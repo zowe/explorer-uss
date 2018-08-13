@@ -1,0 +1,8 @@
+{
+    "files": [
+        {
+            "pattern": "./WebContent/explorer-uss-*.war",
+            "target": "zlux-applications/explorer-uss/${version}/"
+        }
+    ]
+}
