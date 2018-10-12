@@ -12,7 +12,7 @@
     "interweave": "^8.0.1",
     "lowlight": "^1.8.0",
     "material-ui": "^0.18.2",
-    "orion-editor-component": "0.0.5",
+    "orion-editor-component": "0.0.7",
     "prop-types": "^15.5.10",
     "react": "^15.4.0",
     "react-contextmenu": "^2.6.1",
