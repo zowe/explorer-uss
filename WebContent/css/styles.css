@@ -32,12 +32,24 @@ body {
     padding-top: 0px !important;
 }
 
+.component-header {
+    display: inline-flex;
+    width: 100%;
+}
+
+/* Override inline width style */
+.component-text-field-fill{
+    padding-left: 8px;
+    width: 100% !important;
+}
+
 .tree-card {
     padding-bottom: 0;
 }
 
-.uss-node-label {
-    display: inline-flex
+.node-label {
+    display: inline-flex;
+    cursor: pointer;
 }
 
 /* Node Tree Styles */
@@ -46,13 +58,11 @@ body {
     color: #2E77A1;
 }
 
-.node-toggle {
-    cursor: pointer;
-}
-
-.node-toggle-placeholder {
-    width: 24px;
-    display: inline-block;
+/* Override inline height/width icon style */
+.node-icon {
+    padding: 0;
+    height: 20px !important;
+    width: 20px !important;
 }
 
 .node ul {

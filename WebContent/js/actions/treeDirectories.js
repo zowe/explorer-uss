@@ -17,7 +17,7 @@ export const INVALIDATE_DIRECTORY_CHILDREN = 'INVALIDATE_DIRECTORY_CHILDREN';
 export const TOGGLE_DIRECTORY = 'TOGGLE_DIRECTORY';
 export const RESET_DIRECTORY_CHILDREN = 'RESET_DIRECTORY_CHILDREN';
 
-const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Getch children failed for';
+const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Fetch children failed for';
 
 function requestDirectoryChildren(directory) {
     return {
