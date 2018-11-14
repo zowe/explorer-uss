@@ -12,10 +12,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import IconButton from 'material-ui/IconButton';
 import { ContextMenuTrigger } from 'react-contextmenu';
-import DownArrowIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
-import RightArrowIcon from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
+import OpenFolderIcon from 'material-ui/svg-icons/file/folder-open';
+import ClosedFolderIcon from 'material-ui/svg-icons/file/folder';
 import { fetchDirectoryChildren, toggleDirectory } from '../../actions/treeDirectories';
 import { setUSSPath, resetUSSChildren } from '../../actions/treeUSS';
 import TreeFile from './TreeFile';
@@ -33,25 +32,21 @@ export class TreeDirectory extends React.Component {
     }
 
     getToggleIcon() {
-        const style = { padding: 0, height: 24, width: 24 };
         const isToggled = this.isDirectoryToggled();
-        return (
-            <IconButton onClick={this.handleToggle} style={style}>
-                {isToggled ? <DownArrowIcon /> : <RightArrowIcon />}
-            </IconButton>
-        );
+        if (isToggled) {
+            return (<OpenFolderIcon className="node-icon" />);
+        }
+        return (<ClosedFolderIcon className="node-icon" />);
     }
 
     handleToggle() {
         const { path, dispatch } = this.props;
         const isToggled = this.isDirectoryToggled();
-        return (() => {
-            if (!isToggled) {
-                dispatch(fetchDirectoryChildren(path));
-            } else {
-                dispatch(toggleDirectory(path, !isToggled));
-            }
-        });
+        if (!isToggled) {
+            dispatch(fetchDirectoryChildren(path));
+        } else {
+            dispatch(toggleDirectory(path, !isToggled));
+        }
     }
 
     handleDirectorySelect() {
@@ -88,7 +83,7 @@ export class TreeDirectory extends React.Component {
      * create the directories first then the files, return the components in an array
      */
     renderChildren() {
-        const { path, children, dispatch, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, isTreeInDialog } = this.props;
+        const { path, children, dispatch, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, inDialog } = this.props;
         const childComponents = [];
 
         sortChildren(children.keySeq().toArray().filter(this.pathMatchesStartOfElement))
@@ -103,7 +98,7 @@ export class TreeDirectory extends React.Component {
                         handleCreateFile={handleCreateFile}
                         handleDelete={handleDelete}
                         handleOrionEdit={handleOrionEdit}
-                        isTreeInDialog={isTreeInDialog}
+                        inDialog={inDialog}
                     />);
                 } else if (type === 'file') {
                     childComponents.push(<TreeFile
@@ -115,7 +110,7 @@ export class TreeDirectory extends React.Component {
                         handleCreateFile={handleCreateFile}
                         handleDelete={handleDelete}
                         handleOrionEdit={handleOrionEdit}
-                        isTreeInDialog={isTreeInDialog}
+                        inDialog={inDialog}
                     />);
                 }
             });
@@ -123,8 +118,8 @@ export class TreeDirectory extends React.Component {
     }
 
     renderContentMenu() {
-        const { path, handleCreateDirectory, handleCreateFile, handleDelete, isTreeInDialog } = this.props;
-        if (!isTreeInDialog()) {
+        const { path, handleCreateDirectory, handleCreateFile, handleDelete, inDialog } = this.props;
+        if (!inDialog) {
             return (
                 <USSDirectoryMenu
                     childId={path}
@@ -142,14 +137,12 @@ export class TreeDirectory extends React.Component {
         return (
             <li>
                 <div className="node">
-                    <div className="uss-node-label">
-                        <span onClick={this.handleToggle()} >
+                    <ContextMenuTrigger id={path}>
+                        <div className="node-label" onClick={() => { this.handleToggle(); }} onDoubleClick={() => { this.handleDirectorySelect(); }}>
                             {this.getToggleIcon()}
-                        </span>
-                        <ContextMenuTrigger id={path}>
-                            <span onClick={() => { this.handleDirectorySelect(); }}>{childId}</span>
-                        </ContextMenuTrigger>
-                    </div>
+                            {childId}
+                        </div>
+                    </ContextMenuTrigger>
                     {this.renderContentMenu()}
                     <ul>
                         {this.hasChildren() && this.isDirectoryToggled() ? this.renderChildren() : null}
@@ -169,7 +162,7 @@ TreeDirectory.propTypes = {
     handleCreateFile: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleOrionEdit: PropTypes.func.isRequired,
-    isTreeInDialog: PropTypes.func.isRequired,
+    inDialog: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {

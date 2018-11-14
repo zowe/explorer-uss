@@ -13,7 +13,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import TextField from 'material-ui/TextField';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 import UpDirectory from 'material-ui/svg-icons/navigation/arrow-upward';
 import RefreshIcon from '../components/explorer/RefreshIcon';
 import TreeFile from '../components/explorer/TreeFile';
@@ -141,24 +141,8 @@ export class USSTree extends React.Component {
         }
     }
 
-    isTreeInDialog = () => {
-        const { title } = this.props;
-        // When tree is rendered in a dialog box it is not provided with a title
-        return title === undefined;
-    }
-
-    renderTitle() {
-        const { title, subtitle } = this.props;
-        if (!this.isTreeInDialog()) {
-            return (
-                <CardHeader title={title} subtitle={subtitle} />
-            );
-        }
-        return null;
-    }
-
     renderUSSChild(child) {
-        const { USSPath, USSChildren, dispatch } = this.props;
+        const { USSPath, USSChildren, dispatch, inDialog } = this.props;
         if (USSChildren.get(child) === 'directory') {
             return (
                 <ConnectedTreeDirectory
@@ -169,7 +153,7 @@ export class USSTree extends React.Component {
                     handleCreateFile={this.handleCreateFile}
                     handleDelete={this.handleDelete}
                     handleOrionEdit={this.handleOrionEdit}
-                    isTreeInDialog={this.isTreeInDialog}
+                    inDialog={inDialog}
                 />);
         }
         return (
@@ -182,7 +166,7 @@ export class USSTree extends React.Component {
                 handleCreateFile={this.handleCreateFile}
                 handleDelete={this.handleDelete}
                 handleOrionEdit={this.handleOrionEdit}
-                isTreeInDialog={this.isTreeInDialog}
+                inDialog={inDialog}
             />);
     }
 
@@ -231,14 +215,12 @@ export class USSTree extends React.Component {
 
     render() {
         const { USSChildren, USSPath, isFetching, dispatch, inDialog } = this.props;
-        const textFieldStyle = { paddingLeft: 8 };
         return (
             <Card class="tree-card" containerStyle={{ paddingBottom: 0 }}>
-                {this.renderTitle()}
                 <CardText>
-                    <div>
+                    <div className="component-header">
                         <TextField
-                            style={textFieldStyle}
+                            className="component-text-field-fill"
                             id="path"
                             ref={ref => { this.pathRef = ref; }}
                             value={USSPath}
@@ -263,9 +245,11 @@ export class USSTree extends React.Component {
     }
 }
 
+USSTree.defaultProps = {
+    inDialog: false,
+};
+
 USSTree.propTypes = {
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
     dispatch: PropTypes.func.isRequired,
     USSPath: PropTypes.string.isRequired,
     isFetching: PropTypes.bool.isRequired,

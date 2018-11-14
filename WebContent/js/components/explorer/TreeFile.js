@@ -38,17 +38,16 @@ export default class TreeFile extends React.Component {
 
     renderFile() {
         const { childId } = this.props;
-        const iconStyle = { paddingRight: 5 };
         return (
             <div style={{ whiteSpace: 'nowrap' }}>
-                <DescriptionIcon style={iconStyle} />
+                <DescriptionIcon className="node-icon" />
                 <span className="node-label" onClick={this.handleToggle()} >{childId}</span>
             </div>);
     }
 
     renderContentMenu() {
-        const { path, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, isTreeInDialog } = this.props;
-        if (!isTreeInDialog()) {
+        const { path, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, inDialog } = this.props;
+        if (!inDialog) {
             return (
                 <USSFileMenu
                     childId={path}
@@ -67,11 +66,11 @@ export default class TreeFile extends React.Component {
         return (
             <li>
                 <div className="node">
-                    <div className="node-label">
-                        <ContextMenuTrigger id={path}>
+                    <ContextMenuTrigger id={path}>
+                        <div className="node-label">
                             {this.renderFile()}
-                        </ContextMenuTrigger>
-                    </div>
+                        </div>
+                    </ContextMenuTrigger>
                     {this.renderContentMenu()}
                 </div>
             </li>
@@ -87,5 +86,5 @@ TreeFile.propTypes = {
     handleCreateFile: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleOrionEdit: PropTypes.func.isRequired,
-    isTreeInDialog: PropTypes.func.isRequired,
+    inDialog: PropTypes.bool.isRequired,
 };

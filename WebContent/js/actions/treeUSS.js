@@ -28,7 +28,7 @@ const REQUEST_DELETE_RESOURCE = 'REQUEST_DELETE_RESOURCE';
 export const RECEIVE_DELETE_RESOURCE = 'RECEIVE_DELETE_RESOURCE';
 const INVALIDATE_DELETE_RESOURCE = 'INVALIDATE_DELETE_RESOURCE';
 
-const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Getch children failed for';
+const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Fetch children failed for';
 const USS_CREATE_SUCCESS_MESSAGE = 'Create successful for';
 const USS_CREATE_FAIL_MESSAGE = 'Create failed for';
 const USS_DELETE_SUCCESS_MESSAGE = 'Delete successful for';
