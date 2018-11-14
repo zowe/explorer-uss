@@ -137,12 +137,12 @@ export class TreeDirectory extends React.Component {
         return (
             <li>
                 <div className="node">
-                    <div className="node-label" onClick={() => { this.handleToggle(); }} onDoubleClick={() => { this.handleDirectorySelect(); }}>
-                        {this.getToggleIcon()}
-                        <ContextMenuTrigger id={path}>
+                    <ContextMenuTrigger id={path}>
+                        <div className="node-label" onClick={() => { this.handleToggle(); }} onDoubleClick={() => { this.handleDirectorySelect(); }}>
+                            {this.getToggleIcon()}
                             {childId}
-                        </ContextMenuTrigger>
-                    </div>
+                        </div>
+                    </ContextMenuTrigger>
                     {this.renderContentMenu()}
                     <ul>
                         {this.hasChildren() && this.isDirectoryToggled() ? this.renderChildren() : null}

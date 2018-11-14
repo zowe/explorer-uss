@@ -66,11 +66,11 @@ export default class TreeFile extends React.Component {
         return (
             <li>
                 <div className="node">
-                    <div className="node-label">
-                        <ContextMenuTrigger id={path}>
+                    <ContextMenuTrigger id={path}>
+                        <div className="node-label">
                             {this.renderFile()}
-                        </ContextMenuTrigger>
-                    </div>
+                        </div>
+                    </ContextMenuTrigger>
                     {this.renderContentMenu()}
                 </div>
             </li>
