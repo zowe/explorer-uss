@@ -37,6 +37,24 @@ customParameters.push(string(
   defaultValue: 'giza-jenkins@gmail.com',
   trim: true
 ))
+customParameters.push(booleanParam(
+  name: 'NPM_RELEASE',
+  description: 'Publish a release or snapshot version. By default, this task will create snapshot. Check this to publish a release version.',
+  defaultValue: false
+))
+customParameters.push(credentials(
+  name: 'PAX_SERVER_CREDENTIALS_ID',
+  description: 'The server credential used to create PAX file',
+  credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl',
+  defaultValue: 'TestAdminzOSaaS2',
+  required: true
+))
+customParameters.push(string(
+  name: 'PAX_SERVER_IP',
+  description: 'The server IP used to create PAX file',
+  defaultValue: '172.30.0.1',
+  trim: true
+))
 customParameters.push(string(
   name: 'ARTIFACTORY_SERVER',
   description: 'Artifactory server, should be pre-defined in Jenkins configuration',
@@ -52,6 +70,7 @@ node ('jenkins-slave') {
   currentBuild.result = 'SUCCESS'
   def packageName
   def packageVersion
+  def versionId
 
   try {
 
@@ -68,6 +87,12 @@ node ('jenkins-slave') {
       // get package information
       packageName = sh(script: "node -e \"console.log(require('./package.json').name)\"", returnStdout: true).trim()
       packageVersion = sh(script: "node -e \"console.log(require('./package.json').version)\"", returnStdout: true).trim()
+      if (params.NPM_RELEASE) {
+        versionId = packageVersion
+      } else {
+        def buildIdentifier = getBuildIdentifier('%Y%m%d%H%M%S', 'master', false)
+        versionId = "${packageVersion}-snapshot.${buildIdentifier}"
+      }      
       echo "Building ${packageName} v${packageVersion}..."
     }
 
@@ -105,6 +130,13 @@ node ('jenkins-slave') {
           lineCoverageTargets: '80, 0, 0',
           methodCoverageTargets: '80, 0, 0',
           maxNumberOfBuilds: 0
+      }
+    }
+    
+    stage('SonarQube analysis') {
+      def scannerHome = tool 'sonar-scanner-3.2.0';
+      withSonarQubeEnv('sonar-default-server') {
+        sh "${scannerHome}/bin/sonar-scanner"
       }
     }
 

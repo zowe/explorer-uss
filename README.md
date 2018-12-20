@@ -22,3 +22,17 @@ GOTO: localhost:8080
 ```
 npm run prod
 ```
+
+### Prepare PAX Packaging Workspace
+
+```
+./scripts/prepare-pax-workspace.sh
+```
+
+## Start With explorer-ui-server
+
+After preparing PAX workspace, you can serve the explorer UI with explorer-ui-server:
+
+```
+node pax-workspace/ascii/server/src/index.js --config pax-workspace/ascii/server/configs/config.json
+```
