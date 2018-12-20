@@ -147,20 +147,34 @@ node ('jenkins-slave') {
     }
 
     stage('publish') {
-      // ===== publishing to generic artifactory ==============================
-      // gizaArtifactory is pre-defined in Jenkins management
-      def server = Artifactory.server params.ARTIFACTORY_SERVER
-      def uploadSpec = readFile "artifactory-upload-spec.json"
-      def buildIdentifier = getBuildIdentifier(true, 'master', false)
-      uploadSpec = uploadSpec.replaceAll(/\$\{version\}/, "${packageName}-${packageVersion}-${buildIdentifier}")
-      // prepare build information
-      def buildInfo = Artifactory.newBuildInfo()
-      // build info name/number are optional
-      // buildInfo.name = env.JOB_NAME // packageName
-      // buildInfo.number = "${packageVersion}-dev+${env.BUILD_NUMBER}"
-      // upload
-      server.upload spec: uploadSpec, buildInfo: buildInfo
-      server.publishBuildInfo buildInfo
+      timeout(time: 30, unit: 'MINUTES') {
+        echo "prepare pax workspace..."
+        sh "scripts/prepare-pax-workspace.sh"
+
+        echo "creating pax file from workspace..."
+        createPax("${packageName}-packaging", "${packageName}-${versionId}.pax",
+                  params.PAX_SERVER_IP, params.PAX_SERVER_CREDENTIALS_ID,
+                  './pax-workspace', '/zaas1/buildWorkspace', '-x os390')
+
+        echo 'publishing pax file to artifactory...'
+        def releaseIdentifier = getReleaseIdentifier()
+        def server = Artifactory.server params.ARTIFACTORY_SERVER
+        def uploadSpec
+        if (params.NPM_RELEASE) {
+          uploadSpec = readFile "artifactory-upload-spec.release.json.template"
+          uploadSpec = uploadSpec.replaceAll(/\{ARTIFACTORY_VERSION\}/, packageVersion)
+          uploadSpec = uploadSpec.replaceAll(/\{RELEASE_IDENTIFIER\}/, releaseIdentifier)
+        } else {
+          uploadSpec = readFile "artifactory-upload-spec.snapshot.json.template"
+          uploadSpec = uploadSpec.replaceAll(/\{ARTIFACTORY_VERSION\}/, packageVersion)
+          uploadSpec = uploadSpec.replaceAll(/\{RELEASE_IDENTIFIER\}/, releaseIdentifier)
+        }
+        def buildInfo = Artifactory.newBuildInfo()
+        server.upload spec: uploadSpec, buildInfo: buildInfo
+        server.publishBuildInfo buildInfo
+
+        // TODO: tag the branch once we release
+      }
     }
 
     stage('done') {
