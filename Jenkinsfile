@@ -133,12 +133,12 @@ node ('jenkins-slave') {
       }
     }
     
-    stage('SonarQube analysis') {
-      def scannerHome = tool 'sonar-scanner-3.2.0';
-      withSonarQubeEnv('sonar-default-server') {
-        sh "${scannerHome}/bin/sonar-scanner"
-      }
-    }
+    // stage('SonarQube analysis') {
+    //   def scannerHome = tool 'sonar-scanner-3.2.0';
+    //   withSonarQubeEnv('sonar-default-server') {
+    //     sh "${scannerHome}/bin/sonar-scanner"
+    //   }
+    // }
 
     stage('build') {
       ansiColor('xterm') {
