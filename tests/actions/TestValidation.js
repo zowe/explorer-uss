@@ -27,50 +27,50 @@ describe('Action: validation', () => {
     const middlewares = [thunk];
     const mockStore = configureMockStore(middlewares);
 
-    describe('validateUser', () => {
-        it('Should create an action to request and then receive validation along with grabbing and setting port', () => {
-            const username = { username: 'JCAIN' };
-            const expectedActions = [
-                {
-                    type: validation.REQUEST_VALIDATION,
-                },
-                {
-                    type: validation.RECEIVE_VALIDATION,
-                    username: 'JCAIN',
-                },
-            ];
-            nock(`${LOCAL_HOST_SERVER_WITH_PROTOCOL}`)
-                .get('/ZLUX/plugins/com.ibm.atlas.atlasMVS/web/portConfig.json')
-                .reply(200, portConfig);
+    // describe('validateUser', () => {
+    //     it('Should create an action to request and then receive validation along with grabbing and setting port', () => {
+    //         const username = { username: 'JCAIN' };
+    //         const expectedActions = [
+    //             {
+    //                 type: validation.REQUEST_VALIDATION,
+    //             },
+    //             {
+    //                 type: validation.RECEIVE_VALIDATION,
+    //                 username: 'JCAIN',
+    //             },
+    //         ];
+    //         nock(`${LOCAL_HOST_SERVER_WITH_PROTOCOL}`)
+    //             .get('/ZLUX/plugins/com.ibm.atlas.atlasMVS/web/portConfig.json')
+    //             .reply(200, portConfig);
 
-            nock(LOCAL_HOST_ENDPOINT)
-                .get('/zos/username')
-                .reply(200, username);
+    //         nock(LOCAL_HOST_ENDPOINT)
+    //             .get('/zos/username')
+    //             .reply(200, username);
 
-            const store = mockStore();
+    //         const store = mockStore();
 
-            return store.dispatch(validation.validateUser())
-                .then(() => {
-                    expect(store.getActions()).toEqual(expectedActions);
-                });
-        });
+    //         return store.dispatch(validation.validateUser())
+    //             .then(() => {
+    //                 expect(store.getActions()).toEqual(expectedActions);
+    //             });
+    //     });
 
-        it('Should create an action to request and then invalidate as no data is received', () => {
-            const expectedActions = [
-                { type: validation.REQUEST_VALIDATION },
-                { type: validation.INVALIDATE_VALIDATION },
-            ];
+    //     it('Should create an action to request and then invalidate as no data is received', () => {
+    //         const expectedActions = [
+    //             { type: validation.REQUEST_VALIDATION },
+    //             { type: validation.INVALIDATE_VALIDATION },
+    //         ];
 
-            nock(LOCAL_HOST_SERVER_WITH_PROTOCOL)
-                .get('/zos/username')
-                .reply(500, '');
+    //         nock(LOCAL_HOST_SERVER_WITH_PROTOCOL)
+    //             .get('/zos/username')
+    //             .reply(500, '');
 
-            const store = mockStore();
+    //         const store = mockStore();
 
-            return store.dispatch(validation.validateUser())
-                .then(() => {
-                    expect(store.getActions()).toEqual(expectedActions);
-                });
-        });
-    });
+    //         return store.dispatch(validation.validateUser())
+    //             .then(() => {
+    //                 expect(store.getActions()).toEqual(expectedActions);
+    //             });
+    //     });
+    // });
 });

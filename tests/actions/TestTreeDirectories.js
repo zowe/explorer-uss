@@ -79,7 +79,7 @@ describe('Action: treeDirectories', () => {
             {
                 type: treeDirectories.RECEIVE_DIRECTORY_CHILDREN,
                 path,
-                children: treeDirectoriesData.fetchDirectoryChildrenData,
+                children: treeDirectoriesData.fetchDirectoryChildrenDataPost,
             },
             {
                 type: treeDirectories.TOGGLE_DIRECTORY,
@@ -88,7 +88,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(path)}`)
+                .get(`/zosmf/restfiles/fs?path=${path}`)
                 .reply(200, treeDirectoriesData.fetchDirectoryChildrenDataResponse);
 
             const store = mockStore();
@@ -108,7 +108,7 @@ describe('Action: treeDirectories', () => {
             {
                 type: treeDirectories.RECEIVE_DIRECTORY_CHILDREN,
                 path,
-                children: treeDirectoriesData.fetchDirectoryChildrenRootData,
+                children: treeDirectoriesData.fetchDirectoryChildrenRootDataPost,
             },
             {
                 type: treeDirectories.TOGGLE_DIRECTORY,
@@ -117,7 +117,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(path)}`)
+                .get(`/zosmf/restfiles/fs?path=${path}`)
                 .reply(200, treeDirectoriesData.fetchDirectoryChildrenRootDataResponse);
 
             const store = mockStore();

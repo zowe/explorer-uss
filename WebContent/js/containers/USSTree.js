@@ -53,7 +53,11 @@ export class USSTree extends React.Component {
     componentWillMount() {
         const { dispatch, username, USSChildren } = this.props;
         if (USSChildren.isEmpty()) {
-            dispatch(setUSSPath(`/u/${username.toLowerCase()}`));
+            let append = '';
+            if (username.length > 0) {
+                append = `/${username.toLowerCase()}`;
+            }
+            dispatch(setUSSPath(`/u${append}`));
         }
     }
 
@@ -61,7 +65,11 @@ export class USSTree extends React.Component {
         const { dispatch, validated, username, USSPath, USSChildren } = this.props;
         // Once we receive validation update the path, once we have set the path, fetch the children
         if (!validated) {
-            dispatch(setUSSPath(`/u/${username.toLowerCase()}`));
+            let append = '';
+            if (username.length > 0) {
+                append = `/${username.toLowerCase()}`;
+            }
+            dispatch(setUSSPath(`/u${append}`));
         } else if (USSPath !== nextProps.USSPath) {
             this.handlePathUpdate(nextProps.USSPath);
         }

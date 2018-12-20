@@ -8,8 +8,7 @@
  * Copyright IBM Corporation 2016, 2018
  */
 
-import { atlasFetch } from '../utilities/urlUtils';
-import { CONTENT_TYPE_APPLICATION_JSON } from '../constants/apiRequestConstants';
+import { atlasGet, atlasDelete, atlasPost, augmentJson } from '../utilities/urlUtils';
 import { invalidateContentIfOpen } from './editor';
 import { constructAndPushMessage } from './snackbarNotifications';
 
@@ -128,12 +127,12 @@ function invalidateDelete(path) {
 export function fetchUSSTreeChildren(path) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
-        const endpoint = `uss/files/${encodeURIComponent(path)}`;
-        return atlasFetch(endpoint, { credentials: 'include' })
+        const endpoint = `zosmf/restfiles/fs?path=${path}`;
+        return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
                 return response.json();
             }).then(json => {
-                return dispatch(receiveUSSChildren(path, json.children));
+                return dispatch(receiveUSSChildren(path, augmentJson(json, path).items));
             })
             .catch(() => {
                 dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path}`));
@@ -145,37 +144,27 @@ export function fetchUSSTreeChildren(path) {
 export function createUSSResource(path, type) {
     return dispatch => {
         dispatch(requestNewResource(path));
-        const endpoint = 'uss/files';
-        const headers = new Headers(
-            CONTENT_TYPE_APPLICATION_JSON,
-        );
-        const body = `{
-            "type": "${type}",
-            "path": "${path}"
-        }`;
-        return atlasFetch(endpoint, {
-            credentials: 'include',
-            headers,
-            method: 'POST',
-            body,
-        }).then(response => {
-            if (response.ok) {
-                dispatch(constructAndPushMessage(`${USS_CREATE_SUCCESS_MESSAGE} ${path}`));
-                return dispatch(receiveNewResource(path, type));
-            }
-            throw Error(response.statusText);
-        }).catch(() => {
-            dispatch(constructAndPushMessage(`${USS_CREATE_FAIL_MESSAGE} ${path}`));
-            return dispatch(invalidateReceiveResource(path));
-        });
+        const endpoint = `zosmf/restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const body = `{"type": "${type}", "mode": "RWXRWXR--"}`;
+        return atlasPost(endpoint, body)
+            .then(response => {
+                if (response.ok) {
+                    dispatch(constructAndPushMessage(`${USS_CREATE_SUCCESS_MESSAGE} ${path}`));
+                    return dispatch(receiveNewResource(path, type));
+                }
+                throw Error(response.statusText);
+            }).catch(() => {
+                dispatch(constructAndPushMessage(`${USS_CREATE_FAIL_MESSAGE} ${path}`));
+                return dispatch(invalidateReceiveResource(path));
+            });
     };
 }
 
 export function deleteUSSResource(path) {
     return dispatch => {
         dispatch(requestDelete(path));
-        const endpoint = `uss/files/${encodeURIComponent(path)}`;
-        return atlasFetch(endpoint, {
+        const endpoint = `zosmf/restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        return atlasDelete(endpoint, {
             credentials: 'include',
             method: 'DELETE',
         }).then(response => {

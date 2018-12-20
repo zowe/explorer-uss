@@ -20,7 +20,7 @@ import * as editorActions from '../../WebContent/js/actions/editor';
 import * as editorResources from '../testResources/actions/editor';
 import * as treeUSSActions from '../../WebContent/js/actions/treeUSS';
 import * as snackbarActions from '../../WebContent/js/actions/snackbarNotifications';
-import { encodeURLComponent } from '../../WebContent/js/utilities/urlUtils';
+// import { encodeURLComponent } from '../../WebContent/js/utilities/urlUtils';
 
 
 describe('Action: editor', () => {
@@ -67,8 +67,8 @@ describe('Action: editor', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(USSPath)}/content`)
-                .reply(200, editorResources.fetchResponse);
+                .get(`/zosmf/restfiles/fs/${USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`)
+                .reply(200, editorResources.content, { ETag: `${editorResources.checksum}` });
 
             const store = mockStore();
             return store.dispatch(editorActions.fetchUSSFile(USSPath))
@@ -95,7 +95,7 @@ describe('Action: editor', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/files/${encodeURIComponent(USSPath)}/content`)
+                .get(`/files/${USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}/content`)
                 .reply(404, editorResources.USSRequestFailed);
 
             const store = mockStore();
@@ -179,8 +179,8 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURLComponent(editorResources.USSFile)}/content`)
-                .reply(200, { content: editorResources.content, checksum: editorResources.checksum });
+                .get(`/zosmf/restfiles/fs/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
+                .reply(200, editorResources.content, { ETag: `${editorResources.checksum}` });
 
             const store = mockStore();
             return store.dispatch(
@@ -202,7 +202,7 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURLComponent(editorResources.ussFile)}/content`)
+                .get('/zosmf/restfiles/fs/')
                 .reply(500);
 
             const store = mockStore();
@@ -237,7 +237,7 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .put(`/uss/files/${encodeURLComponent(editorResources.USSFile)}/content`)
+                .put(`/zosmf/restfiles/fs/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
                 .reply(204);
 
             const store = mockStore();
@@ -265,7 +265,7 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .put(`/uss/files/${encodeURLComponent(editorResources.USSFile)}/content`)
+                .put(`/zosmf/restfiles/fs/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}/content`)
                 .reply(500);
 
             const store = mockStore();
@@ -324,14 +324,17 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .post('/uss/files')
+                .post('/zosmf/restfiles/fs')
                 .reply(201);
             nock(BASE_URL)
-                .put(`/uss/files/${encodeURLComponent(editorResources.newUSSFile)}/content`)
+                .post(`/zosmf/restfiles/fs/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
+                .reply(201);
+            nock(BASE_URL)
+                .put(`/zosmf/restfiles/fs/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
                 .reply(200);
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURLComponent(editorResources.newUSSFile)}/content`)
-                .reply(200, { content: editorResources.newContent, checksum: editorResources.newChecksum });
+                .get(`/zosmf/restfiles/fs/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
+                .reply(200, editorResources.newContent, { ETag: `${editorResources.newChecksum}` });
 
             const store = mockStore();
 
@@ -376,7 +379,7 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .put(`/uss/files/${encodeURLComponent(editorResources.newUSSFile)}/content`)
+                .put(`/zosmf/restfiles/fs/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}/content`)
                 .reply(500);
 
             const store = mockStore();

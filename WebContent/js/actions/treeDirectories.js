@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2016, 2018
  */
 
-import { atlasFetch } from '../utilities/urlUtils';
+import { atlasGet, augmentJson } from '../utilities/urlUtils';
 import { constructAndPushMessage } from './snackbarNotifications';
 
 export const REQUEST_DIRECTORY_CHILDREN = 'REQUEST_DIRECTORY_CHILDREN';
@@ -67,13 +67,15 @@ export function addTreeDirectory(path, child) {
 }
 
 export function fetchDirectoryChildren(path) {
+    const endpoint = `zosmf/restfiles/fs?path=${path}`;
     return dispatch => {
         dispatch(requestDirectoryChildren(path));
-        const endpoint = `uss/files/${encodeURIComponent(path)}`;
-        return atlasFetch(endpoint, { credentials: 'include' })
-            .then(response => { return response.json(); })
+        return atlasGet(endpoint, { credentials: 'include' })
+            .then(response => {
+                return response.json();
+            })
             .then(json => {
-                dispatch(receiveDirectoryChildren(path, json.children));
+                dispatch(receiveDirectoryChildren(path, augmentJson(json, path).items));
                 dispatch(toggleDirectory(path, true));
             })
             .catch(() => {

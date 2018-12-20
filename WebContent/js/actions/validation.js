@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2016, 2018
  */
 
-import { atlasFetch } from '../utilities/urlUtils';
+import { atlasGet } from '../utilities/urlUtils';
 
 export const REQUEST_VALIDATION = 'REQUEST_VALIDATION';
 export const RECEIVE_VALIDATION = 'RECEIVE_VALIDATION';
@@ -37,13 +37,13 @@ function invalidateValidation() {
 export function validateUser() {
     return dispatch => {
         dispatch(requestValidation());
-        return atlasFetch('zos/username', { credentials: 'include' })
+        return atlasGet('zosmf/restjobs/jobs')
             .then(response => { return response.json(); })
             .then(json => {
-                if (json.username) {
-                    return dispatch(receiveValidation(json.username));
+                if (json.length > 0) {
+                    return dispatch(receiveValidation(json[0].owner));
                 }
-                return dispatch(invalidateValidation());
+                return dispatch(receiveValidation(''));
             })
             .catch(() => {
                 return dispatch(invalidateValidation());
