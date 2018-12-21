@@ -15,7 +15,7 @@ import expect from 'expect';
 import * as validation from '../../WebContent/js/actions/validation';
 // import fetchPostResponse from '../testResources/actions/validate';
 import {
-    LOCAL_HOST_ENDPOINT,
+//    LOCAL_HOST_ENDPOINT,
     LOCAL_HOST_SERVER_WITH_PROTOCOL,
 } from '../testResources/hostConstants';
 
