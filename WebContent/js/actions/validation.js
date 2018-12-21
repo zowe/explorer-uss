@@ -38,9 +38,14 @@ export function validateUser() {
     return dispatch => {
         dispatch(requestValidation());
         return atlasGet('zosmf/restjobs/jobs')
-            .then(response => { return response.json(); })
+            .then(response => {
+                console.log(response);
+                return response.json();
+            })
             .then(json => {
+                console.log(json);
                 if (json.length > 0) {
+                    console.log(json[0].owner);
                     return dispatch(receiveValidation(json[0].owner));
                 }
                 return dispatch(receiveValidation(''));

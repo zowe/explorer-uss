@@ -8,7 +8,6 @@
  * Copyright IBM Corporation 2016, 2018
  */
 
-import { CONTENT_TYPE_APPLICATION_JSON } from '../constants/apiRequestConstants';
 import { createUSSResource, fetchUSSTreeChildren } from '../actions/treeUSS';
 import { getPathToResource } from '../utilities/USSUtilities';
 import { atlasGet, atlasPut } from '../utilities/urlUtils';
@@ -161,23 +160,6 @@ export function getNewUSSResourceChecksum(resourceName) {
             }).catch(() => {
                 dispatch(invalidateChecksumChange());
             });
-    };
-}
-
-export function getChtag(contentURL) {
-    return dispatch => {
-        dispatch(requestChtag(contentURL));
-        return atlasPut(contentURL, '{"request": "chtag", "action": "list"}').then(response => {
-            if (response.ok) {
-                dispatch(receiveChtag(contentURL));
-                return response.json();
-            }
-            throw Error(response);
-        }).then(json => {
-            dispatch(updateChtag(json));
-        }).catch(() => {
-            return '';
-        });
     };
 }
 
