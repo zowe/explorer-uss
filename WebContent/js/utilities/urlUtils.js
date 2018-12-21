@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2018
  */
 
-let host = 'winmvs3b.hursley.ibm.com:23956';
+let host = 'winmvs3b.hursley.ibm.com:7447';
 if (typeof location !== 'undefined') {
     const hostname = location.hostname;
     if (hostname !== 'localhost') {
@@ -16,10 +16,6 @@ if (typeof location !== 'undefined') {
     }
 }
 export const LOCAL_DEV_SERVER = host;
-
-export function encodeURLComponent(URL) {
-    return encodeURIComponent(URL);
-}
 
 function whichServer() {
     let server = LOCAL_DEV_SERVER;
@@ -39,6 +35,7 @@ export function atlasGet(endpoint, content) {
         credentials: 'include' };
     return atlasAction(endpoint, content, fetchParams);
 }
+
 export function atlasDelete(endpoint, content) {
     const fetchParams = {
         method: 'DELETE',
@@ -46,6 +43,7 @@ export function atlasDelete(endpoint, content) {
         credentials: 'include' };
     return atlasAction(endpoint, content, fetchParams);
 }
+
 export function atlasPost(endpoint, body) {
     return fetch(`https://${whichServer()}/${endpoint}`, {
         method: 'POST',
@@ -66,16 +64,7 @@ export function atlasPut(endpoint, body, checksum) {
         credentials: 'include' });
 }
 
-export function atlasChtag(endpoint, body) {
-    const header = { 'X-CSRF-ZOSMF-HEADER': '*', 'Content-Type': 'text/plain' };
-    return fetch(`https://${whichServer()}/${endpoint}`, {
-        method: 'PUT',
-        body,
-        headers: header,
-        credentials: 'include' });
-}
-
-export function linkPath(path, item) {
+function linkPath(path, item) {
     let endpoint = `zosmf/restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
     endpoint = endpoint.endsWith('/') ? endpoint.slice(0, -1) : endpoint;
     if (item === '.') {

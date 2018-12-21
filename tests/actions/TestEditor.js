@@ -20,8 +20,6 @@ import * as editorActions from '../../WebContent/js/actions/editor';
 import * as editorResources from '../testResources/actions/editor';
 import * as treeUSSActions from '../../WebContent/js/actions/treeUSS';
 import * as snackbarActions from '../../WebContent/js/actions/snackbarNotifications';
-// import { encodeURLComponent } from '../../WebContent/js/utilities/urlUtils';
-
 
 describe('Action: editor', () => {
     let sandbox;
