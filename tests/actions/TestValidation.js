@@ -13,9 +13,8 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 import expect from 'expect';
 import * as validation from '../../WebContent/js/actions/validation';
-// import fetchPostResponse from '../testResources/actions/validate';
 import {
-//    LOCAL_HOST_ENDPOINT,
+    LOCAL_HOST_ENDPOINT,
     LOCAL_HOST_SERVER_WITH_PROTOCOL,
 } from '../testResources/hostConstants';
 
@@ -27,29 +26,49 @@ describe('Action: validation', () => {
     const middlewares = [thunk];
     const mockStore = configureMockStore(middlewares);
 
+    const followersResponse = [{
+        owner: 'JCAIN',
+        subsystem: 'JES2',
+        type: 'TSU',
+        jobid: 'TSU257',
+        class: 'TSU',
+        jobname: 'STONECC',
+        status: 'OUTPUT',
+        retcode: 'ABEND S222',
+    }, {
+        owner: 'JCAIN',
+        subsystem: 'JES2',
+        type: 'TSU',
+        jobid: 'TSU257',
+        class: 'TSU',
+        jobname: 'STONECC',
+        status: 'OUTPUT',
+        retcode: 'ABEND S222',
+    }];
+
     describe('validateUser', () => {
-        // it('Should create an action to request and then receive validation along with grabbing and setting port', () => {
-        //     const expectedActions = [
-        //         {
-        //             type: validation.REQUEST_VALIDATION,
-        //         },
-        //         {
-        //             type: validation.RECEIVE_VALIDATION,
-        //             username: 'JCAIN',
-        //         },
-        //     ];
+        it('Should create an action to request and then receive validation along with grabbing and setting port', () => {
+            const expectedActions = [
+                {
+                    type: validation.REQUEST_VALIDATION,
+                },
+                {
+                    type: validation.RECEIVE_VALIDATION,
+                    username: 'JCAIN',
+                },
+            ];
 
-        //     nock(LOCAL_HOST_ENDPOINT)
-        //         .get('/zosmf/restjobs/jobs')
-        //         .reply(200, fetchPostResponse).log(console.log);
+            nock(LOCAL_HOST_ENDPOINT)
+                .get('/zosmf/restjobs/jobs')
+                .reply(200, followersResponse);
 
-        //     const store = mockStore();
+            const store = mockStore();
 
-        //     return store.dispatch(validation.validateUser())
-        //         .then(() => {
-        //             expect(store.getActions()).toEqual(expectedActions);
-        //         });
-        // });
+            return store.dispatch(validation.validateUser())
+                .then(() => {
+                    expect(store.getActions()).toEqual(expectedActions);
+                });
+        });
 
         it('Should create an action to request and then invalidate as no data is received', () => {
             const expectedActions = [
