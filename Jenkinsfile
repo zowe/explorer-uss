@@ -132,13 +132,6 @@ node ('jenkins-slave') {
           maxNumberOfBuilds: 0
       }
     }
-    
-    // stage('SonarQube analysis') {
-    //   def scannerHome = tool 'sonar-scanner-3.2.0';
-    //   withSonarQubeEnv('sonar-default-server') {
-    //     sh "${scannerHome}/bin/sonar-scanner"
-    //   }
-    // }
 
     stage('build') {
       ansiColor('xterm') {
@@ -172,8 +165,6 @@ node ('jenkins-slave') {
         def buildInfo = Artifactory.newBuildInfo()
         server.upload spec: uploadSpec, buildInfo: buildInfo
         server.publishBuildInfo buildInfo
-
-        // TODO: tag the branch once we release
       }
     }
 
