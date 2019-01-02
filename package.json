@@ -89,6 +89,7 @@
     "require": [
       "babel-core/register"
     ],
+    "sourceMap": true,
     "all": true,
     "include": [
       "WebContent/js"
