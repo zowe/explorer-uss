@@ -107,7 +107,7 @@ node ('jenkins-slave') {
         npmLogin(npmRegistry, params.NPM_CREDENTIALS_ID, params.NPM_USER_EMAIL)
 
         // sh 'npm prune'
-        sh 'npm install'
+        sh 'npm ci'
       }
     }
 
@@ -130,6 +130,13 @@ node ('jenkins-slave') {
           lineCoverageTargets: '80, 0, 0',
           methodCoverageTargets: '80, 0, 0',
           maxNumberOfBuilds: 0
+      }
+    }
+
+    stage('SonarQube analysis') {
+      def scannerHome = tool 'sonar-scanner-3.2.0';
+      withSonarQubeEnv('sonar-default-server') {
+        sh "${scannerHome}/bin/sonar-scanner"
       }
     }
 
