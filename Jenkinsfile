@@ -107,29 +107,62 @@ node ('jenkins-slave') {
         npmLogin(npmRegistry, params.NPM_CREDENTIALS_ID, params.NPM_USER_EMAIL)
 
         // sh 'npm prune'
-        sh 'npm install'
+        sh 'npm ci'
       }
     }
 
     stage('test') {
       ansiColor('xterm') {
         sh 'npm run lint'
-        sh 'npm run coverage'
-        sh 'npm run coverageReport'
-
-        junit 'target/report.xml'
-        cobertura coberturaReportFile: 'coverage/cobertura-coverage.xml',
-          sourceEncoding: 'ASCII',
-          autoUpdateHealth: false,
-          autoUpdateStability: false,
-          onlyStable: false,
-          failUnhealthy: false,
-          failUnstable: false,
-          zoomCoverageChart: false,
-          conditionalCoverageTargets: '70, 0, 0',
-          lineCoverageTargets: '80, 0, 0',
-          methodCoverageTargets: '80, 0, 0',
-          maxNumberOfBuilds: 0
+         try {
+           sh 'npm test'
+         } catch (err) {
+           junit 'target/report.xml'
+           error "Test failed: $err"
+           cobertura coberturaReportFile: 'coverage/cobertura-coverage.xml',
+         } finally {
+           sourceEncoding: 'ASCII',
+           // publish test reports
+           autoUpdateHealth: false,
+           junit 'target/report.xml'
+           autoUpdateStability: false,
+           cobertura coberturaReportFile: 'coverage/cobertura-coverage.xml',
+           onlyStable: false,
+           sourceEncoding: 'ASCII',
+           failUnhealthy: false,
+           autoUpdateHealth: false,
+           failUnstable: false,
+           autoUpdateStability: false,
+           zoomCoverageChart: false,
+           onlyStable: false,
+           conditionalCoverageTargets: '70, 0, 0',
+           failUnhealthy: false,
+           lineCoverageTargets: '80, 0, 0',
+           failUnstable: false,
+           methodCoverageTargets: '80, 0, 0',
+           zoomCoverageChart: false,
+           maxNumberOfBuilds: 0
+           conditionalCoverageTargets: '70, 0, 0',
+           lineCoverageTargets: '80, 0, 0',
+           methodCoverageTargets: '80, 0, 0',
+           maxNumberOfBuilds: 0
+           publishHTML([
+             allowMissing: false,
+             alwaysLinkToLastBuild: false,
+             keepAll: false,
+             reportDir: 'coverage/lcov-report',
+             reportFiles: 'index.html',
+             reportName: 'Coverage HTML Report',
+             reportTitles: ''
+           ])
+         }
+       }
+     }
+ 
+     stage('SonarQube analysis') {
+       def scannerHome = tool 'sonar-scanner-3.2.0';
+       withSonarQubeEnv('sonar-default-server') {
+         sh "${scannerHome}/bin/sonar-scanner"
       }
     }
 
