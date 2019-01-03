@@ -117,31 +117,18 @@ node ('jenkins-slave') {
          try {
            sh 'npm test'
          } catch (err) {
-           junit 'target/report.xml'
            error "Test failed: $err"
-           cobertura coberturaReportFile: 'coverage/cobertura-coverage.xml',
          } finally {
-           sourceEncoding: 'ASCII',
            // publish test reports
-           autoUpdateHealth: false,
            junit 'target/report.xml'
-           autoUpdateStability: false,
            cobertura coberturaReportFile: 'coverage/cobertura-coverage.xml',
-           onlyStable: false,
            sourceEncoding: 'ASCII',
-           failUnhealthy: false,
            autoUpdateHealth: false,
-           failUnstable: false,
            autoUpdateStability: false,
-           zoomCoverageChart: false,
            onlyStable: false,
-           conditionalCoverageTargets: '70, 0, 0',
            failUnhealthy: false,
-           lineCoverageTargets: '80, 0, 0',
            failUnstable: false,
-           methodCoverageTargets: '80, 0, 0',
            zoomCoverageChart: false,
-           maxNumberOfBuilds: 0
            conditionalCoverageTargets: '70, 0, 0',
            lineCoverageTargets: '80, 0, 0',
            methodCoverageTargets: '80, 0, 0',
