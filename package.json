@@ -32,7 +32,7 @@
   },
   "peerDependencies": {
     "explorer-ui-server": "0.0.7"
-  },  
+  },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",
