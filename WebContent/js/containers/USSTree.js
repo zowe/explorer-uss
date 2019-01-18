@@ -20,7 +20,7 @@ import TreeFile from '../components/explorer/TreeFile';
 import ConnectedTreeDirectory from '../components/explorer/TreeDirectory';
 import { setUSSPath, fetchUSSTreeChildren, resetUSSChildren } from '../actions/treeUSS';
 import { addTreeDirectory, resetDirectoryChildren } from '../actions/treeDirectories';
-import { requestEdit, fetchUSSFile } from '../actions/editor';
+import { fetchUSSFile } from '../actions/editor';
 import ConnectedCreateUSSResourceDialog from '../components/dialogs/USS/CreateUSSResourceDialog';
 import DeleteUSSResourceDialog from '../components/dialogs/USS/DeleteUSSResourceDialog';
 import FullHeightTree from './FullHeightTree';
@@ -136,7 +136,6 @@ export class USSTree extends React.Component {
 
     handleOrionEdit = path => {
         const { dispatch } = this.props;
-        dispatch(requestEdit());
         dispatch(fetchUSSFile(path));
     }
 
