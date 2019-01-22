@@ -26,28 +26,9 @@ describe('Action: validation', () => {
     const middlewares = [thunk];
     const mockStore = configureMockStore(middlewares);
 
-    const followersResponse = [{
-        owner: 'JCAIN',
-        subsystem: 'JES2',
-        type: 'TSU',
-        jobid: 'TSU257',
-        class: 'TSU',
-        jobname: 'STONECC',
-        status: 'OUTPUT',
-        retcode: 'ABEND S222',
-    }, {
-        owner: 'JCAIN',
-        subsystem: 'JES2',
-        type: 'TSU',
-        jobid: 'TSU257',
-        class: 'TSU',
-        jobname: 'STONECC',
-        status: 'OUTPUT',
-        retcode: 'ABEND S222',
-    }];
-
     describe('validateUser', () => {
         it('Should create an action to request and then receive validation along with grabbing and setting port', () => {
+            const username = { username: 'JCAIN' };
             const expectedActions = [
                 {
                     type: validation.REQUEST_VALIDATION,
@@ -59,8 +40,8 @@ describe('Action: validation', () => {
             ];
 
             nock(LOCAL_HOST_ENDPOINT)
-                .get('/zosmf/restjobs/jobs')
-                .reply(200, followersResponse);
+                .get('/datasets/username')
+                .reply(200, username);
 
             const store = mockStore();
 
@@ -77,7 +58,7 @@ describe('Action: validation', () => {
             ];
 
             nock(LOCAL_HOST_SERVER_WITH_PROTOCOL)
-                .get('/zosmf/restjobs/jobs')
+                .get('/datasets/username')
                 .reply(500, '');
 
             const store = mockStore();
