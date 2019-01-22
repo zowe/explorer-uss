@@ -76,6 +76,7 @@ class CreateUSSResourceDialog extends React.Component {
                 dialogReturn={dialogReturn}
                 dispatch={dispatch}
                 dialogContent={dialogContent}
+                bodyStyle={{ overflowY: 'auto' }}
             />
         );
     }
