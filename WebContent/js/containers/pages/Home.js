@@ -57,6 +57,7 @@ function mapStateToProps(state) {
     const validationRoot = state.get('validation');
     return {
         validated: validationRoot.get('validated'),
+        isValidating: validationRoot.get('isValidating'),
     };
 }
 
