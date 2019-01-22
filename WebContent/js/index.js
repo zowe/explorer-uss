@@ -47,7 +47,7 @@ ReactDOM.render(
         <Provider store={store().getStore()}>
             <Router history={hashHistory}>
                 <Route path="/">
-                    <IndexRoute path="/" component={HomeView} />
+                    <IndexRoute component={HomeView} />
                     <Route path="/editor" component={FullScreenEditor} />
                 </Route>
             </Router>
