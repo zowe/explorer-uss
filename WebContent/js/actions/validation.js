@@ -37,15 +37,18 @@ function invalidateValidation() {
 export function validateUser() {
     return dispatch => {
         dispatch(requestValidation());
-        return atlasGet('zosmf/restjobs/jobs')
+        return atlasGet('datasets/username')
             .then(response => {
-                return response.json();
+                if (response.ok) {
+                    return response.json();
+                }
+                throw Error(response.statusText);
             })
             .then(json => {
-                if (json.length > 0) {
-                    return dispatch(receiveValidation(json[0].owner));
+                if (json.username) {
+                    return dispatch(receiveValidation(json.username));
                 }
-                return dispatch(receiveValidation(''));
+                return dispatch(invalidateValidation());
             })
             .catch(() => {
                 return dispatch(invalidateValidation());
