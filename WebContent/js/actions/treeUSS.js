@@ -128,7 +128,7 @@ export function fetchUSSTreeChildren(path) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
         let endpoint = `zosmf/restfiles/fs?path=${path}`;
-        if (endpoint.substr(endpoint.length - 1) === '/') {
+        if (path.substr(path.length - 1) === '/' && path !== '/') {
             endpoint = endpoint.substr(0, endpoint.length - 1);
         }
         return atlasGet(endpoint, { credentials: 'include' })
