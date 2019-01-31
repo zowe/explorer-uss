@@ -127,7 +127,10 @@ function invalidateDelete(path) {
 export function fetchUSSTreeChildren(path) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
-        const endpoint = `zosmf/restfiles/fs?path=${path}`;
+        let endpoint = `zosmf/restfiles/fs?path=${path}`;
+        if (path.substr(path.length - 1) === '/' && path !== '/') {
+            endpoint = endpoint.substr(0, endpoint.length - 1);
+        }
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
                 return response.json();
