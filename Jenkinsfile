@@ -16,9 +16,9 @@
 
 def repositoryName = 'zowe/explorer-uss'
 def isPullRequest = env.BRANCH_NAME.startsWith('PR-')
-def isMasterBranch = env.BRANCH_NAME == 'master' || env.BRANCH_NAME =='zosmf_convert'
+def isMasterBranch = env.BRANCH_NAME == 'master'
 def isReleaseBranch = env.BRANCH_NAME ==~ /^v[0-9]+\.[0-9]+\.[0-9x]+$/
-def extraReleaseBranches = ['tag-release']
+def extraReleaseBranches = ['tag-release', 'zosmf_convert']
 def supportedReleaseTypes = ['PATCH', 'MINOR', 'MAJOR']
 def allowReleasing = false
 
@@ -127,7 +127,7 @@ node ('ibm-jenkins-slave-nvm-jnlp') {
       } else {
         def buildIdentifier = getBuildIdentifier('%Y%m%d%H%M%S', 'master', false)
         versionId = "${packageVersion}-snapshot.${buildIdentifier}"
-      }      
+      }
       echo "Building ${packageName} v${versionId}..."
     }
 
