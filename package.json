@@ -110,7 +110,6 @@
   "config": {
     "pluginId": "org.zowe.explorer-uss",
     "pluginName": "USS Explorer",
-    "baseuri": "/ui/v1/explorer-uss",
-    "port": 8547
+    "baseuri": "/ui/v1/explorer-uss"
   }
 }
