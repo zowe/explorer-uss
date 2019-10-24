@@ -21,7 +21,6 @@
 # - KEYSTORE_CERTIFICATE
 # - KEYSTORE_PASSWORD
 
-. $ROOT_DIR/scripts/utils/validateNode.sh
 NODE_BIN=${NODE_HOME}/bin/node
 
 cd "$ROOT_DIR/components/explorer-uss/bin"
