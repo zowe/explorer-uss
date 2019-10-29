@@ -1,6 +1,6 @@
 # explorer-uss
 
-[![Code Quality](https://jayne.zowe.org:9000/api/project_badges/measure?project=zowe%3Aexplorer-uss&metric=alert_status)](https://jayne.zowe.org:9000/dashboard/index/zowe:explorer-uss)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=zowe_explorer-uss&metric=alert_status)](https://sonarcloud.io/dashboard?id=zowe_explorer-uss)
 
 Requires access to npm registry with orion-editor-component
 https://gizaartifactory.jfrog.io/gizaartifactory/webapp/#/artifacts/browse/tree/General/npm-release
