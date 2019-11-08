@@ -2,6 +2,8 @@
 
 [![Code Quality](https://jayne.zowe.org:9000/api/project_badges/measure?project=zowe%3Aexplorer-uss&metric=alert_status)](https://jayne.zowe.org:9000/dashboard/index/zowe:explorer-uss)
 
+The issues for the USS explorer are tracked under the Zowe Zlux repository, https://github.com/zowe/zlux and tagged accordingly with the 'explorer-uss' label. Open issues tagged with 'explorer-uss' can be found [here](https://github.com/zowe/zlux/issues?q=is%3Aissue+is%3Aopen+label%3Aexplorer-uss).
+
 Requires access to npm registry with orion-editor-component
 https://gizaartifactory.jfrog.io/gizaartifactory/webapp/#/artifacts/browse/tree/General/npm-release
 
