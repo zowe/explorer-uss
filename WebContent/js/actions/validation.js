@@ -35,13 +35,17 @@ function invalidateValidation(message) {
     };
 }
 
+export function constructValidationErrorMessage(errorMessageObject) {
+    return `${errorMessageObject.messageNumber} : ${errorMessageObject.messageContent}`;
+}
+
 function checkResponse(response) {
     if (response.ok) {
         return response.json();
     }
     return response.json()
         .then(e => {
-            throw Error(`${e.messages[0].messageNumber} : ${e.messages[0].messageContent}`);
+            throw Error(constructValidationErrorMessage(e.message[0]));
         });
 }
 
@@ -77,8 +81,6 @@ export function loginUser(username, password) {
                     .then(e => {
                         throw Error(`${e.messages[0].messageNumber} : ${e.messages[0].messageContent}`);
                     });
-            }).then(json => {
-                return dispatch(receiveValidation(json.userId));
             }).catch(error => {
                 return dispatch(invalidateValidation(error.message));
             });

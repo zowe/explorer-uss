@@ -39,7 +39,7 @@ export default function content(state = INITIAL_CONTENT_STATE, action) {
             return state.merge({
                 isValidating: false,
                 validated: false,
-                message: action.message,
+                message: action.message ? action.message : '',
             });
         default:
             return state;
