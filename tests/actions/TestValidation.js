@@ -54,7 +54,10 @@ describe('Action: validation', () => {
         it('Should create an action to request and then invalidate', () => {
             const expectedActions = [
                 { type: validation.REQUEST_VALIDATION },
-                { type: validation.INVALIDATE_VALIDATION, message: undefined },
+                {
+                    type: validation.INVALIDATE_VALIDATION,
+                    message: validation.constructValidationErrorMessage(validationResources.validationQueryInvalidTokenResponse.messages[0]),
+                },
             ];
 
             nock(LOCAL_HOST_ENDPOINT)
