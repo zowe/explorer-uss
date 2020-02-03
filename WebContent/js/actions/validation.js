@@ -35,6 +35,15 @@ function invalidateValidation(message) {
     };
 }
 
+export function checkForValidationFailure(response) {
+    return dispatch => {
+        if (response.status === 401) {
+            return dispatch(invalidateValidation());
+        }
+        return response;
+    };
+}
+
 export function constructValidationErrorMessage(errorMessageObject) {
     return `${errorMessageObject.messageNumber} : ${errorMessageObject.messageContent}`;
 }
@@ -44,8 +53,8 @@ function checkResponse(response) {
         return response.json();
     }
     return response.json()
-        .then(e => {
-            throw Error(constructValidationErrorMessage(e.message[0]));
+        .then(error => {
+            throw Error(constructValidationErrorMessage(error.messages[0]));
         });
 }
 
@@ -59,8 +68,8 @@ export function validateUser() {
             return checkResponse(response);
         }).then(json => {
             return dispatch(receiveValidation(json.userId));
-        }).catch(() => {
-            return dispatch(invalidateValidation());
+        }).catch(error => {
+            return dispatch(invalidateValidation(error.message));
         });
     };
 }
@@ -77,10 +86,7 @@ export function loginUser(username, password) {
                 if (response.ok) {
                     return dispatch(receiveValidation(username));
                 }
-                return response.json()
-                    .then(e => {
-                        throw Error(`${e.messages[0].messageNumber} : ${e.messages[0].messageContent}`);
-                    });
+                return checkResponse(response);
             }).catch(error => {
                 return dispatch(invalidateValidation(error.message));
             });

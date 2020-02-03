@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import USSTreeComponent from '../USSTree';
 import Editor from '../../components/editor/Editor';
 import ConnectedSnackbar from '../../components/Snackbar';
-import Login from '../../components/dialogs/LoginDialog';
+import LoginDialog from '../../components/dialogs/LoginDialog';
 
 const HomeView = props => {
     const { validated } = props;
@@ -31,7 +31,7 @@ const HomeView = props => {
             </div>
         );
     }
-    return (<Login />);
+    return (<LoginDialog />);
 };
 
 HomeView.propTypes = {

@@ -5,10 +5,11 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2018
+ * Copyright IBM Corporation 2016, 2020
  */
 
 import { atlasGet, atlasDelete, atlasPost, augmentJson } from '../utilities/urlUtils';
+import { checkForValidationFailure } from './validation';
 import { invalidateContentIfOpen } from './editor';
 import { constructAndPushMessage } from './snackbarNotifications';
 
@@ -133,6 +134,9 @@ export function fetchUSSTreeChildren(path) {
         }
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
                 return response.json();
             }).then(json => {
                 return dispatch(receiveUSSChildren(path, augmentJson(json, path).items));
@@ -150,6 +154,9 @@ export function createUSSResource(path, type) {
         const endpoint = `zosmf/restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
         const body = `{"type": "${type}", "mode": "RWXRWXR--"}`;
         return atlasPost(endpoint, body)
+            .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
             .then(response => {
                 if (response.ok) {
                     dispatch(constructAndPushMessage(`${USS_CREATE_SUCCESS_MESSAGE} ${path}`));
@@ -170,16 +177,20 @@ export function deleteUSSResource(path) {
         return atlasDelete(endpoint, {
             credentials: 'include',
             method: 'DELETE',
-        }).then(response => {
-            if (response.ok) {
-                dispatch(receiveDelete(path));
-                dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
-                return dispatch(invalidateContentIfOpen(path));
-            }
-            throw Error(response.statusText);
-        }).catch(() => {
-            dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path}`));
-            return dispatch(invalidateDelete(path));
-        });
+        })
+            .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
+                if (response.ok) {
+                    dispatch(receiveDelete(path));
+                    dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
+                    return dispatch(invalidateContentIfOpen(path));
+                }
+                throw Error(response.statusText);
+            }).catch(() => {
+                dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path}`));
+                return dispatch(invalidateDelete(path));
+            });
     };
 }

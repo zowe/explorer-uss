@@ -5,12 +5,13 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2018
+ * Copyright IBM Corporation 2016, 2020
  */
 
 import { createUSSResource, fetchUSSTreeChildren } from '../actions/treeUSS';
 import { getPathToResource } from '../utilities/USSUtilities';
 import { atlasGet, atlasPut } from '../utilities/urlUtils';
+import { checkForValidationFailure } from './validation';
 import { constructAndPushMessage } from './snackbarNotifications';
 
 export const REQUEST_CONTENT = 'REQUEST_CONTENT';
@@ -65,8 +66,14 @@ export function fetchUSSFile(USSPath) {
         let checksum = '';
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
-                checksum = response.headers.get('ETag');
-                return response.text();
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
+                if (response.ok) {
+                    checksum = response.headers.get('ETag');
+                    return response.text();
+                }
+                throw Error();
             })
             .then(text => {
                 dispatch(receiveContent(USSPath, text, checksum));
@@ -153,11 +160,15 @@ export function getNewUSSResourceChecksum(resourceName) {
         let checksum = '';
         return atlasGet(contentURL, { credentials: 'include' })
             .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
                 dispatch(receiveChecksum(resourceName));
                 checksum = response.headers.get('ETag');
             }).then(() => {
                 dispatch(updateEditorChecksum(checksum));
-            }).catch(() => {
+            })
+            .catch(() => {
                 dispatch(invalidateChecksumChange());
             });
     };
@@ -171,18 +182,23 @@ export function saveUSSResource(resourceName, content, checksum) {
     return dispatch => {
         dispatch(requestSave(resourceName));
         const contentURL = constructSaveUSSURL(resourceName);
-        return atlasPut(contentURL, content, checksum).then(response => {
-            if (response.ok) {
-                dispatch(constructAndPushMessage(`${SAVE_SUCCESS_MESSAGE} ${resourceName}`));
-                return dispatch(receiveSave(resourceName));
-            }
-            throw Error(response);
-        }).then(() => {
-            dispatch(getNewUSSResourceChecksum(resourceName));
-        }).catch(response => {
-            dispatch(constructAndPushMessage(`${SAVE_FAILURE_MESSAGE} ${resourceName}`));
-            dispatch(invalidateSave(response));
-        });
+        return atlasPut(contentURL, content, checksum)
+            .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
+                if (response.ok) {
+                    dispatch(constructAndPushMessage(`${SAVE_SUCCESS_MESSAGE} ${resourceName}`));
+                    return dispatch(receiveSave(resourceName));
+                }
+                throw Error(response);
+            }).then(() => {
+                dispatch(getNewUSSResourceChecksum(resourceName));
+            })
+            .catch(response => {
+                dispatch(constructAndPushMessage(`${SAVE_FAILURE_MESSAGE} ${resourceName}`));
+                dispatch(invalidateSave(response));
+            });
     };
 }
 
@@ -191,16 +207,20 @@ export function saveAsUSSResource(oldResource, newResource, content) {
         dispatch(requestSaveAs(oldResource, newResource));
         return dispatch(createUSSResource(newResource, 'file')).then(() => {
             const contentURL = constructSaveUSSURL(newResource);
-            return atlasPut(contentURL, content).then(response => {
-                if (response.ok) {
-                    dispatch(constructAndPushMessage(`${SAVE_SUCCESS_MESSAGE} ${newResource}`));
-                    return dispatch(receiveSave(newResource));
-                }
-                throw response;
-            }).then(() => {
-                dispatch(fetchUSSTreeChildren(getPathToResource(newResource)));
-                return dispatch(fetchUSSFile(newResource));
-            })
+            return atlasPut(contentURL, content)
+                .then(response => {
+                    return dispatch(checkForValidationFailure(response));
+                })
+                .then(response => {
+                    if (response.ok) {
+                        dispatch(constructAndPushMessage(`${SAVE_SUCCESS_MESSAGE} ${newResource}`));
+                        return dispatch(receiveSave(newResource));
+                    }
+                    throw response;
+                }).then(() => {
+                    dispatch(fetchUSSTreeChildren(getPathToResource(newResource)));
+                    return dispatch(fetchUSSFile(newResource));
+                })
                 .catch(response => {
                     dispatch(constructAndPushMessage(`${SAVE_FAILURE_MESSAGE} ${newResource}`));
                     dispatch(invalidateSaveAs(response));

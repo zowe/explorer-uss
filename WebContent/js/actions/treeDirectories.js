@@ -5,10 +5,11 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2018
+ * Copyright IBM Corporation 2016, 2020
  */
 
 import { atlasGet, augmentJson } from '../utilities/urlUtils';
+import { checkForValidationFailure } from './validation';
 import { constructAndPushMessage } from './snackbarNotifications';
 
 export const REQUEST_DIRECTORY_CHILDREN = 'REQUEST_DIRECTORY_CHILDREN';
@@ -71,6 +72,9 @@ export function fetchDirectoryChildren(path) {
     return dispatch => {
         dispatch(requestDirectoryChildren(path));
         return atlasGet(endpoint, { credentials: 'include' })
+            .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
             .then(response => {
                 return response.json();
             })
