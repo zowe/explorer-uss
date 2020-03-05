@@ -16,6 +16,7 @@ import { TextField, FlatButton } from 'material-ui';
 import CircularProgress from 'material-ui/CircularProgress';
 import Dialog from 'material-ui/Dialog';
 import { validateUser, loginUser } from '../../actions/validation';
+import ZoweIcon from '../../../img/zowe-icon-color.svg';
 
 class LoginDialog extends React.Component {
     constructor(props) {
@@ -56,30 +57,38 @@ class LoginDialog extends React.Component {
         const { isValidating, validationMessage } = this.props;
         const dialogContent = isValidating ? <CircularProgress /> :
             (<div>
+                <div style={{ textAlign: 'center' }}>
+                    <img
+                        style={{ width: '100px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+                        src={ZoweIcon}
+                        alt="logo"
+                    />
+                    Zowe Login
+                </div>
                 <form onSubmit={this.handleLogin}>
                     <TextField
                         id="username"
                         label="username"
-                        hintText="Username"
-                        errorText={this.state.username === '' ? <div>*Required</div> : null}
+                        hintText="Username*"
                         value={this.state.username}
                         onChange={this.handleUsernameChange}
                         style={{ display: 'block' }}
+                        fullWidth={true}
                     />
                     <TextField
                         id="password"
                         label="password"
-                        hintText="Password"
-                        errorText={this.state.password === '' ? <div>*Required</div> : null}
+                        hintText="Password*"
                         type="password"
                         value={this.state.password}
                         onChange={this.handlePasswordChange}
+                        fullWidth={true}
                     />
                     <input type="submit" style={{ display: 'none' }} />
+                    <div style={{ color: 'red' }}>
+                        {validationMessage}
+                    </div>
                 </form>
-                <div style={{ color: 'red' }}>
-                    {validationMessage}
-                </div>
             </div>);
 
         const actions = [
@@ -88,7 +97,6 @@ class LoginDialog extends React.Component {
 
         return (
             <Dialog
-                title="Zowe Login"
                 open={true}
                 actions={actions}
                 type={'primary'}

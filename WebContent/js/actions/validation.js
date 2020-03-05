@@ -63,14 +63,16 @@ export function validateUser() {
         dispatch(requestValidation());
         return fetch(`https://${whichServer()}/gateway/auth/query`,
             { credentials: 'include',
-                'Access-Control-Allow-Credentials': 'true' },
-        ).then(response => {
-            return checkResponse(response);
-        }).then(json => {
-            return dispatch(receiveValidation(json.userId));
-        }).catch(error => {
-            return dispatch(invalidateValidation(error.message));
-        });
+                'Access-Control-Allow-Credentials': 'true' })
+            .then(response => {
+                return checkResponse(response);
+            })
+            .then(json => {
+                return dispatch(receiveValidation(json.userId));
+            })
+            .catch(error => {
+                return dispatch(invalidateValidation(error.message));
+            });
     };
 }
 
