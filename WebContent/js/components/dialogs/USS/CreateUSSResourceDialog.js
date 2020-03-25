@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2018
+ * Copyright IBM Corporation 2016, 2020
  */
 
 import React from 'react';
@@ -34,12 +34,12 @@ class CreateUSSResourceDialog extends React.Component {
 
     getTitleName() {
         const { type } = this.props;
-        return type === 'directory' ? CREATE_DIRECTORY_TITLE : CREATE_FILE_TITLE;
+        return type === 'DIRECTORY' ? CREATE_DIRECTORY_TITLE : CREATE_FILE_TITLE;
     }
 
     getFieldName() {
         const { type } = this.props;
-        return type === 'directory' ? NEW_DIRECTORY_FIELD : NEW_FILE_FIELD;
+        return type === 'DIRECTORY' ? NEW_DIRECTORY_FIELD : NEW_FILE_FIELD;
     }
 
     addSlashToPathIfMissing = path => {

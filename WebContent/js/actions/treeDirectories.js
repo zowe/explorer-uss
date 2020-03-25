@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2016, 2020
  */
 
-import { atlasGet, augmentJson } from '../utilities/urlUtils';
+import { atlasGet } from '../utilities/urlUtils';
 import { checkForValidationFailure } from './validation';
 import { constructAndPushMessage } from './snackbarNotifications';
 
@@ -68,7 +68,7 @@ export function addTreeDirectory(path, child) {
 }
 
 export function fetchDirectoryChildren(path) {
-    const endpoint = `zosmf/restfiles/fs?path=${path}`;
+    const endpoint = `unixfiles?path=${path}`;
     return dispatch => {
         dispatch(requestDirectoryChildren(path));
         return atlasGet(endpoint, { credentials: 'include' })
@@ -76,14 +76,17 @@ export function fetchDirectoryChildren(path) {
                 return dispatch(checkForValidationFailure(response));
             })
             .then(response => {
-                return response.json();
+                if (response.ok) {
+                    return response.json();
+                }
+                return response.json().then(e => { throw Error(e.message); });
             })
             .then(json => {
-                dispatch(receiveDirectoryChildren(path, augmentJson(json, path).items));
+                dispatch(receiveDirectoryChildren(path, json.children));
                 dispatch(toggleDirectory(path, true));
             })
-            .catch(() => {
-                dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path}`));
+            .catch(e => {
+                dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path} : ${e.message}`));
                 dispatch(invalidateChildren());
             });
     };

@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2016, 2020
  */
 
-import { createUSSResource, fetchUSSTreeChildren } from '../actions/treeUSS';
+import { createUSSResource, fetchUSSTreeChildren, INVALIDATE_NEW_RESOURCE } from '../actions/treeUSS';
 import { getPathToResource } from '../utilities/USSUtilities';
 import { atlasGet, atlasPut } from '../utilities/urlUtils';
 import { checkForValidationFailure } from './validation';
@@ -33,7 +33,7 @@ export const REQUEST_CHTAG = 'REQUEST_CHTAG';
 export const RECEIVE_CHTAG = 'RECEIVE_CHTAG';
 export const UPDATE_CHTAG = 'UPDATE_CHTAG';
 
-const GET_CONTENT_FAIL_MESSAGE = 'Get content failed for';
+const GET_CONTENT_FAIL_MESSAGE = 'Get content failed';
 const SAVE_FAILURE_MESSAGE = 'Save failed for';
 const SAVE_SUCCESS_MESSAGE = 'Save success for';
 
@@ -62,7 +62,7 @@ export function invalidateContent() {
 export function fetchUSSFile(USSPath) {
     return dispatch => {
         dispatch(requestContent(USSPath));
-        const endpoint = `zosmf/restfiles/fs/${USSPath && USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`;
+        const endpoint = `unixfiles/${USSPath && USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`;
         let checksum = '';
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
@@ -71,15 +71,15 @@ export function fetchUSSFile(USSPath) {
             .then(response => {
                 if (response.ok) {
                     checksum = response.headers.get('ETag');
-                    return response.text();
+                    return response.json();
                 }
-                throw Error();
+                return response.json().then(e => { throw Error(e.message); });
             })
-            .then(text => {
-                dispatch(receiveContent(USSPath, text, checksum));
+            .then(json => {
+                dispatch(receiveContent(USSPath, json.content, checksum));
             })
-            .catch(() => {
-                dispatch(constructAndPushMessage(`${GET_CONTENT_FAIL_MESSAGE} ${USSPath}`));
+            .catch(e => {
+                dispatch(constructAndPushMessage(`${GET_CONTENT_FAIL_MESSAGE} ${USSPath} : ${e.message}`));
                 return dispatch(invalidateContent());
             });
     };
@@ -156,7 +156,7 @@ function invalidateChecksumChange() {
 export function getNewUSSResourceChecksum(resourceName) {
     return dispatch => {
         dispatch(requestChecksum(resourceName));
-        const contentURL = `zosmf/restfiles/fs/${(resourceName && resourceName.length > 0 && resourceName.indexOf('/') === 0) ? resourceName.substring(1) : resourceName}`;
+        const contentURL = `unixfiles/${(resourceName && resourceName.length > 0 && resourceName.indexOf('/') === 0) ? resourceName.substring(1) : resourceName}`;
         let checksum = '';
         return atlasGet(contentURL, { credentials: 'include' })
             .then(response => {
@@ -174,15 +174,33 @@ export function getNewUSSResourceChecksum(resourceName) {
     };
 }
 
+function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+
 function constructSaveUSSURL(resourceName) {
-    return `zosmf/restfiles/fs/${resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName}`;
+    return `unixfiles/${resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName}`;
+}
+
+function encodeContentString(content) {
+    let newContent = replaceAll(content, /\\/, '\\\\'); // Escape backslashes
+    newContent = replaceAll(newContent, /"/, '\\"'); // Escape double quotes
+    // The new server interface is unable to accept setings with hex values
+    newContent = replaceAll(newContent, '\x0a', '\\n'); // Escape line feed
+    newContent = replaceAll(newContent, '\x0d', '\\r'); // Escape return
+    newContent = replaceAll(newContent, '\x09', '\\t'); // Escape tab
+    return newContent;
+}
+
+function getSaveRequestBody(content) {
+    return `{"content": "${encodeContentString(content)}"}`;
 }
 
 export function saveUSSResource(resourceName, content, checksum) {
     return dispatch => {
         dispatch(requestSave(resourceName));
         const contentURL = constructSaveUSSURL(resourceName);
-        return atlasPut(contentURL, content, checksum)
+        return atlasPut(contentURL, getSaveRequestBody(content), checksum)
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
             })
@@ -191,13 +209,13 @@ export function saveUSSResource(resourceName, content, checksum) {
                     dispatch(constructAndPushMessage(`${SAVE_SUCCESS_MESSAGE} ${resourceName}`));
                     return dispatch(receiveSave(resourceName));
                 }
-                throw Error(response);
+                return response.json().then(e => { throw Error(e.message); });
             }).then(() => {
                 dispatch(getNewUSSResourceChecksum(resourceName));
             })
-            .catch(response => {
-                dispatch(constructAndPushMessage(`${SAVE_FAILURE_MESSAGE} ${resourceName}`));
-                dispatch(invalidateSave(response));
+            .catch(e => {
+                dispatch(constructAndPushMessage(`${SAVE_FAILURE_MESSAGE} ${resourceName} : ${e.message}`));
+                dispatch(invalidateSave());
             });
     };
 }
@@ -205,9 +223,12 @@ export function saveUSSResource(resourceName, content, checksum) {
 export function saveAsUSSResource(oldResource, newResource, content) {
     return dispatch => {
         dispatch(requestSaveAs(oldResource, newResource));
-        return dispatch(createUSSResource(newResource, 'file')).then(() => {
+        return dispatch(createUSSResource(newResource, 'FILE')).then(createResponse => {
+            if (createResponse.type === INVALIDATE_NEW_RESOURCE) {
+                return dispatch(invalidateSaveAs());
+            }
             const contentURL = constructSaveUSSURL(newResource);
-            return atlasPut(contentURL, content)
+            return atlasPut(contentURL, getSaveRequestBody(content))
                 .then(response => {
                     return dispatch(checkForValidationFailure(response));
                 })
@@ -216,14 +237,14 @@ export function saveAsUSSResource(oldResource, newResource, content) {
                         dispatch(constructAndPushMessage(`${SAVE_SUCCESS_MESSAGE} ${newResource}`));
                         return dispatch(receiveSave(newResource));
                     }
-                    throw response;
+                    return response.json().then(e => { throw Error(e.message); });
                 }).then(() => {
                     dispatch(fetchUSSTreeChildren(getPathToResource(newResource)));
                     return dispatch(fetchUSSFile(newResource));
                 })
-                .catch(response => {
-                    dispatch(constructAndPushMessage(`${SAVE_FAILURE_MESSAGE} ${newResource}`));
-                    dispatch(invalidateSaveAs(response));
+                .catch(e => {
+                    dispatch(constructAndPushMessage(`${SAVE_FAILURE_MESSAGE} ${newResource} : ${e.message}`));
+                    dispatch(invalidateSaveAs());
                 });
         });
     };

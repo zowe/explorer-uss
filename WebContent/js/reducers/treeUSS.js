@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2018
+ * Copyright IBM Corporation 2016, 2020
  */
 
 import { Map } from 'immutable';
@@ -53,14 +53,14 @@ export default function treeUSS(state = INITIAL_TREE_STATE, action) {
         }
         case RECEIVE_NEW_DIRECTORY: {
             let child = Map({});
-            child = child.set(`${getResourceFromPath(action.USSPath)}`, 'directory');
+            child = child.set(`${getResourceFromPath(action.USSPath)}`, 'DIRECTORY');
             return state.mergeDeep({
                 USSChildren: child,
             });
         }
         case RECEIVE_NEW_FILE: {
             let child = Map({});
-            child = child.set(`${getResourceFromPath(action.USSPath)}`, 'file');
+            child = child.set(`${getResourceFromPath(action.USSPath)}`, 'FILE');
             return state.mergeDeep({
                 USSChildren: child,
             });

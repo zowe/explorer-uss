@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2016, 2020
  */
 
-import { atlasGet, atlasDelete, atlasPost, augmentJson } from '../utilities/urlUtils';
+import { atlasGet, atlasDelete, atlasPost } from '../utilities/urlUtils';
 import { checkForValidationFailure } from './validation';
 import { invalidateContentIfOpen } from './editor';
 import { constructAndPushMessage } from './snackbarNotifications';
@@ -91,7 +91,7 @@ function receiveNewFile(path) {
 }
 
 function receiveNewResource(path, type) {
-    if (type === 'directory') {
+    if (type === 'DIRECTORY') {
         return receiveNewDirectory(path);
     }
     return receiveNewFile(path);
@@ -128,7 +128,7 @@ function invalidateDelete(path) {
 export function fetchUSSTreeChildren(path) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
-        let endpoint = `zosmf/restfiles/fs?path=${path}`;
+        let endpoint = `unixfiles?path=${path}`;
         if (path.substr(path.length - 1) === '/' && path !== '/') {
             endpoint = endpoint.substr(0, endpoint.length - 1);
         }
@@ -137,12 +137,15 @@ export function fetchUSSTreeChildren(path) {
                 return dispatch(checkForValidationFailure(response));
             })
             .then(response => {
-                return response.json();
+                if (response.ok) {
+                    return response.json();
+                }
+                return response.json().then(e => { throw Error(e.message); });
             }).then(json => {
-                return dispatch(receiveUSSChildren(path, augmentJson(json, path).items));
+                return dispatch(receiveUSSChildren(path, json.children));
             })
-            .catch(() => {
-                dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path}`));
+            .catch(e => {
+                dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path} : ${e.message}`));
                 return dispatch(invalidateUSSChildren(path));
             });
     };
@@ -151,8 +154,8 @@ export function fetchUSSTreeChildren(path) {
 export function createUSSResource(path, type) {
     return dispatch => {
         dispatch(requestNewResource(path));
-        const endpoint = `zosmf/restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
-        const body = `{"type": "${type}", "mode": "RWXRWXR--"}`;
+        const endpoint = `unixfiles/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const body = `{"type": "${type}", "permissions": "RWXRWXR--"}`;
         return atlasPost(endpoint, body)
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
@@ -162,9 +165,9 @@ export function createUSSResource(path, type) {
                     dispatch(constructAndPushMessage(`${USS_CREATE_SUCCESS_MESSAGE} ${path}`));
                     return dispatch(receiveNewResource(path, type));
                 }
-                throw Error(response.statusText);
-            }).catch(() => {
-                dispatch(constructAndPushMessage(`${USS_CREATE_FAIL_MESSAGE} ${path}`));
+                return response.json().then(e => { throw Error(e.message); });
+            }).catch(e => {
+                dispatch(constructAndPushMessage(`${USS_CREATE_FAIL_MESSAGE} ${path} : ${e.message}`));
                 return dispatch(invalidateReceiveResource(path));
             });
     };
@@ -173,10 +176,11 @@ export function createUSSResource(path, type) {
 export function deleteUSSResource(path) {
     return dispatch => {
         dispatch(requestDelete(path));
-        const endpoint = `zosmf/restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const endpoint = `unixfiles/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
         return atlasDelete(endpoint, {
             credentials: 'include',
             method: 'DELETE',
+            headers: { recursive: true },
         })
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
@@ -187,9 +191,9 @@ export function deleteUSSResource(path) {
                     dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
                     return dispatch(invalidateContentIfOpen(path));
                 }
-                throw Error(response.statusText);
-            }).catch(() => {
-                dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path}`));
+                return response.json().then(e => { throw Error(e.message); });
+            }).catch(e => {
+                dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path} : ${e.message}`));
                 return dispatch(invalidateDelete(path));
             });
     };
