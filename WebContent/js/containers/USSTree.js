@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2018
+ * Copyright IBM Corporation 2016, 2020
  */
 
 import PropTypes from 'prop-types';
@@ -150,7 +150,7 @@ export class USSTree extends React.Component {
 
     renderUSSChild(child) {
         const { USSPath, USSChildren, dispatch, inDialog } = this.props;
-        if (USSChildren.get(child) === 'directory') {
+        if (USSChildren.get(child) === 'DIRECTORY') {
             return (
                 <ConnectedTreeDirectory
                     childId={child}
@@ -184,14 +184,14 @@ export class USSTree extends React.Component {
                 return (
                     <ConnectedCreateUSSResourceDialog
                         dialogReturn={this.dialogReturn}
-                        type={'directory'}
+                        type={'DIRECTORY'}
                     />
                 );
             case CREATE_FILE:
                 return (
                     <ConnectedCreateUSSResourceDialog
                         dialogReturn={this.dialogReturn}
-                        type={'file'}
+                        type={'FILE'}
                     />
                 );
             case DELETE:
