@@ -22,11 +22,11 @@ export function whichServer() {
     if (location.hostname === 'tester.test.com') {
         server = 'tester.test.com:7443';
     }
-    return `${server}/api/v1`;
+    return `${server}`;
 }
 
 function atlasAction(endpoint, content, fetchParams) {
-    return fetch(`https://${whichServer()}/${endpoint}`, { ...fetchParams, ...content });
+    return fetch(`https://${whichServer()}/api/v2/${endpoint}`, { ...fetchParams, ...content });
 }
 
 export function atlasGet(endpoint, content) {
@@ -46,7 +46,7 @@ export function atlasDelete(endpoint, content) {
 }
 
 export function atlasPost(endpoint, body) {
-    return fetch(`https://${whichServer()}/${endpoint}`, {
+    return atlasAction(endpoint, {
         method: 'POST',
         body,
         headers: { 'Content-Type': 'application/json' },
@@ -59,7 +59,7 @@ export function atlasPut(endpoint, body, checksum) {
     if (checksum) {
         headers['If-Match'] = checksum;
     }
-    return fetch(`https://${whichServer()}/${endpoint}`, {
+    return atlasAction(endpoint, {
         method: 'PUT',
         body,
         headers,
