@@ -11,10 +11,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import CircularProgress from 'material-ui/CircularProgress';
 import Editor from '../../components/editor/Editor';
 import ConnectedSnackbar from '../../components/Snackbar';
 import { validateUser } from '../../actions/validation';
+import LoginDialog from '../../components/dialogs/LoginDialog';
 
 class FullScreenEditor extends React.Component {
     componentWillMount() {
@@ -25,7 +25,7 @@ class FullScreenEditor extends React.Component {
     }
 
     render() {
-        const { location, validated, isValidating } = this.props;
+        const { location, validated } = this.props;
         if (validated) {
             return (
                 <div>
@@ -34,17 +34,13 @@ class FullScreenEditor extends React.Component {
                 </div>
             );
         }
-        if (isValidating) {
-            return (<CircularProgress className="vertical-horizontal-center-new" />);
-        }
-        return (<div className="vertical-horizontal-center">Unable to Authenticate</div>);
+        return (<LoginDialog />);
     }
 }
 
 FullScreenEditor.propTypes = {
     dispatch: PropTypes.func.isRequired,
     validated: PropTypes.bool.isRequired,
-    isValidating: PropTypes.bool.isRequired,
     location: PropTypes.shape({
         pathname: PropTypes.string.isRequired,
     }).isRequired,

@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018
+ * Copyright IBM Corporation 2018, 2020
  */
 
 import configureMockStore from 'redux-mock-store';
@@ -88,7 +88,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/zosmf/restfiles/fs?path=${path}`)
+                .get(`/unixfiles?path=${path}`)
                 .reply(200, treeDirectoriesData.fetchDirectoryChildrenDataResponse);
 
             const store = mockStore();
@@ -117,7 +117,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/zosmf/restfiles/fs?path=${path}`)
+                .get(`/unixfiles?path=${path}`)
                 .reply(200, treeDirectoriesData.fetchDirectoryChildrenRootDataResponse);
 
             const store = mockStore();
@@ -139,7 +139,7 @@ describe('Action: treeDirectories', () => {
             {
                 type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
                 message: Map({
-                    message: `${rewiredFailureMessage} ${path}`,
+                    message: `${rewiredFailureMessage} ${path} : ${treeDirectoriesData.fetchDirectoryChildrenErrorResponse.message}`,
                 }),
             },
             {
@@ -147,8 +147,8 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/uss/files/dir?path=${path}`)
-                .reply(500, '');
+                .get(`/unixfiles?path=${path}`)
+                .reply(500, treeDirectoriesData.fetchDirectoryChildrenErrorResponse);
 
             const store = mockStore();
 

@@ -28,6 +28,10 @@ const INITIAL_EDITOR_STATE = Map({
 
 export default function editor(state = INITIAL_EDITOR_STATE, action) {
     switch (action.type) {
+        case REQUEST_CHECKSUM:
+            return state.merge({
+                file: action.resource,
+            });
         case RECEIVE_CONTENT:
             return state.merge({
                 file: action.resource,
@@ -41,10 +45,6 @@ export default function editor(state = INITIAL_EDITOR_STATE, action) {
                 checksum: null,
             });
         case REQUEST_SAVE:
-            return state.merge({
-                file: action.resource,
-            });
-        case REQUEST_CHECKSUM:
             return state.merge({
                 file: action.resource,
             });
