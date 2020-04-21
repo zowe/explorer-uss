@@ -2,6 +2,8 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=zowe_explorer-uss&metric=alert_status)](https://sonarcloud.io/dashboard?id=zowe_explorer-uss)
 
+The issues for the USS explorer are tracked under the Zowe Zlux repository, https://github.com/zowe/zlux and tagged accordingly with the 'explorer-uss' label. Open issues tagged with 'explorer-uss' can be found [here](https://github.com/zowe/zlux/issues?q=is%3Aissue+is%3Aopen+label%3Aexplorer-uss).
+
 ## Build 
 
 ### Install Dependencies
