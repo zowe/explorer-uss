@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 
 import configureMockStore from 'redux-mock-store';
@@ -20,8 +20,6 @@ import * as editorActions from '../../WebContent/js/actions/editor';
 import * as editorResources from '../testResources/actions/editor';
 import * as treeUSSActions from '../../WebContent/js/actions/treeUSS';
 import * as snackbarActions from '../../WebContent/js/actions/snackbarNotifications';
-import { encodeURLComponent } from '../../WebContent/js/utilities/urlUtils';
-
 
 describe('Action: editor', () => {
     let sandbox;
@@ -62,13 +60,13 @@ describe('Action: editor', () => {
             {
                 type: editorActions.RECEIVE_CONTENT,
                 resource: USSPath,
-                content: editorResources.content,
+                content: editorResources.content.content,
                 checksum: editorResources.checksum,
             }];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(USSPath)}/content`)
-                .reply(200, editorResources.fetchResponse);
+                .get(`/unixfiles/${USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`)
+                .reply(200, editorResources.content, { ETag: `${editorResources.checksum}` });
 
             const store = mockStore();
             return store.dispatch(editorActions.fetchUSSFile(USSPath))
@@ -87,7 +85,7 @@ describe('Action: editor', () => {
             {
                 type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
                 message: Map({
-                    message: `${rewiredFetchFail} ${USSPath}`,
+                    message: `${rewiredFetchFail} ${USSPath} : ${editorResources.getContentNotFoundResponse.message}`,
                 }),
             },
             {
@@ -95,8 +93,8 @@ describe('Action: editor', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/files/${encodeURIComponent(USSPath)}/content`)
-                .reply(404, editorResources.USSRequestFailed);
+                .get(`/unixfiles/${USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`)
+                .reply(404, editorResources.getContentNotFoundResponse);
 
             const store = mockStore();
             return store.dispatch(editorActions.fetchUSSFile(USSPath))
@@ -179,8 +177,8 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURLComponent(editorResources.USSFile)}/content`)
-                .reply(200, { content: editorResources.content, checksum: editorResources.checksum });
+                .get(`/unixfiles/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
+                .reply(200, editorResources.content, { ETag: `${editorResources.checksum}` });
 
             const store = mockStore();
             return store.dispatch(
@@ -202,7 +200,7 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURLComponent(editorResources.ussFile)}/content`)
+                .get('/unixfiles/')
                 .reply(500);
 
             const store = mockStore();
@@ -237,16 +235,17 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .put(`/uss/files/${encodeURLComponent(editorResources.USSFile)}/content`)
+                .put(`/unixfiles/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
                 .reply(204);
 
             const store = mockStore();
 
-            return store.dispatch(editorActions.saveUSSResource(editorResources.USSFile, editorResources.content, editorResources.checksum))
+            return store.dispatch(editorActions.saveUSSResource(editorResources.USSFile, editorResources.content.content, editorResources.checksum))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });
         });
+
         it('should create actions to request and invalidate save', () => {
             const expectedActions = [
                 {
@@ -256,7 +255,7 @@ describe('Action: editor', () => {
                 {
                     type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
                     message: Map({
-                        message: `${rewiredSaveFailMessage} ${editorResources.USSFile}`,
+                        message: `${rewiredSaveFailMessage} ${editorResources.USSFile} : ${editorResources.saveContentFailedResponse.message}`,
                     }),
                 },
                 {
@@ -265,12 +264,12 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .put(`/uss/files/${encodeURLComponent(editorResources.USSFile)}/content`)
-                .reply(500);
+                .put(`/unixfiles/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
+                .reply(500, editorResources.saveContentFailedResponse);
 
             const store = mockStore();
 
-            return store.dispatch(editorActions.saveUSSResource(editorResources.USSFile, editorResources.content, editorResources.checksum))
+            return store.dispatch(editorActions.saveUSSResource(editorResources.USSFile, editorResources.content.content, editorResources.checksum))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });
@@ -318,26 +317,29 @@ describe('Action: editor', () => {
                 {
                     type: editorActions.RECEIVE_CONTENT,
                     resource: editorResources.newUSSFile,
-                    content: editorResources.newContent,
+                    content: editorResources.newContent.content,
                     checksum: editorResources.newChecksum,
                 },
             ];
 
             nock(BASE_URL)
-                .post('/uss/files')
+                .post('/unixfiles')
                 .reply(201);
             nock(BASE_URL)
-                .put(`/uss/files/${encodeURLComponent(editorResources.newUSSFile)}/content`)
+                .post(`/unixfiles/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
+                .reply(201);
+            nock(BASE_URL)
+                .put(`/unixfiles/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
                 .reply(200);
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURLComponent(editorResources.newUSSFile)}/content`)
-                .reply(200, { content: editorResources.newContent, checksum: editorResources.newChecksum });
+                .get(`/unixfiles/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
+                .reply(200, editorResources.newContent, { ETag: `${editorResources.newChecksum}` });
 
             const store = mockStore();
 
             mockVoidFunction(treeUSSActions, 'fetchUSSTreeChildren');
 
-            return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent))
+            return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent.content))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                     expect(treeUSSActions.fetchUSSTreeChildren.calledOnce).toEqual(true, 'fetchUSSTreeChildren called once');
@@ -357,7 +359,7 @@ describe('Action: editor', () => {
                 {
                     type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
                     message: Map({
-                        message: `${rewiredCreateFailMessage} ${editorResources.newUSSFile}`,
+                        message: `${rewiredCreateFailMessage} ${editorResources.newUSSFile} : ${editorResources.saveContentFailedResponse.message}`,
                     }),
                 },
                 {
@@ -365,23 +367,17 @@ describe('Action: editor', () => {
                     path: editorResources.newUSSFile,
                 },
                 {
-                    type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
-                    message: Map({
-                        message: `${rewiredSaveFailMessage} ${editorResources.newUSSFile}`,
-                    }),
-                },
-                {
                     type: editorActions.INVALIDATE_SAVE_AS,
                 },
             ];
 
             nock(BASE_URL)
-                .put(`/uss/files/${encodeURLComponent(editorResources.newUSSFile)}/content`)
-                .reply(500);
+                .post(`/unixfiles/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.newUSSFile}`)
+                .reply(500, editorResources.saveContentFailedResponse);
 
             const store = mockStore();
 
-            return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent))
+            return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent.content))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });

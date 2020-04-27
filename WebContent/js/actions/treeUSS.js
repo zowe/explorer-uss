@@ -5,11 +5,11 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2019
+ * Copyright IBM Corporation 2016, 2020
  */
 
-import { atlasFetch } from '../utilities/urlUtils';
-import { CONTENT_TYPE_APPLICATION_JSON } from '../constants/apiRequestConstants';
+import { atlasGet, atlasDelete, atlasPost } from '../utilities/urlUtils';
+import { checkForValidationFailure } from './validation';
 import { invalidateContentIfOpen } from './editor';
 import { constructAndPushMessage } from './snackbarNotifications';
 
@@ -91,7 +91,7 @@ function receiveNewFile(path) {
 }
 
 function receiveNewResource(path, type) {
-    if (type === 'directory') {
+    if (type === 'DIRECTORY') {
         return receiveNewDirectory(path);
     }
     return receiveNewFile(path);
@@ -128,15 +128,24 @@ function invalidateDelete(path) {
 export function fetchUSSTreeChildren(path) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
-        const endpoint = `uss/files/${encodeURIComponent(path)}`;
-        return atlasFetch(endpoint, { credentials: 'include' })
+        let endpoint = `unixfiles?path=${path}`;
+        if (path.substr(path.length - 1) === '/' && path !== '/') {
+            endpoint = endpoint.substr(0, endpoint.length - 1);
+        }
+        return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
-                return response.json();
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                return response.json().then(e => { throw Error(e.message); });
             }).then(json => {
                 return dispatch(receiveUSSChildren(path, json.children));
             })
-            .catch(() => {
-                dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path}`));
+            .catch(e => {
+                dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path} : ${e.message}`));
                 return dispatch(invalidateUSSChildren(path));
             });
     };
@@ -145,49 +154,47 @@ export function fetchUSSTreeChildren(path) {
 export function createUSSResource(path, type) {
     return dispatch => {
         dispatch(requestNewResource(path));
-        const endpoint = 'uss/files';
-        const headers = new Headers(
-            CONTENT_TYPE_APPLICATION_JSON,
-        );
-        const body = `{
-            "type": "${type}",
-            "path": "${path}"
-        }`;
-        return atlasFetch(endpoint, {
-            credentials: 'include',
-            headers,
-            method: 'POST',
-            body,
-        }).then(response => {
-            if (response.ok) {
-                dispatch(constructAndPushMessage(`${USS_CREATE_SUCCESS_MESSAGE} ${path}`));
-                return dispatch(receiveNewResource(path, type));
-            }
-            throw Error(response.statusText);
-        }).catch(() => {
-            dispatch(constructAndPushMessage(`${USS_CREATE_FAIL_MESSAGE} ${path}`));
-            return dispatch(invalidateReceiveResource(path));
-        });
+        const endpoint = `unixfiles/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const body = `{"type": "${type}", "permissions": "RWXRWXR--"}`;
+        return atlasPost(endpoint, body)
+            .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
+                if (response.ok) {
+                    dispatch(constructAndPushMessage(`${USS_CREATE_SUCCESS_MESSAGE} ${path}`));
+                    return dispatch(receiveNewResource(path, type));
+                }
+                return response.json().then(e => { throw Error(e.message); });
+            }).catch(e => {
+                dispatch(constructAndPushMessage(`${USS_CREATE_FAIL_MESSAGE} ${path} : ${e.message}`));
+                return dispatch(invalidateReceiveResource(path));
+            });
     };
 }
 
 export function deleteUSSResource(path) {
     return dispatch => {
         dispatch(requestDelete(path));
-        const endpoint = `uss/files/${encodeURIComponent(path)}`;
-        return atlasFetch(endpoint, {
+        const endpoint = `unixfiles/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        return atlasDelete(endpoint, {
             credentials: 'include',
             method: 'DELETE',
-        }).then(response => {
-            if (response.ok) {
-                dispatch(receiveDelete(path));
-                dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
-                return dispatch(invalidateContentIfOpen(path));
-            }
-            throw Error(response.statusText);
-        }).catch(() => {
-            dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path}`));
-            return dispatch(invalidateDelete(path));
-        });
+            headers: { recursive: true },
+        })
+            .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
+                if (response.ok) {
+                    dispatch(receiveDelete(path));
+                    dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
+                    return dispatch(invalidateContentIfOpen(path));
+                }
+                return response.json().then(e => { throw Error(e.message); });
+            }).catch(e => {
+                dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path} : ${e.message}`));
+                return dispatch(invalidateDelete(path));
+            });
     };
 }

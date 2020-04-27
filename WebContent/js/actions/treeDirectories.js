@@ -5,10 +5,11 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2019
+ * Copyright IBM Corporation 2016, 2020
  */
 
-import { atlasFetch } from '../utilities/urlUtils';
+import { atlasGet } from '../utilities/urlUtils';
+import { checkForValidationFailure } from './validation';
 import { constructAndPushMessage } from './snackbarNotifications';
 
 export const REQUEST_DIRECTORY_CHILDREN = 'REQUEST_DIRECTORY_CHILDREN';
@@ -67,17 +68,25 @@ export function addTreeDirectory(path, child) {
 }
 
 export function fetchDirectoryChildren(path) {
+    const endpoint = `unixfiles?path=${path}`;
     return dispatch => {
         dispatch(requestDirectoryChildren(path));
-        const endpoint = `uss/files/${encodeURIComponent(path)}`;
-        return atlasFetch(endpoint, { credentials: 'include' })
-            .then(response => { return response.json(); })
+        return atlasGet(endpoint, { credentials: 'include' })
+            .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                return response.json().then(e => { throw Error(e.message); });
+            })
             .then(json => {
                 dispatch(receiveDirectoryChildren(path, json.children));
                 dispatch(toggleDirectory(path, true));
             })
-            .catch(() => {
-                dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path}`));
+            .catch(e => {
+                dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path} : ${e.message}`));
                 dispatch(invalidateChildren());
             });
     };

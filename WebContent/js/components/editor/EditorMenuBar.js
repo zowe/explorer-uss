@@ -36,7 +36,7 @@ export default class EditorMenuBar extends React.Component {
     }
 
     static getFullScreenLink(file) {
-        return `/editor?file=${encodeURIComponent(file)}`;
+        return `/editor?file=${file}`;
     }
 
     static renderFullScreenButton(file) {

@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 
 import configureMockStore from 'redux-mock-store';
@@ -80,7 +80,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(path)}`)
+                .get(`/unixfiles?path=${path}`)
                 .reply(200, treeData.USSFetchResponse);
 
             const store = mockStore();
@@ -102,7 +102,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(path)}`)
+                .get(`/unixfiles?path=${path}`)
                 .reply(200, treeData.largeDataResponse);
 
             const store = mockStore();
@@ -124,7 +124,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(path)}`)
+                .get(`/unixfiles?path=${path}`)
                 .reply(200, treeData.noDataResponse);
 
             const store = mockStore();
@@ -146,7 +146,7 @@ describe('Action: treeUSS', () => {
                 {
                     type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
                     message: new Map({
-                        message: `${rewiredFailureMessage} ${path}`,
+                        message: `${rewiredFailureMessage} ${path} : ${treeData.fetchUSSChildrenErrorResponse.message}`,
                     }),
                 },
                 {
@@ -156,8 +156,8 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(path)}`)
-                .reply(500, '');
+                .get(`/unixfiles?path=${path}`)
+                .reply(500, treeData.fetchUSSChildrenErrorResponse);
 
             const store = mockStore();
 

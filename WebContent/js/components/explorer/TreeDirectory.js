@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2019
+ * Copyright IBM Corporation 2016, 2020
  */
 
 import PropTypes from 'prop-types';
@@ -89,7 +89,7 @@ export class TreeDirectory extends React.Component {
         sortChildren(children.keySeq().toArray().filter(this.pathMatchesStartOfElement))
             .forEach(child => {
                 const type = children.get(child).get('type');
-                if (type === 'directory') {
+                if (type === 'DIRECTORY') {
                     childComponents.push(<ConnectedTreeDirectory
                         childId={child.substring(child.lastIndexOf('/') + 1)}
                         key={child}
@@ -100,7 +100,7 @@ export class TreeDirectory extends React.Component {
                         handleOrionEdit={handleOrionEdit}
                         inDialog={inDialog}
                     />);
-                } else if (type === 'file') {
+                } else if (type === 'FILE') {
                     childComponents.push(<TreeFile
                         childId={child.substring(child.lastIndexOf('/') + 1)}
                         key={child}

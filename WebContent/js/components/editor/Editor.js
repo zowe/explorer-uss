@@ -138,7 +138,7 @@ Editor.propTypes = {
     dispatch: PropTypes.func,
     location: PropTypes.shape({
         query: PropTypes.shape({
-            dataset: PropTypes.string,
+            file: PropTypes.string,
         }),
     }),
 };

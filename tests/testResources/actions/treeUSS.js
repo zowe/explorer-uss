@@ -5,16 +5,17 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 
 import * as treeTyes from '../../../WebContent/js/actions/treeUSS';
 
 export const USSFetchChildrenData = [
-    { name: '.sh_history', type: 'file', size: 1276 },
-    { name: 'test', type: 'directory', size: 8192 },
-    { name: 'hello.txt', type: 'file', size: 57 },
-    { name: 'test2', type: 'directory', size: 8192 },
+    { name: '.sh_history', mode: '-rwxrwxrwx', type: 'FILE', size: 1276, link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/.sh_history' },
+    { name: 'test', mode: 'drwxrwxrwx', type: 'DIRECTORY', size: 8192, link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/test' },
+    { name: 'hello.txt', mode: '-rwxrwxrwx', type: 'FILE', size: 57, link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/hello.txt' },
+    { name: 'test2', mode: 'drwxrwxrwx', type: 'DIRECTORY', size: 8192, link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/test2' },
+
 ];
 
 export const USSFetchResponse = {
@@ -28,62 +29,63 @@ export const receivedUSSChildrenAction = {
 };
 
 export const USSFetchChildrenLargeData = [
-    { name: '.sh_history', type: 'file', size: 2351 },
-    { name: '$SYSNAME', type: 'directory', size: 576 },
-    { name: '$VERSION', type: 'directory', size: 8192 },
-    { name: 'bin', type: 'directory', size: 16384 },
-    { name: 'dev', type: 'directory', size: 8192 },
-    { name: 'etc', type: 'directory', size: 8192 },
-    { name: 'lib', type: 'directory', size: 8192 },
-    { name: 'opt', type: 'directory', size: 8192 },
-    { name: 'samples', type: 'directory', size: 8192 },
-    { name: 'tmp', type: 'directory', size: 16384 },
-    { name: 'usr', type: 'directory', size: 8192 },
-    { name: 'var', type: 'directory', size: 8192 },
-    { name: '...', type: 'directory', size: 256 },
-    { name: 'mqm', type: 'directory', size: 352 },
-    { name: 'shr', type: 'directory', size: 8192 },
-    { name: 'tools', type: 'directory', size: 24576 },
-    { name: 'u', type: 'directory', size: 0 },
-    { name: 'MV2E', type: 'directory', size: 576 },
-    { name: 'MV2F', type: 'directory', size: 608 },
-    { name: 'ZOS112', type: 'directory', size: 256 },
-    { name: 'ZOS170', type: 'directory', size: 256 },
-    { name: 'ZOS180', type: 'directory', size: 256 },
-    { name: 'cics', type: 'directory', size: 8192 },
-    { name: 'ZOS190', type: 'directory', size: 256 },
-    { name: 'java', type: 'directory', size: 16384 },
-    { name: 'cicsts', type: 'directory', size: 8192 },
-    { name: 'dead.letter', type: 'file', size: 22157 },
-    { name: 'ZOS113', type: 'directory', size: 8192 },
-    { name: 'ing', type: 'directory', size: 8192 },
-    { name: 'netview', type: 'directory', size: 8192 },
-    { name: 'ZOS201', type: 'directory', size: 8192 },
-    { name: 'insBase', type: 'other', size: 0 },
-    { name: 'vndr69a', type: 'directory', size: 8192 },
-    { name: '557', type: 'directory', size: 8192 },
-    { name: 'CICSIA', type: 'directory', size: 8192 },
-    { name: 'liberty_servers', type: 'directory', size: 8192 },
-    { name: 'was', type: 'directory', size: 8192 },
-    { name: 'WebSphere', type: 'directory', size: 8192 },
-    { name: 'applications', type: 'directory', size: 8192 },
-    { name: '.ssh', type: 'directory', size: 8192 },
-    { name: 'temp', type: 'directory', size: 384 },
-    { name: 'bundles', type: 'directory', size: 8192 },
-    { name: 'ZOS111', type: 'directory', size: 256 },
-    { name: 'itbld', type: 'directory', size: 8192 },
-    { name: 'àà¢ î á+î', type: 'file', size: 0 },
-    { name: 'àà¢ë&àáâíå', type: 'file', size: 0 },
-    { name: 'RAA', type: 'directory', size: 8192 },
-    { name: 'db2', type: 'directory', size: 8192 },
-    { name: 'rtehome', type: 'directory', size: 8192 },
-    { name: 'liberty', type: 'directory', size: 8192 },
-    { name: 'ims12', type: 'directory', size: 8192 },
-    { name: 'ims13', type: 'directory', size: 8192 },
-    { name: 'atlas', type: 'directory', size: 8192 },
-    { name: 'DD:STDOUT', type: 'file', size: 0 },
-    { name: 'RTCV502', type: 'directory', size: 8192 },
-    { name: 'jenkins', type: 'directory', size: 8192 }];
+    { name: '.sh_history', mode: '-rwxrwxrwx', size: 2351, type: 'FILE', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/.sh_history' },
+    { name: '$SYSNAME', mode: 'drwxrwxrwx', size: 576, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/$SYSNAME' },
+    { name: '$VERSION', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/$VERSION' },
+    { name: 'bin', mode: 'drwxrwxrwx', size: 16384, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/bin' },
+    { name: 'dev', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/dev' },
+    { name: 'etc', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/etc' },
+    { name: 'lib', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/lib' },
+    { name: 'opt', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/opt' },
+    { name: 'samples', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/samples' },
+    { name: 'tmp', mode: 'drwxrwxrwx', size: 16384, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/tmp' },
+    { name: 'usr', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/usr' },
+    { name: 'var', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/var' },
+    { name: '...', mode: 'drwxrwxrwx', size: 256, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/...' },
+    { name: 'mqm', mode: 'drwxrwxrwx', size: 352, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/mqm' },
+    { name: 'shr', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/shr' },
+    { name: 'tools', mode: 'drwxrwxrwx', size: 24576, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/tools' },
+    { name: 'u', mode: 'drwxrwxrwx', size: 0, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/u' },
+    { name: 'MV2E', mode: 'drwxrwxrwx', size: 576, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/MV2E' },
+    { name: 'MV2F', mode: 'drwxrwxrwx', size: 608, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/MV2F' },
+    { name: 'ZOS112', mode: 'drwxrwxrwx', size: 256, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ZOS112' },
+    { name: 'ZOS170', mode: 'drwxrwxrwx', size: 256, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ZOS170' },
+    { name: 'ZOS180', mode: 'drwxrwxrwx', size: 256, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ZOS180' },
+    { name: 'cics', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/cics' },
+    { name: 'ZOS190', mode: 'drwxrwxrwx', size: 256, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ZOS190' },
+    { name: 'java', mode: 'drwxrwxrwx', size: 16384, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/java' },
+    { name: 'cicsts', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/cicsts' },
+    { name: 'dead.letter', mode: '-rwxrwxrwx', size: 22157, type: 'FILE', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/dead.letter' },
+    { name: 'ZOS113', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ZOS113' },
+    { name: 'ing', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ing' },
+    { name: 'netview', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/netview' },
+    { name: 'ZOS201', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ZOS201' },
+    { name: 'insBase', mode: 'drwxrwxrwx', size: 0, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/insBase' },
+    { name: 'vndr69a', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/vndr69a' },
+    { name: '557', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/557' },
+    { name: 'CICSIA', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/CICSIA' },
+    { name: 'liberty_servers', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/liberty_servers' },
+    { name: 'was', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/was' },
+    { name: 'WebSphere', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/WebSphere' },
+    { name: 'applications', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/applications' },
+    { name: '.ssh', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/.ssh' },
+    { name: 'temp', mode: 'drwxrwxrwx', size: 384, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/temp' },
+    { name: 'bundles', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/bundles' },
+    { name: 'ZOS111', mode: 'drwxrwxrwx', size: 256, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ZOS111' },
+    { name: 'itbld', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/itbld' },
+    // { name: 'àà¢ î á+î', mode: '-rwxrwxrwx', size: 0, type: 'FILE', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/àà¢ î á+î' },
+    //    { name: 'àà¢ë&àáâíå', mode: '-rwxrwxrwx', size: 0, type: 'FILE', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/àà¢ë&àáâíå' },
+    { name: 'RAA', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/RAA' },
+    { name: 'db2', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/db2' },
+    { name: 'rtehome', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/rtehome' },
+    { name: 'liberty', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/liberty' },
+    { name: 'ims12', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ims12' },
+    { name: 'ims13', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/ims13' },
+    { name: 'atlas', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/atlas' },
+    { name: 'DD:STDOUT', mode: '-rwxrwxrwx', size: 0, type: 'FILE', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/DD:STDOUT' },
+    { name: 'RTCV502', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/RTCV502' },
+    { name: 'jenkins', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/api/v1/zosmf/restfiles/fs/u/jcain/jenkins' },
+];
 
 export const largeDataResponse = {
     children: USSFetchChildrenLargeData,
@@ -95,14 +97,18 @@ export const receivedLargeUSSChildrenAction = {
     childData: USSFetchChildrenLargeData,
 };
 
-export const USSFetchChildrenNoData = [];
-
 export const noDataResponse = {
-    children: USSFetchChildrenNoData,
+    children: [],
 };
 
 export const receivedNoUSSChildrenAction = {
     type: treeTyes.RECEIVE_USS_TREE_CHILDREN,
     USSPath: '/u/jcain',
-    childData: USSFetchChildrenNoData,
+    childData: [],
 };
+
+export const fetchUSSChildrenErrorResponse = {
+    status: 'INTERNAL_SERVER_ERROR',
+    message: 'Error',
+}
+;

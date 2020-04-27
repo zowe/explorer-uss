@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 
 import configureMockStore from 'redux-mock-store';
@@ -79,7 +79,7 @@ describe('Action: treeDirectories', () => {
             {
                 type: treeDirectories.RECEIVE_DIRECTORY_CHILDREN,
                 path,
-                children: treeDirectoriesData.fetchDirectoryChildrenData,
+                children: treeDirectoriesData.fetchDirectoryChildrenDataPost,
             },
             {
                 type: treeDirectories.TOGGLE_DIRECTORY,
@@ -88,7 +88,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(path)}`)
+                .get(`/unixfiles?path=${path}`)
                 .reply(200, treeDirectoriesData.fetchDirectoryChildrenDataResponse);
 
             const store = mockStore();
@@ -108,7 +108,7 @@ describe('Action: treeDirectories', () => {
             {
                 type: treeDirectories.RECEIVE_DIRECTORY_CHILDREN,
                 path,
-                children: treeDirectoriesData.fetchDirectoryChildrenRootData,
+                children: treeDirectoriesData.fetchDirectoryChildrenRootDataPost,
             },
             {
                 type: treeDirectories.TOGGLE_DIRECTORY,
@@ -117,7 +117,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/uss/files/${encodeURIComponent(path)}`)
+                .get(`/unixfiles?path=${path}`)
                 .reply(200, treeDirectoriesData.fetchDirectoryChildrenRootDataResponse);
 
             const store = mockStore();
@@ -139,7 +139,7 @@ describe('Action: treeDirectories', () => {
             {
                 type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
                 message: Map({
-                    message: `${rewiredFailureMessage} ${path}`,
+                    message: `${rewiredFailureMessage} ${path} : ${treeDirectoriesData.fetchDirectoryChildrenErrorResponse.message}`,
                 }),
             },
             {
@@ -147,8 +147,8 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/uss/files/dir?path=${path}`)
-                .reply(500, '');
+                .get(`/unixfiles?path=${path}`)
+                .reply(500, treeDirectoriesData.fetchDirectoryChildrenErrorResponse);
 
             const store = mockStore();
 

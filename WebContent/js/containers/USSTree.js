@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2016, 2019
+ * Copyright IBM Corporation 2016, 2020
  */
 
 import PropTypes from 'prop-types';
@@ -53,7 +53,11 @@ export class USSTree extends React.Component {
     componentWillMount() {
         const { dispatch, username, USSChildren } = this.props;
         if (USSChildren.isEmpty()) {
-            dispatch(setUSSPath(`/u/${username.toLowerCase()}`));
+            let append = '';
+            if (username.length > 0) {
+                append = `/${username.toLowerCase()}`;
+            }
+            dispatch(setUSSPath(`/u${append}`));
         }
     }
 
@@ -61,7 +65,11 @@ export class USSTree extends React.Component {
         const { dispatch, validated, username, USSPath, USSChildren } = this.props;
         // Once we receive validation update the path, once we have set the path, fetch the children
         if (!validated) {
-            dispatch(setUSSPath(`/u/${username.toLowerCase()}`));
+            let append = '';
+            if (username.length > 0) {
+                append = `/${username.toLowerCase()}`;
+            }
+            dispatch(setUSSPath(`/u${append}`));
         } else if (USSPath !== nextProps.USSPath) {
             this.handlePathUpdate(nextProps.USSPath);
         }
@@ -142,7 +150,7 @@ export class USSTree extends React.Component {
 
     renderUSSChild(child) {
         const { USSPath, USSChildren, dispatch, inDialog } = this.props;
-        if (USSChildren.get(child) === 'directory') {
+        if (USSChildren.get(child) === 'DIRECTORY') {
             return (
                 <ConnectedTreeDirectory
                     childId={child}
@@ -176,14 +184,14 @@ export class USSTree extends React.Component {
                 return (
                     <ConnectedCreateUSSResourceDialog
                         dialogReturn={this.dialogReturn}
-                        type={'directory'}
+                        type={'DIRECTORY'}
                     />
                 );
             case CREATE_FILE:
                 return (
                     <ConnectedCreateUSSResourceDialog
                         dialogReturn={this.dialogReturn}
-                        type={'file'}
+                        type={'FILE'}
                     />
                 );
             case DELETE:

@@ -58,6 +58,7 @@ class USSSaveAsDataset extends React.Component {
                 dispatch={dispatch}
                 dialogContent={dialogContentDataset}
                 contentStyle={dialogWidthStyle}
+                bodyStyle={{ overflowY: 'auto' }}
             />
         );
     }

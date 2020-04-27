@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 
 import expect from 'expect';
@@ -33,13 +33,13 @@ describe('Reducer: validation', () => {
         expect(validation(validationResources.requestedValidation, action)).toEqual(validationResources.receivedSpecialCharsValidation);
     });
 
-    it('Should handle INVALIDATE_VALIDATION and set validated to false after already validating', () => {
-        const action = { type: validationActions.INVALIDATE_VALIDATION };
-        expect(validation(validationResources.receivedValidation, action)).toEqual(validationResources.baseValidation);
-    });
-
-    it('Should handle INVALIDATE_VALIDATION and set validated to false after requested', () => {
+    it('Should handle INVALIDATE_VALIDATION and not set any message', () => {
         const action = { type: validationActions.INVALIDATE_VALIDATION };
         expect(validation(validationResources.requestedValidation, action)).toEqual(validationResources.baseValidation);
+    });
+
+    it('Should handle INVALIDATE_VALIDATION with a message', () => {
+        const action = { type: validationActions.INVALIDATE_VALIDATION, message: validationResources.invalidValidationWithMessage.get('message') };
+        expect(validation(validationResources.requestedValidation, action)).toEqual(validationResources.invalidValidationWithMessage);
     });
 });
