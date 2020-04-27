@@ -102,6 +102,7 @@
       "WebContent/js/resources/languages"
     ]
   },
+  "repository": "zowe/explorer-uss",
   "publishConfig": {
     "registry": "https://zowe.jfrog.io/zowe/api/npm/npm-local-release/"
   },
