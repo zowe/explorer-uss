@@ -18,17 +18,19 @@ import { popMessage } from '../actions/snackbarNotifications';
 class AtlasSnackbar extends React.Component {
     constructor(props) {
         super(props);
-        this.registerMessageWithSnackbar = this.registerMessageWithSnackbar.bind(this);
         this.state = {
             timeout: 0,
             open: false,
         };
+        this.registerMessageWithSnackbar = this.registerMessageWithSnackbar.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         const { snackbarNotificationsMessages } = this.props;
         if (nextProps.snackbarNotificationsMessages.first() &&
             snackbarNotificationsMessages.first() !== nextProps.snackbarNotificationsMessages.first()) {
+            const messageValue = nextProps.snackbarNotificationsMessages.first();
+            window.sendUssNotificationsToZlux(messageValue.get('message'));
             this.registerMessageWithSnackbar();
         }
     }
