@@ -63,3 +63,32 @@ sonar.login=<hash>
 Then you can run `sonar-scanner` to start code analysis.
 
 Build pipeline has embedded the SonarQube code analysis stage.
+
+## Build and install as plugin in local zlux development environment
+
+Modify `explorer-uss/Webcontent/index.html`   
+Change relative path for `iframe-adapter.js` & `logger.js` to absolute path.   
+Append with your `API Gateway` `Hostname` and `Port`
+
+For example:
+```
+  <script type="text/javascript" src="https://mymainframe.com:7554/ui/v1/zlux/lib/org.zowe.zlux.logger/0.9.0/logger.js"></script>
+  <script type="text/javascript" src="https://mymainframe.com:7554/ui/v1/zlux/ZLUX/plugins/org.zowe.zlux.bootstrap/web/iframe-adapter.js"></script>
+```
+
+Build web folder
+```
+cd explorer-uss
+# root folder
+npm install
+# This will create web folder
+npm run build
+```
+
+Install as ZLUX App/Plugin
+```
+# install in zlux locally
+cd zlux/zlux-app-server/bin
+./install-app.sh <path-to-explorer-uss>
+```
+`explorer-uss` root already have sample `pluginDefinition.json` & will have `web` folder after `build`.
