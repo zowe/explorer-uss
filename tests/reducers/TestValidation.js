@@ -35,11 +35,11 @@ describe('Reducer: validation', () => {
 
     it('Should handle INVALIDATE_VALIDATION and not set any message', () => {
         const action = { type: validationActions.INVALIDATE_VALIDATION };
-        expect(validation(validationResources.requestedValidation, action)).toEqual(validationResources.baseValidation);
+        expect(validation(validationResources.requestedValidation, action)).toEqual(validationResources.invalidatedValidation);
     });
 
     it('Should handle INVALIDATE_VALIDATION with a message', () => {
-        const action = { type: validationActions.INVALIDATE_VALIDATION, message: validationResources.invalidValidationWithMessage.get('message') };
-        expect(validation(validationResources.requestedValidation, action)).toEqual(validationResources.invalidValidationWithMessage);
+        const action = { type: validationActions.INVALIDATE_VALIDATION, message: validationResources.invalidatedValidationWithMessage.get('message') };
+        expect(validation(validationResources.requestedValidation, action)).toEqual(validationResources.invalidatedValidationWithMessage);
     });
 });
