@@ -17,7 +17,8 @@ import {
     RESET_USS_TREE_CHILDREN,
     RECEIVE_NEW_DIRECTORY,
     RECEIVE_NEW_FILE,
-    RECEIVE_DELETE_RESOURCE } from '../actions/treeUSS';
+    RECEIVE_DELETE_RESOURCE,
+    INVALIDATE_USS_TREE_CHILDREN } from '../actions/treeUSS';
 import { getResourceFromPath } from '../utilities/USSUtilities';
 
 export const ROOT_TREE_ID = 'treeUSS';
@@ -51,6 +52,8 @@ export default function treeUSS(state = INITIAL_TREE_STATE, action) {
                 USSChildren: children,
             });
         }
+        case INVALIDATE_USS_TREE_CHILDREN:
+            return state.set('isFetching', false);
         case RECEIVE_NEW_DIRECTORY: {
             let child = Map({});
             child = child.set(`${getResourceFromPath(action.USSPath)}`, 'DIRECTORY');
