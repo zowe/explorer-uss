@@ -15,6 +15,7 @@ export const baseValidation = Map({
     isValidating: false,
     username: '',
     message: '',
+    forceLogin: false,
 });
 
 export const requestedValidation = Map({
@@ -22,6 +23,7 @@ export const requestedValidation = Map({
     isValidating: true,
     username: '',
     message: '',
+    forceLogin: false,
 });
 
 export const receivedValidation = Map({
@@ -29,6 +31,7 @@ export const receivedValidation = Map({
     isValidating: false,
     username: 'dummyUser',
     message: '',
+    forceLogin: false,
 });
 
 export const receivedSpecialCharsValidation = Map({
@@ -36,11 +39,21 @@ export const receivedSpecialCharsValidation = Map({
     isValidating: false,
     username: "!@£$%^&*&^%$£@'test'{C}<I>[C]`S`汉语/漢語Wałęsa æøå",
     message: '',
+    forceLogin: false,
 });
 
-export const invalidValidationWithMessage = Map({
+export const invalidatedValidation = Map({
+    validated: false,
+    isValidating: false,
+    username: '',
+    message: '',
+    forceLogin: true,
+});
+
+export const invalidatedValidationWithMessage = Map({
     validated: false,
     isValidating: false,
     username: '',
     message: 'Error validating',
+    forceLogin: true,
 });
