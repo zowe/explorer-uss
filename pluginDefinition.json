@@ -9,7 +9,7 @@
     "launchDefinition": {
       "pluginShortNameKey": "USS Explorer",
       "pluginShortNameDefault": "USS Explorer", 
-      "imageSrc": "images/explorer-USS.png"
+      "imageSrc": "img/explorer-USS.png"
     },
     "descriptionKey": "",
     "descriptionDefault": "",
