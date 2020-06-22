@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2018, 2020
  */
 
-let host = 'tvt5003.svl.ibm.com:9554';
+let host = 'tvt5003.svl.ibm.com:7554';
 if (typeof location !== 'undefined') {
     const hostname = location.hostname;
     if (hostname !== 'localhost') {
