@@ -6,7 +6,6 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.16.0",
-    "file-loader": "^0.11.2",
     "immutable": "^3.8.1",
     "interweave": "^8.0.1",
     "lowlight": "^1.8.0",
@@ -31,7 +30,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "peerDependencies": {
-    "explorer-ui-server": "0.2.11"
+    "explorer-ui-server": "0.2.12"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
@@ -44,6 +43,9 @@
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
     "babel-register": "^6.14.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "compression-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^6.0.2",
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.4",
     "enzyme": "^2.8.2",
@@ -56,6 +58,7 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-react": "^7.3.0",
     "expect": "^1.20.2",
+    "file-loader": "^6.0.0",
     "highlight.js": "^9.12.0",
     "isomorphic-fetch": "^2.2.1",
     "mocha": "^3.4.2",
@@ -70,8 +73,11 @@
     "rimraf": "^3.0.2",
     "sinon": "^4.1.2",
     "style-loader": "^0.18.2",
-    "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.11.5"
+    "terser-webpack-plugin": "^3.0.6",
+    "webpack": "^4.43.0",
+    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
     "dev": "webpack-dev-server --content-base WebContent --inline --hot",
@@ -79,10 +85,9 @@
     "lint": "eslint ./WebContent/js/ ./tests/",
     "test": "cross-env JUNIT_REPORT_PATH=target/report.xml nyc --report cobertura --require babel-core/register --all mocha --compilers js:babel-register tests --recursive --colors --reporter mocha-jenkins-reporter",
     "testWatch": "cross-env JUNIT_REPORT_PATH=target/report.xml mocha --watch --compilers js:babel-register tests --recursive",
-    "prod": "cross-env NODE_ENV='production' webpack -p && cp -r ./WebContent/zlux-hooks ./dist/ && cp -r ./WebContent/css ./dist/ && cp -r ./WebContent/img ./dist/ && cp ./WebContent/index.html ./dist/ && cp ./WebContent/favicon.ico ./dist/",
-    "build": "npm run clean && cross-env NODE_ENV='development' OUTPUT_FOLDER='web' webpack --progress --colors && npm run copy-static",
-    "copy-static": "cp ./WebContent/index.html ./web/ && cp ./WebContent/favicon.ico ./web/ && cp -r ./WebContent/css ./web/css && cp -r ./WebContent/img ./web/images && cp -r ./WebContent/zlux-hooks ./web/zlux-hooks",
-    "clean": "rimraf web",
+    "prod": "cross-env NODE_ENV='production' webpack -p ",
+    "build": "cross-env NODE_ENV='development' OUTPUT_FOLDER='web' webpack --progress --colors ",
+    "prod:analyze": "cross-env ANALYZE=true npm run prod",
     "preCommit": "npm-run-all --aggregate-output --parallel --print-label lint test prod"
   },
   "nyc": {

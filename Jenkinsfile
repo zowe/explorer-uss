@@ -33,6 +33,7 @@ node('ibm-jenkins-slave-nvm') {
 
   pipeline.setup(
     packageName: 'org.zowe.explorer-uss',
+    nodeJsVersion: 'v10.18.1',
     github: [
       email                      : lib.Constants.DEFAULT_GITHUB_ROBOT_EMAIL,
       usernamePasswordCredential : lib.Constants.DEFAULT_GITHUB_ROBOT_CREDENTIAL,
@@ -66,7 +67,7 @@ node('ibm-jenkins-slave-nvm') {
   pipeline.build(
     operation: {
       ansiColor('xterm') {
-        sh "npm run prod"
+        pipeline.nvmShell "npm run prod"
       }
     }
   )
