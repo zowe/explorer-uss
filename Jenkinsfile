@@ -101,7 +101,10 @@ node('ibm-jenkins-slave-nvm') {
   )
 
   // we have pax packaging step
-  pipeline.packaging(name: 'explorer-uss')
+  pipeline.packaging(
+    name: 'explorer-uss',
+    paxOptions: '-o saveext'
+  )
 
   // define we need publish stage
   pipeline.publish(
