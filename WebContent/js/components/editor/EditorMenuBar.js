@@ -95,7 +95,7 @@ export default class EditorMenuBar extends React.Component {
                 {file}
                 {file ? EditorMenuBar.renderFullScreenButton(file) : null}
                 <SelectField
-                    style={{ float: 'right' }}
+                    style={{ float: 'right', width: '120px' }}
                     value={this.state.syntax}
                     onChange={this.handleSyntaxChange}
                 >

@@ -6,6 +6,7 @@ All notable changes to the USS-Explorer will be documented in this file.
 ### New features and enhancements
 
 - Changed packaging and lifecycle start.sh script to support explorer-ui-server keyring support (https://github.com/zowe/zowe-install-packaging/pull/1177), Thanks @stevenhorsman, @js665999, @nakulmanchanda, @jackjia-ibm
+- Added ability to collapse and resize jobs tree (https://github.com/zowe/zlux/issues/259), Thanks @skurnevich
 
 ### Bug fixes
 
