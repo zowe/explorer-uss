@@ -1,0 +1,11 @@
+services:
+  - serviceId: explorer-uss
+    title: USS Explorer
+    description: IBM z/OS Unix Files UI service
+    catalogUiTileId:
+    instanceBaseUrls:
+      - https://${ZOWE_EXPLORER_HOST}:${USS_EXPLORER_UI_PORT}/
+    homePageRelativeUrl:
+    routedServices:
+      - gatewayUrl: ui/v1
+        serviceRelativeUrl: ${EXPLORER_PLUGIN_BASEURI}
