@@ -18,7 +18,7 @@
 
 NODE_BIN=${NODE_HOME}/bin/node
 
-EXPLORER_CONFIG="$ROOT_DIR/components/explorer-uss/bin/app/package.json"
+EXPLORER_CONFIG="$ROOT_DIR/components/explorer-uss/app/package.json"
 EXPLORER_PLUGIN_BASEURI=$($NODE_BIN -e "process.stdout.write(require('${EXPLORER_CONFIG}').config.baseuri)")
 EXPLORER_PLUGIN_ID=$($NODE_BIN -e "process.stdout.write(require('${EXPLORER_CONFIG}').config.pluginId)")
 EXPLORER_PLUGIN_NAME=$($NODE_BIN -e "process.stdout.write(require('${EXPLORER_CONFIG}').config.pluginName)")
@@ -32,7 +32,7 @@ then
     "${EXPLORER_PLUGIN_NAME}" \
     ${EXPLORER_PLUGIN_FULLURL} \
     "${WORKSPACE_DIR}/explorer-uss" \
-    "${ROOT_DIR}/components/explorer-uss/bin/app/img/explorer-USS.png"
+    "${ROOT_DIR}/components/explorer-uss/app/img/explorer-USS.png"
 fi
 
 # Remove any old config
@@ -45,8 +45,8 @@ cat <<EOF >$STATIC_DEF_CONFIG_DIR/uss.ebcdic.yml
 #
 services:
   - serviceId: explorer-uss
-    title: IBM z/OS USS UI
-    description: IBM z/OS USS UI service
+    title: USS Explorer
+    description: IBM z/OS Unix Files UI service
     catalogUiTileId:
     instanceBaseUrls:
       - https://$ZOWE_EXPLORER_HOST:$USS_EXPLORER_UI_PORT/
