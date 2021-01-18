@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import DescriptionIcon from 'material-ui/svg-icons/action/description';
+import { hideMenu } from 'react-contextmenu/modules/actions';
 import { fetchUSSFile } from '../../actions/editor';
 import USSFileMenu from '../../components/contextMenus/USSFileMenu';
 import { getPathToResource } from '../../utilities/USSUtilities';
@@ -24,6 +25,11 @@ export default class TreeFile extends React.Component {
     constructor(props) {
         super(props);
         this.handleToggle = this.handleToggle.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.state = {
+            menuShortCuts: true,
+            menuVisible: false,
+        };
     }
 
     /**
@@ -34,6 +40,36 @@ export default class TreeFile extends React.Component {
             const { path, dispatch } = this.props;
             dispatch(fetchUSSFile(path));
         });
+    }
+
+    hideContextMenu() {
+        hideMenu();
+        this.setState({ menuVisible: false });
+    }
+
+    handleKeyDown(e) {
+        const { handleCreateFile, handleOrionEdit, handleCreateDirectory, handleDelete, path } = this.props;
+        if (e.metaKey || e.altKey || e.ctrlKey) {
+            return;
+        }
+        if (this.state.menuShortCuts && this.state.menuVisible) {
+            if (e.key.toLowerCase() === 'd') {
+                handleCreateDirectory(getPathToResource(path));
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'n') {
+                handleCreateFile(getPathToResource(path));
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'o') {
+                handleOrionEdit(path);
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'delete') {
+                handleDelete(path);
+                this.hideContextMenu();
+            }
+        }
     }
 
     renderFile() {
@@ -55,6 +91,8 @@ export default class TreeFile extends React.Component {
                     handleCreateFile={() => { handleCreateFile(getPathToResource(path)); }}
                     handleDelete={() => { handleDelete(path); }}
                     handleOrionEdit={() => { handleOrionEdit(path); }}
+                    onShow={() => { this.setState({ menuVisible: true }); }}
+                    onHide={() => { this.setState({ menuVisible: false }); }}
                 />
             );
         }
@@ -67,7 +105,11 @@ export default class TreeFile extends React.Component {
             <li>
                 <div className="node">
                     <ContextMenuTrigger id={path}>
-                        <div className="node-label">
+                        <div
+                            className="node-label"
+                            tabIndex="0"
+                            onKeyDown={this.handleKeyDown}
+                        >
                             {this.renderFile()}
                         </div>
                     </ContextMenuTrigger>

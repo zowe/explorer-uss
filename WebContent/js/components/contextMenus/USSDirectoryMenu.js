@@ -11,19 +11,20 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { ContextMenu, MenuItem } from 'react-contextmenu';
+import { MENU_NEW_DIRECTORY, MENU_NEW_FILE, MENU_DELETE } from './USSFileMenu';
 
 const USSDirectoryMenu = props => {
-    const { childId, handleCreateDirectory, handleCreateFile, handleDelete } = props;
+    const { childId, handleCreateDirectory, handleCreateFile, handleDelete, onHide, onShow } = props;
     return (
-        <ContextMenu id={childId}>
+        <ContextMenu id={childId} onShow={onShow} onHide={onHide}>
             <MenuItem onClick={path => { handleCreateDirectory(path); }}>
-                New Directory
+                {MENU_NEW_DIRECTORY}
             </MenuItem>
             <MenuItem onClick={handleCreateFile}>
-                New File
+                {MENU_NEW_FILE}
             </MenuItem>
             <MenuItem onClick={handleDelete}>
-                Delete
+                {MENU_DELETE}
             </MenuItem>
         </ContextMenu>
     );
@@ -36,4 +37,6 @@ USSDirectoryMenu.propTypes = {
     handleCreateDirectory: PropTypes.func.isRequired,
     handleCreateFile: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
+    onHide: PropTypes.func.isRequired,
+    onShow: PropTypes.func.isRequired,
 };
