@@ -107,6 +107,7 @@ export default class TreeFile extends React.Component {
                     <ContextMenuTrigger id={path}>
                         <div
                             className="node-label"
+                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                             tabIndex="0"
                             onKeyDown={this.handleKeyDown}
                         >
