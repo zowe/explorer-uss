@@ -1,6 +1,23 @@
 # Change Log
 All notable changes to the USS-Explorer will be documented in this file.
 
+## <1.0.12>
+
+### New features and enhancements
+- Introduces the menu shortcuts and confirmation dialog before deleting file for USSS explorer. Thanks @Martin-Zeithaml
+
+## <1.0.11>
+
+### New features and enhancements
+
+- Refactor USS packagaing & installation scripts, and folder renames, to accomodate new iframe capability in ZLUX. Thanks @NakulManchanda
+- Added manifest for API ML & App Framework installation using new plugin installation process. Thanks @JadinLuong, @jackjia-ibm
+
+## <1.0.8>
+
+### New features and enhancements
+- Added trap int signal for zowe launcher to stop the running process
+
 ## <1.0.6>
 
 ### New features and enhancements
