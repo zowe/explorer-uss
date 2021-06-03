@@ -5,21 +5,29 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2020
+* Copyright IBM Corporation 2018, 2020
  */
+
+const PACKAGE = require('./package.json');
+
+const DEVSERVER_HOST = PACKAGE.devServerHost || 'localhost';
+const proxy = PACKAGE.proxy;
+const APP_VERSION = PACKAGE.version;
+
 
 const REACT_APP_ENVIRONMENT = process.env.NODE_ENV;
 const debug = REACT_APP_ENVIRONMENT !== 'production';
+const prod = REACT_APP_ENVIRONMENT === 'production';
 const analyze = process.env.ANALYZE;
 const OUTPUT_FOLDER = process.env.OUTPUT_FOLDER || 'dist';
 
 const webpack = require('webpack');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
-
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const copyArray = [{
@@ -33,10 +41,6 @@ const copyArray = [{
 {
     from: path.resolve(__dirname, './WebContent/img'),
     to: path.resolve(OUTPUT_FOLDER, 'img'),
-},
-{
-    from: path.resolve(__dirname, './WebContent/index.html'),
-    to: path.resolve(OUTPUT_FOLDER),
 },
 {
     from: path.resolve(__dirname, './WebContent/favicon.ico'),
@@ -72,22 +76,33 @@ const rules = [
     },
 ];
 
+const htmlTask = new HtmlWebpackPlugin({ template: './WebContent/index.html' });
+
 const entry = path.join(__dirname, 'WebContent/js/index.js');
 const output = {
     path: path.join(__dirname, OUTPUT_FOLDER),
-    filename: 'app.min.js',
+    filename: 'app.[hash].min.js',
 };
 
-const plugins = debug ? [cleanTask, copyTask] : [cleanTask,
-    new webpack.DefinePlugin({
-        'process.env.REACT_SYNTAX_HIGHLIGHTER_LIGHT_BUILD': true,
-        'process.env.NODE_ENV': JSON.stringify(REACT_APP_ENVIRONMENT),
-    }),
+const defineEnvConstants = {
+    'process.env.REACT_SYNTAX_HIGHLIGHTER_LIGHT_BUILD': true,
+    'process.env.NODE_ENV': JSON.stringify(REACT_APP_ENVIRONMENT),
+    'process.env.APP_VERSION': JSON.stringify(APP_VERSION),
+};
+
+if (debug) {
+    defineEnvConstants['process.env.DEVSERVER_HOSTNAME'] = JSON.stringify(DEVSERVER_HOST);
+}
+
+const definePlugin = new webpack.DefinePlugin(defineEnvConstants);
+
+const plugins = debug ? [cleanTask, definePlugin, copyTask, htmlTask] : [cleanTask, definePlugin,
     new CompressionPlugin({
         threshold: 100000,
         minRatio: 0.8,
     }),
     copyTask,
+    htmlTask,
 ];
 
 if (analyze) {
@@ -95,8 +110,8 @@ if (analyze) {
 }
 
 const optimization = {
-    minimize: true,
-    minimizer: [new TerserPlugin({
+    minimize: prod,
+    minimizer: debug ? [] : [new TerserPlugin({
         terserOptions: {
             ecma: 8,
             compress: {
@@ -106,6 +121,18 @@ const optimization = {
         },
         extractComments: false,
     })],
+};
+
+const devServer = {
+    host: DEVSERVER_HOST,
+    https: true,
+    proxy: {
+        '*': {
+            target: proxy.target,
+            secure: false,
+        },
+    },
+    open: true,
 };
 
 module.exports = {
@@ -118,4 +145,5 @@ module.exports = {
     plugins,
     optimization,
     mode: REACT_APP_ENVIRONMENT,
+    devServer,
 };
