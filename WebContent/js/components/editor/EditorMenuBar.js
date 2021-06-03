@@ -36,15 +36,15 @@ export default class EditorMenuBar extends React.Component {
         return result.length > 0 ? result : null;
     }
 
-    static openDatasetInNewWindow(file) {
+    static openFileInNewWindow(file) {
         const baseURI = `${window.location.origin}${window.location.pathname}`;
-        const newWindow = window.open(`${baseURI}#/editor?dataset=${encodeURIComponent(file)}`, '_blank');
+        const newWindow = window.open(`${baseURI}#/editor?file=${encodeURIComponent(file)}`, '_blank');
         newWindow.focus();
     }
 
     static renderFullScreenButton(file) {
         return (
-            <IconButton style={{ float: 'right' }} onClick={() => { EditorMenuBar.openDatasetInNewWindow(file); }}>
+            <IconButton style={{ float: 'right' }} onClick={() => { EditorMenuBar.openFileInNewWindow(file); }}>
                 <NewTabIcon />
             </IconButton>
         );

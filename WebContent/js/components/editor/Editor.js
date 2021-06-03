@@ -11,6 +11,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import queryString from 'query-string';
 import OrionEditor from 'orion-editor-component';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -35,18 +36,13 @@ class Editor extends React.Component {
             syntax: PLAIN_TEXT,
         };
         this.getContent = this.getContent.bind(this);
+        this.editorReady = this.editorReady.bind(this);
         this.handleChangeSyntax = this.handleChangeSyntax.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleSaveAs = this.handleSaveAs.bind(this);
         this.dialogReturn = this.dialogReturn.bind(this);
     }
 
-    componentWillMount() {
-        const { dispatch, location } = this.props;
-        if (location) {
-            dispatch(fetchUSSFile(location.query.file));
-        }
-    }
 
     componentWillReceiveProps(nextProps) {
         const { checksum, location, content, file } = this.props;
@@ -82,6 +78,14 @@ class Editor extends React.Component {
 
     dialogReturn = () => {
         this.setState({ dialog: NO_DIALOG });
+    }
+
+    editorReady = () => {
+        const { location, dispatch } = this.props;
+        if (location && location.search) {
+            const urlQueryParams = queryString.parse(location.search);
+            dispatch(fetchUSSFile(urlQueryParams.file));
+        }
     }
 
     renderDialog() {
@@ -123,6 +127,7 @@ class Editor extends React.Component {
                             languageFilesHost={location.host}
                             fullscreen={!!location}
                             editorTopOffset={56}
+                            editorReady={this.editorReady}
                         />
                     </CardContent>
                 </Card>
@@ -138,9 +143,7 @@ Editor.propTypes = {
     file: PropTypes.string,
     dispatch: PropTypes.func,
     location: PropTypes.shape({
-        query: PropTypes.shape({
-            file: PropTypes.string,
-        }),
+        search: PropTypes.string,
     }),
 };
 
