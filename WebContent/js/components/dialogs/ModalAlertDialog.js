@@ -9,8 +9,10 @@
  */
 
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@material-ui/core/Button';
 
 import PropTypes from 'prop-types';
 
@@ -31,7 +33,7 @@ export default class ModalAlertDialog extends React.Component {
 
         const modalActions = [];
         actions.forEach(action => {
-            modalActions.push(<FlatButton
+            modalActions.push(<Button
                 label={action.label}
                 onClick={() => { action.onClick(); }}
             />);
@@ -40,12 +42,15 @@ export default class ModalAlertDialog extends React.Component {
         return (
             <div>
                 <Dialog
-                    actions={modalActions}
-                    modal={true}
                     open={this.state.open}
-                    onRequestClose={this.handleClose}
+                    onClose={this.handleClose}
                 >
-                    {dialogContent}
+                    <DialogContent>
+                        {dialogContent}
+                    </DialogContent>
+                    <DialogActions >
+                        {modalActions}
+                    </DialogActions>
                 </Dialog>
             </div>
         );

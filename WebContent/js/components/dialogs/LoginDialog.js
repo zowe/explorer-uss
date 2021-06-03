@@ -12,9 +12,13 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { TextField, FlatButton } from 'material-ui';
-import CircularProgress from 'material-ui/CircularProgress';
-import Dialog from 'material-ui/Dialog';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import { validateUser, loginUser } from '../../actions/validation';
 import ZoweIcon from '../../../img/zowe-icon-color.svg';
 
@@ -28,6 +32,7 @@ class LoginDialog extends React.Component {
         this.state = {
             username: '',
             password: '',
+            firstLoginAttempted: false,
         };
     }
 
@@ -36,6 +41,20 @@ class LoginDialog extends React.Component {
         if (!forceLogin) {
             dispatch(validateUser());
         }
+    }
+
+    getDialogErrorMessage() {
+        const { validationMessage } = this.props;
+        if (this.state.firstLoginAttempted) {
+            return (
+                <div
+                    style={{ color: 'red' }}
+                    role="status"
+                >
+                    {validationMessage}
+                </div>);
+        }
+        return null;
     }
 
     handleUsernameChange(event) {
@@ -50,63 +69,67 @@ class LoginDialog extends React.Component {
         });
     }
 
-    handleLogin = () => {
-        const { dispatch } = this.props;
-        return dispatch(loginUser(this.state.username, this.state.password));
-    }
+     handleLogin = () => {
+         const { dispatch } = this.props;
+         this.setState({ firstLoginAttempted: true });
+         return dispatch(loginUser(this.state.username, this.state.password));
+     }
 
-    render() {
-        const { isValidating, validationMessage } = this.props;
-        const dialogContent = isValidating ? <CircularProgress /> :
-            (<div>
-                <div style={{ textAlign: 'center' }}>
-                    <img
-                        style={{ width: '100px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
-                        src={ZoweIcon}
-                        alt="logo"
-                    />
-                    Zowe Login
-                </div>
-                <form onSubmit={this.handleLogin}>
-                    <TextField
-                        id="username"
-                        label="username"
-                        hintText="Username*"
-                        value={this.state.username}
-                        onChange={this.handleUsernameChange}
-                        style={{ display: 'block' }}
-                        fullWidth={true}
-                    />
-                    <TextField
-                        id="password"
-                        label="password"
-                        hintText="Password*"
-                        type="password"
-                        value={this.state.password}
-                        onChange={this.handlePasswordChange}
-                        fullWidth={true}
-                    />
-                    <input type="submit" style={{ display: 'none' }} />
-                    <div style={{ color: 'red' }}>
-                        {validationMessage}
-                    </div>
-                </form>
-            </div>);
+     render() {
+         const { isValidating } = this.props;
+         const dialogContent = isValidating ? <CircularProgress /> :
+             (<form onSubmit={this.handleLogin} style={{ width: '500px' }}>
+                 <TextField
+                     id="username"
+                     label="Username*"
+                     value={this.state.username}
+                     onChange={this.handleUsernameChange}
+                     style={{ display: 'block' }}
+                     fullWidth={true}
+                     autoFocus={true}
+                 />
+                 <TextField
+                     id="password"
+                     label="Password*"
+                     type="password"
+                     value={this.state.password}
+                     onChange={this.handlePasswordChange}
+                     fullWidth={true}
+                 />
+                 <input type="submit" style={{ display: 'none' }} />
+                 {this.getDialogErrorMessage()}
+             </form>);
 
-        const actions = [
-            <FlatButton label={'Login'} onClick={this.handleLogin} />,
-        ];
+         const dialogAction = !isValidating ? (<Button onClick={this.handleLogin} >Login</Button>) : null;
 
-        return (
-            <Dialog
-                open={true}
-                actions={actions}
-                type={'primary'}
-            >
-                {dialogContent}
-            </Dialog>
-        );
-    }
+         const dialogTitle = !isValidating ?
+             (
+                 <DialogTitle style={{ textAlign: 'center' }}>
+                     <img
+                         style={{ width: '100px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+                         src={ZoweIcon}
+                         alt="logo"
+                     />
+                     Zowe Login
+                 </DialogTitle>
+             )
+             : null;
+
+         return (
+             <Dialog
+                 open={true}
+                 type={'primary'}
+             >
+                 {dialogTitle}
+                 <DialogContent>
+                     {dialogContent}
+                 </DialogContent>
+                 <DialogActions >
+                     {dialogAction}
+                 </DialogActions>
+             </Dialog>
+         );
+     }
 }
 
 LoginDialog.propTypes = {
@@ -127,3 +150,4 @@ function mapStateToProps(state) {
 
 const connectedLoginDialog = connect(mapStateToProps)(LoginDialog);
 export default connectedLoginDialog;
+

@@ -12,9 +12,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import TextField from 'material-ui/TextField';
-import { Card, CardText } from 'material-ui/Card';
-import UpDirectory from 'material-ui/svg-icons/navigation/arrow-upward';
+import TextField from '@material-ui/core/TextField';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import RefreshIcon from '../components/explorer/RefreshIcon';
 import TreeFile from '../components/explorer/TreeFile';
 import ConnectedTreeDirectory from '../components/explorer/TreeDirectory';
@@ -81,7 +82,7 @@ export class USSTree extends React.Component {
     }
 
     handlePathUpdate(path) {
-        if (this.pathRef.state.isFocused) {
+        if (document.activeElement === this.pathRef.current) {
             clearTimeout(this.state.timeout);
             this.state.timeout = setTimeout(() => {
                 this.resetAndFetchChildren(path);
@@ -207,12 +208,12 @@ export class USSTree extends React.Component {
         }
     }
 
-    renderUpDirectory() {
+    renderArrowUpwardIcon() {
         const { USSPath } = this.props;
         const iconStyle = { float: 'right', padding: '10px' };
         if (USSPath !== '/') {
             return (
-                <UpDirectory
+                <ArrowUpwardIcon
                     style={iconStyle}
                     onClick={this.handleUpOneDirectory}
                 />);
@@ -223,8 +224,8 @@ export class USSTree extends React.Component {
     render() {
         const { USSChildren, USSPath, isFetching, dispatch, inDialog } = this.props;
         return (
-            <Card class="tree-card" containerStyle={{ paddingBottom: 0 }}>
-                <CardText>
+            <Card class="tree-card" style={{ paddingBottom: 0 }}>
+                <CardContent>
                     <div className="component-header">
                         <TextField
                             className="component-text-field-fill"
@@ -238,7 +239,7 @@ export class USSTree extends React.Component {
                             submitAction={this.handleRefreshTree}
                             dispatch={dispatch}
                         />
-                        {this.renderUpDirectory()}
+                        {this.renderArrowUpwardIcon()}
                     </div>
                     <FullHeightTree offset={16} overrideHeight={inDialog ? '300px' : null}>
                         <ul>
@@ -246,7 +247,7 @@ export class USSTree extends React.Component {
                         </ul>
                     </FullHeightTree>
                     {this.renderDialog()}
-                </CardText>
+                </CardContent>
             </Card>
         );
     }

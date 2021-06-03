@@ -11,7 +11,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { ContextMenuTrigger } from 'react-contextmenu';
-import DescriptionIcon from 'material-ui/svg-icons/action/description';
+import ContentIcon from '@material-ui/icons/Description';
 import { fetchUSSFile } from '../../actions/editor';
 import USSFileMenu from '../../components/contextMenus/USSFileMenu';
 import { getPathToResource } from '../../utilities/USSUtilities';
@@ -40,7 +40,7 @@ export default class TreeFile extends React.Component {
         const { childId } = this.props;
         return (
             <div style={{ whiteSpace: 'nowrap' }}>
-                <DescriptionIcon className="node-icon" />
+                <ContentIcon className="node-icon" />
                 <span className="node-label" onClick={this.handleToggle()} >{childId}</span>
             </div>);
     }
