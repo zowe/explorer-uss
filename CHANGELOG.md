@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the USS-Explorer will be documented in this file.
 
+## <1.0.13>
+- updated material ui from 0.18 to 4.x, react from v15 to v16
+- updated webpack config for local build config
+- updated packages for security updates
+
 ## <1.0.6>
 
 ### New features and enhancements

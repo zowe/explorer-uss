@@ -5,28 +5,29 @@
     "test": "tests"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "babel-polyfill": "^6.16.0",
     "immutable": "^3.8.1",
     "interweave": "^8.0.1",
     "lowlight": "^1.8.0",
-    "material-ui": "^0.18.2",
     "npm-install-peers": "^1.2.1",
-    "orion-editor-component": "0.0.13",
+    "orion-editor-component": "0.0.14",
     "prop-types": "^15.5.10",
-    "react": "^15.4.0",
+    "query-string": "^6.8.2",
+    "react": "^16.4.2",
     "react-contextmenu": "^2.6.1",
-    "react-dom": "^15.4.0",
+    "react-dom": "^16.4.2",
     "react-redux": "^5.1.1",
-    "react-router": "^3.0.5",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
     "react-syntax-highlighter": "^5.6.2",
-    "react-tap-event-plugin": "^2.0.0",
     "react-tooltip": "^3.3.0",
-    "redux": "^3.5.2",
+    "redux": "^4.0.4",
     "redux-immutable": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-router": "^2.0.0",
-    "redux-thunk": "^2.1.0",
-    "url-loader": "^0.5.7",
+    "redux-thunk": "^2.3.0",
+    "url-loader": "^4.1.1",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
@@ -57,8 +58,9 @@
     "expect": "^1.20.2",
     "file-loader": "^6.0.0",
     "highlight.js": "^9.12.0",
-    "isomorphic-fetch": "^2.2.1",
-    "mocha": "^3.4.2",
+    "html-webpack-plugin": "^4.4.1",
+    "isomorphic-fetch": "^3.0.0",
+    "mocha": "^8.4.0",
     "mocha-jenkins-reporter": "^0.4.1",
     "mock-socket": "^6.1.0",
     "nock": "^9.0.13",
@@ -72,15 +74,15 @@
     "style-loader": "^0.18.2",
     "terser-webpack-plugin": "^3.0.6",
     "webpack": "^4.43.0",
-    "webpack-bundle-analyzer": "^3.8.0",
+    "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.2"
   },
   "scripts": {
     "dev": "webpack-dev-server --content-base WebContent --inline --hot",
     "start": "npm run build && cross-env NODE_ENV='development' OUTPUT_FOLDER='web' webpack --progress --colors --watch ",
     "lint": "eslint ./WebContent/js/ ./tests/",
-    "test": "cross-env JUNIT_REPORT_PATH=target/report.xml nyc --report cobertura --require babel-core/register --all mocha --compilers js:babel-register tests --recursive --colors --reporter mocha-jenkins-reporter",
+    "test": "cross-env JUNIT_REPORT_PATH=target/report.xml nyc mocha --require babel-core/register tests --recursive --colors --reporter mocha-jenkins-reporter",
     "testWatch": "cross-env JUNIT_REPORT_PATH=target/report.xml mocha --watch --compilers js:babel-register tests --recursive",
     "prod": "cross-env NODE_ENV='production' webpack -p ",
     "build": "cross-env NODE_ENV='development' OUTPUT_FOLDER='web' webpack --progress --colors ",
@@ -120,5 +122,8 @@
     "pluginId": "org.zowe.explorer-uss",
     "pluginName": "USS Explorer",
     "baseuri": "/ui/v1/explorer-uss"
+  },
+  "proxy": {
+    "target": "https://tvt5003.svl.ibm.com:47554"
   }
 }

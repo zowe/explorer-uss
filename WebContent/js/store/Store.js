@@ -17,9 +17,17 @@ import rootReducer from '../reducers';
 // Singleton
 export default () => {
     let store;
+
     function configureStore() {
+        let appMiddleware;
+        if (window.localStorage.getItem('enableReduxLogger') === 'true') {
+            appMiddleware = applyMiddleware(thunk, createLogger());
+        } else {
+            appMiddleware = applyMiddleware(thunk);
+        }
+
         const emptyState = Map({});
-        return applyMiddleware(thunk, createLogger())(createStore)(rootReducer, emptyState);
+        return appMiddleware(createStore)(rootReducer, emptyState);
     }
     return {
         getStore: () => {

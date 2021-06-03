@@ -10,7 +10,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import TextField from 'material-ui/TextField';
+import TextField from '@material-ui/core/TextField';
 
 
 export default class USSFieldName extends React.Component {
@@ -41,10 +41,10 @@ export default class USSFieldName extends React.Component {
         const { fieldName } = this.props;
         return (
             <TextField
-                hintText={fieldName}
+                label={fieldName}
+                placeholder={fieldName}
                 value={this.state.field}
                 onChange={this.handleFieldChange}
-                floatingLabelText={fieldName}
             />);
     }
 }

@@ -11,8 +11,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import KeyboardArrowLeftIcon from 'material-ui/svg-icons/navigation/chevron-left';
-import IconButton from 'material-ui/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import IconButton from '@material-ui/core/IconButton';
 import USSTreeComponent from '../USSTree';
 import Editor from '../../components/editor/Editor';
 import ConnectedSnackbar from '../../components/Snackbar';
@@ -119,7 +119,7 @@ class HomeView extends React.Component {
                                     e.stopPropagation();
                                 }}
                             >
-                                <KeyboardArrowLeftIcon className={collapsed ? 'rotate-180' : ''} />
+                                <ChevronLeftIcon className={collapsed ? 'rotate-180' : ''} />
                             </IconButton>
                         </div>
                         <div

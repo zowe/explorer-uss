@@ -5,17 +5,18 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router';
-import RaisedButton from 'material-ui/RaisedButton';
-import IconButton from 'material-ui/IconButton';
-import NewTabIcon from 'material-ui/svg-icons/action/tab';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import NewTabIcon from '@material-ui/icons/Tab';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
+import CircularProgressMui from '@material-ui/core/CircularProgress';
 
 export default class EditorMenuBar extends React.Component {
     static renderTypesDropdown() {
@@ -26,7 +27,7 @@ export default class EditorMenuBar extends React.Component {
                 types.forEach(type => {
                     if (type.getProperty('contentTypes')) {
                         type.getProperty('contentTypes').forEach(typeElement => {
-                            result.push(<MenuItem value={typeElement.id} primaryText={typeElement.name} key={typeElement.id} />);
+                            result.push(<MenuItem id={typeElement.id} value={typeElement.id} key={typeElement.id}>{typeElement.name}</MenuItem>);
                         });
                     }
                 });
@@ -35,72 +36,59 @@ export default class EditorMenuBar extends React.Component {
         return result.length > 0 ? result : null;
     }
 
-    static getFullScreenLink(file) {
-        return `/editor?file=${file}`;
+    static openFileInNewWindow(file) {
+        const baseURI = `${window.location.origin}${window.location.pathname}`;
+        const newWindow = window.open(`${baseURI}#/editor?file=${encodeURIComponent(file)}`, '_blank');
+        newWindow.focus();
     }
 
     static renderFullScreenButton(file) {
         return (
-            <Link
-                to={EditorMenuBar.getFullScreenLink(file)}
-                target="_blank"
-            >
-                <IconButton style={{ float: 'right' }}>
-                    <NewTabIcon />
-                </IconButton>
-            </Link>
+            <IconButton style={{ float: 'right' }} onClick={() => { EditorMenuBar.openFileInNewWindow(file); }}>
+                <NewTabIcon />
+            </IconButton>
         );
     }
 
-    constructor(props) {
-        super(props);
-
-        // TODO:: Is initial syntax necessary?
-        this.state = {
-            syntax: props.initialSyntax,
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { initialSyntax } = this.props;
-        if (initialSyntax !== nextProps.initialSyntax) {
-            this.setState({ syntax: nextProps.initialSyntax });
-        }
-    }
-
-    handleSyntaxChange = (event, index, syntax) => {
+    handleSyntaxChange = event => {
         const { updateEditorSyntax } = this.props;
-        this.setState({ syntax });
-        updateEditorSyntax(syntax);
+        updateEditorSyntax(event.target.value);
     };
 
     render() {
-        const { file, handleSave, handleSaveAs } = this.props;
+        const { file, handleSave, handleSaveAs, initialSyntax, isFetching } = this.props;
         return (
             <div>
                 <RaisedButton
-                    label="Save"
-                    secondary={true}
                     style={{ margin: '5px' }}
                     disabled={!file}
+                    variant="contained"
+                    color="primary"
                     onClick={handleSave}
-                />
-                <RaisedButton
-                    label="Save as.."
-                    secondary={true}
-                    style={{ margin: '5px' }}
-                    disabled={!file}
-                    onClick={handleSaveAs}
-                />
-                {file}
-                {file ? EditorMenuBar.renderFullScreenButton(file) : null}
-                <SelectField
-                    style={{ float: 'right', width: '120px' }}
-                    value={this.state.syntax}
-                    onChange={this.handleSyntaxChange}
                 >
-                    {EditorMenuBar.renderTypesDropdown()}
-                </SelectField>
+                    Save
+                </RaisedButton>
+                <RaisedButton
+                    style={{ margin: '5px' }}
+                    disabled={!file || !file.includes('(')}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSaveAs}
+                >
+                    Save as..
+                </RaisedButton>
+                <span aria-live="polite">{file}</span>
+                {isFetching && <CircularProgressMui size={24} style={{ verticalAlign: 'middle', marginLeft: '5px' }} />}
+                {file ? EditorMenuBar.renderFullScreenButton(file) : null}
+                <FormControl style={{ float: 'right', paddingTop: '5px', width: '100px' }}>
+                    <Select
+                        MenuProps={{ disableEnforceFocus: true }}
+                        value={initialSyntax}
+                        onChange={this.handleSyntaxChange}
+                    >
+                        {EditorMenuBar.renderTypesDropdown()}
+                    </Select>
+                </FormControl>
             </div>
         );
     }
@@ -108,6 +96,7 @@ export default class EditorMenuBar extends React.Component {
 
 EditorMenuBar.propTypes = {
     file: PropTypes.string,
+    isFetching: PropTypes.bool,
     updateEditorSyntax: PropTypes.func,
     initialSyntax: PropTypes.string,
     handleSave: PropTypes.func,

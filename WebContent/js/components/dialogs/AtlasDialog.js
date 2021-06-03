@@ -10,8 +10,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 export default class AtlasDialog extends React.Component {
     constructor(props) {
@@ -39,32 +42,38 @@ export default class AtlasDialog extends React.Component {
     }
 
     render() {
-        const actions = [
-            <FlatButton label="Cancel" primary={true} onTouchTap={this.handleClose} />,
-            <FlatButton
-                label="Ok"
-                primary={true}
-                keyboardFocused={!this.props.dialogContent}
-                onTouchTap={this.handleSubmit}
-            />,
-        ];
-
         return (
             <div>
                 <Dialog
-                    title={this.props.title}
-                    actions={actions}
-                    modal={false}
                     open={this.state.open}
-                    onRequestClose={this.handleClose}
-                    contentStyle={this.props.contentStyle}
-                    bodyStyle={this.props.bodyStyle}
+                    onClose={this.handleClose}
+                    id="dialog"
                 >
-                    <div>
+                    <DialogTitle id="dialog-title">{this.props.title}</DialogTitle>
+                    <DialogContent
+                        style={{ ...this.props.bodyStyle, ...this.props.contentStyle, ...{ width: '550px' } }}
+                        id="dialog-content"
+                    >
                         <form onSubmit={this.handleSubmit} >
                             {this.props.dialogContent}
                         </form>
-                    </div>
+                    </DialogContent>
+                    <DialogActions id="dialog-actions">
+                        <Button
+                            onClick={this.handleClose}
+                            variant="contained"
+                            color="primary"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={this.handleSubmit}
+                            variant="contained"
+                            color="primary"
+                        >
+                            Ok
+                        </Button>
+                    </DialogActions>
                 </Dialog>
             </div>
         );
