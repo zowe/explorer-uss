@@ -82,7 +82,7 @@ export class USSTree extends React.Component {
     }
 
     handlePathUpdate(path) {
-        if (document.activeElement === this.pathRef.current) {
+        if (document.activeElement === this.pathRef) {
             clearTimeout(this.state.timeout);
             this.state.timeout = setTimeout(() => {
                 this.resetAndFetchChildren(path);
@@ -230,7 +230,7 @@ export class USSTree extends React.Component {
                         <TextField
                             className="component-text-field-fill"
                             id="path"
-                            ref={ref => { this.pathRef = ref; }}
+                            inputRef={el => { this.pathRef = el; }}
                             value={USSPath}
                             onChange={this.handlePathChange}
                         />
