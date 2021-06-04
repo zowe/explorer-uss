@@ -82,7 +82,7 @@ export class USSTree extends React.Component {
     }
 
     handlePathUpdate(path) {
-        if (document.activeElement.tagName.toLowerCase() === 'input') {
+        if (document.activeElement && document.activeElement.tagName.toLowerCase() === 'input') {
             clearTimeout(this.state.timeout);
             this.state.timeout = setTimeout(() => {
                 this.resetAndFetchChildren(path);
