@@ -230,7 +230,6 @@ export class USSTree extends React.Component {
                         <TextField
                             className="component-text-field-fill"
                             id="path"
-                            inputRef={el => { this.pathRef = el; }}
                             value={USSPath}
                             onChange={this.handlePathChange}
                         />
