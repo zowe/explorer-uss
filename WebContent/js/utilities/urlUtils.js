@@ -21,7 +21,7 @@ export function whichServer() {
 }
 
 function atlasAction(endpoint, content, fetchParams) {
-    return fetch(`https://${whichServer()}/api/v2/${endpoint}`, { ...fetchParams, ...content });
+   return fetch(`https://${whichServer()}/ibmzosmf/api/v1/zosmf/${endpoint}`, { ...fetchParams, ...content });
 }
 
 export function atlasGet(endpoint, content) {

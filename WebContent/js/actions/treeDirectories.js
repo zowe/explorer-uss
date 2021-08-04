@@ -68,7 +68,7 @@ export function addTreeDirectory(path, child) {
 }
 
 export function fetchDirectoryChildren(path) {
-    const endpoint = `unixfiles?path=${path}`;
+    const endpoint = `restfiles/fs?path=${path}`;
     return dispatch => {
         dispatch(requestDirectoryChildren(path));
         return atlasGet(endpoint, { credentials: 'include' })
@@ -82,7 +82,7 @@ export function fetchDirectoryChildren(path) {
                 return response.json().then(e => { throw Error(e.message); });
             })
             .then(json => {
-                dispatch(receiveDirectoryChildren(path, json.children));
+                dispatch(receiveDirectoryChildren(path, json.items));
                 dispatch(toggleDirectory(path, true));
             })
             .catch(e => {

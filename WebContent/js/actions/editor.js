@@ -62,7 +62,7 @@ export function invalidateContent() {
 export function fetchUSSFile(USSPath) {
     return dispatch => {
         dispatch(requestContent(USSPath));
-        const endpoint = `unixfiles/${USSPath && USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`;
+        const endpoint = `restfiles/fs/${USSPath && USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`;
         let checksum = '';
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
@@ -71,12 +71,12 @@ export function fetchUSSFile(USSPath) {
             .then(response => {
                 if (response.ok) {
                     checksum = response.headers.get('ETag');
-                    return response.json();
+                    return response.text();
                 }
-                return response.json().then(e => { throw Error(e.message); });
+                return response.text().then(e => { throw Error(e.message); });
             })
-            .then(json => {
-                dispatch(receiveContent(USSPath, json.content, checksum));
+            .then(text => {
+                dispatch(receiveContent(USSPath, text, checksum));
             })
             .catch(e => {
                 dispatch(constructAndPushMessage(`${GET_CONTENT_FAIL_MESSAGE} ${USSPath} : ${e.message}`));
@@ -156,7 +156,7 @@ function invalidateChecksumChange() {
 export function getNewUSSResourceChecksum(resourceName) {
     return dispatch => {
         dispatch(requestChecksum(resourceName));
-        const contentURL = `unixfiles/${(resourceName && resourceName.length > 0 && resourceName.indexOf('/') === 0) ? resourceName.substring(1) : resourceName}`;
+        const contentURL = `restfiles/fs/${(resourceName && resourceName.length > 0 && resourceName.indexOf('/') === 0) ? resourceName.substring(1) : resourceName}`;
         let checksum = '';
         return atlasGet(contentURL, { credentials: 'include' })
             .then(response => {
@@ -179,7 +179,7 @@ function replaceAll(str, find, replace) {
 }
 
 function constructSaveUSSURL(resourceName) {
-    return `unixfiles/${resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName}`;
+    return `restfiles/fs/${resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName}`;
 }
 
 function encodeContentString(content) {
