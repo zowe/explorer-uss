@@ -33,13 +33,12 @@ function getUSSChildrenFromJSON(childData) {
     let children = Map({});
     let type;
     childData.forEach(child => {
-        if(child.mode.charAt(0) === 'd'){
+        if (child.mode.charAt(0) === 'd') {
             type = 'DIRECTORY';
-        }
-        else {
+        } else {
             type = 'FILE';
         }
-        if(!(child.name === '.' || child.name === '..')) {
+        if (!(child.name === '.' || child.name === '..')) {
             children = children.set(child.name, type);
         }
     });
