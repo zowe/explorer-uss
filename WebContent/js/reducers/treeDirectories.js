@@ -35,8 +35,6 @@ function getChildrenFromJson(path, json) {
                 } else {
                     dirProps = dirProps.set('type', 'FILE');
                 }
-            } else {
-                dirProps = dirProps.set('type', child.type);
             }
             dirProps = dirProps.set('isToggled', false);
             newDir = newDir.set(`${path}/${child.name}`, dirProps);

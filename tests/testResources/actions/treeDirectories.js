@@ -22,6 +22,8 @@ export const fetchDirectoryChildrenDataResponse = {
 };
 
 export const fetchDirectoryChildrenRootDataPost = [
+    { name: '.', mode: 'drwxr-xr-x', size: 2351, type: 'FILE', link: 'https://tester.test.com:7443/ibmzosmf/api/v1/zosmf/restfiles/fs/.sh_history' },
+    { name: '..', mode: 'drwxr-xr-x', size: 2351, type: 'FILE', link: 'https://tester.test.com:7443/ibmzosmf/api/v1/zosmf/restfiles/fs/.sh_history' },
     { name: '.sh_history', mode: '-rwxrwxrwx', size: 2351, type: 'FILE', link: 'https://tester.test.com:7443/ibmzosmf/api/v1/zosmf/restfiles/fs/.sh_history' },
     { name: '$SYSNAME', mode: 'drwxrwxrwx', size: 576, type: 'DIRECTORY', link: 'https://tester.test.com:7443/ibmzosmf/api/v1/zosmf/restfiles/fs/$SYSNAME' },
     { name: '$VERSION', mode: 'drwxrwxrwx', size: 8192, type: 'DIRECTORY', link: 'https://tester.test.com:7443/ibmzosmf/api/v1/zosmf/restfiles/fs/$VERSION' },
