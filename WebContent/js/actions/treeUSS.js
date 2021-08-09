@@ -191,7 +191,7 @@ export function deleteUSSResource(path) {
                     dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
                     return dispatch(invalidateContentIfOpen(path));
                 }
-                return response.json().then(e => { throw Error(e.message); });
+                return response.json().then(e => { throw Error(e.details); });
             }).catch(e => {
                 dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path} : ${e.message}`));
                 return dispatch(invalidateDelete(path));

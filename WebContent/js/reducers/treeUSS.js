@@ -38,7 +38,7 @@ function getUSSChildrenFromJSON(childData) {
         } else {
             type = 'FILE';
         }
-        if (!(child.name === '.' || child.name === '..')) {
+        if (!['.', '..'].includes(child.name)) {
             children = children.set(child.name, type);
         }
     });
