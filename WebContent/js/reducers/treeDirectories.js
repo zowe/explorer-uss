@@ -29,12 +29,10 @@ function getChildrenFromJson(path, json) {
          * Do not include the . and ..
          */
         if (!(child.name === '.' || child.name === '..')) {
-            if (child.mode) {
-                if (child.mode.charAt(0) === 'd') {
-                    dirProps = dirProps.set('type', 'DIRECTORY');
-                } else {
-                    dirProps = dirProps.set('type', 'FILE');
-                }
+            if (child.mode.charAt(0) === 'd') {
+                dirProps = dirProps.set('type', 'DIRECTORY');
+            } else {
+                dirProps = dirProps.set('type', 'FILE');
             }
             dirProps = dirProps.set('isToggled', false);
             newDir = newDir.set(`${path}/${child.name}`, dirProps);
