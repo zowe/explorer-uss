@@ -104,7 +104,7 @@ export const noDataResponse = {
 export const receivedNoUSSChildrenAction = {
     type: treeTyes.RECEIVE_USS_TREE_CHILDREN,
     USSPath: '/u/jcain',
-    childData: []
+    childData: [],
 };
 
 export const fetchUSSChildrenErrorResponse = {

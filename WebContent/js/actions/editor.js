@@ -72,11 +72,8 @@ export function fetchUSSFile(USSPath) {
                 if (response.ok) {
                     checksum = response.headers.get('ETag');
                     return response.text();
-                    return response.text().then(e => { throw Error(e.message); });
                 }
-                else {
-                    return response.json().then(e => { throw Error(e.message); });
-                }
+                return response.text().then(e => { throw Error(JSON.parse(e).message); });
             })
             .then(text => {
                 dispatch(receiveContent(USSPath, text, checksum));
