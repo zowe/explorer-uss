@@ -60,13 +60,13 @@ describe('Action: editor', () => {
             {
                 type: editorActions.RECEIVE_CONTENT,
                 resource: USSPath,
-                content: editorResources.content.content,
+                content: editorResources.text,
                 checksum: editorResources.checksum,
             }];
 
             nock(BASE_URL)
-                .get(`/unixfiles/${USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`)
-                .reply(200, editorResources.content, { ETag: `${editorResources.checksum}` });
+                .get(`/restfiles/fs/${USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`)
+                .reply(200, editorResources.text, { ETag: `${editorResources.checksum}` });
 
             const store = mockStore();
             return store.dispatch(editorActions.fetchUSSFile(USSPath))
@@ -93,7 +93,7 @@ describe('Action: editor', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/unixfiles/${USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`)
+                .get(`/restfiles/fs/${USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`)
                 .reply(404, editorResources.getContentNotFoundResponse);
 
             const store = mockStore();
@@ -177,7 +177,7 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
+                .get(`/restfiles/fs/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
                 .reply(200, editorResources.content, { ETag: `${editorResources.checksum}` });
 
             const store = mockStore();
@@ -200,7 +200,7 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .get('/unixfiles/')
+                .get('/restfiles/fs/')
                 .reply(500);
 
             const store = mockStore();
@@ -235,12 +235,12 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .put(`/unixfiles/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
+                .put(`/restfiles/fs/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
                 .reply(204);
 
             const store = mockStore();
 
-            return store.dispatch(editorActions.saveUSSResource(editorResources.USSFile, editorResources.content.content, editorResources.checksum))
+            return store.dispatch(editorActions.saveUSSResource(editorResources.USSFile, editorResources.text, editorResources.checksum))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });
@@ -264,12 +264,12 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .put(`/unixfiles/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
+                .put(`/restfiles/fs/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
                 .reply(500, editorResources.saveContentFailedResponse);
 
             const store = mockStore();
 
-            return store.dispatch(editorActions.saveUSSResource(editorResources.USSFile, editorResources.content.content, editorResources.checksum))
+            return store.dispatch(editorActions.saveUSSResource(editorResources.USSFile, editorResources.text, editorResources.checksum))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });
@@ -317,29 +317,29 @@ describe('Action: editor', () => {
                 {
                     type: editorActions.RECEIVE_CONTENT,
                     resource: editorResources.newUSSFile,
-                    content: editorResources.newContent.content,
+                    content: editorResources.newContent,
                     checksum: editorResources.newChecksum,
                 },
             ];
 
             nock(BASE_URL)
-                .post('/unixfiles')
+                .post('/restfiles/fs')
                 .reply(201);
             nock(BASE_URL)
-                .post(`/unixfiles/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
+                .post(`/restfiles/fs/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
                 .reply(201);
             nock(BASE_URL)
-                .put(`/unixfiles/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
+                .put(`/restfiles/fs/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
                 .reply(200);
             nock(BASE_URL)
-                .get(`/unixfiles/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
+                .get(`/restfiles/fs/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.USSFile}`)
                 .reply(200, editorResources.newContent, { ETag: `${editorResources.newChecksum}` });
 
             const store = mockStore();
 
             mockVoidFunction(treeUSSActions, 'fetchUSSTreeChildren');
 
-            return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent.content))
+            return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                     expect(treeUSSActions.fetchUSSTreeChildren.calledOnce).toEqual(true, 'fetchUSSTreeChildren called once');
@@ -372,7 +372,7 @@ describe('Action: editor', () => {
             ];
 
             nock(BASE_URL)
-                .post(`/unixfiles/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.newUSSFile}`)
+                .post(`/restfiles/fs/${editorResources.newUSSFile.indexOf('/') === 0 ? editorResources.newUSSFile.substring(1) : editorResources.newUSSFile}`)
                 .reply(500, editorResources.saveContentFailedResponse);
 
             const store = mockStore();

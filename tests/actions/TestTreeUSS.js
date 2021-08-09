@@ -80,7 +80,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(200, treeData.USSFetchResponse);
 
             const store = mockStore();
@@ -102,7 +102,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(200, treeData.largeDataResponse);
 
             const store = mockStore();
@@ -124,7 +124,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(200, treeData.noDataResponse);
 
             const store = mockStore();
@@ -156,7 +156,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(500, treeData.fetchUSSChildrenErrorResponse);
 
             const store = mockStore();

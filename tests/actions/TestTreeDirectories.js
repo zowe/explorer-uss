@@ -88,7 +88,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(200, treeDirectoriesData.fetchDirectoryChildrenDataResponse);
 
             const store = mockStore();
@@ -117,7 +117,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(200, treeDirectoriesData.fetchDirectoryChildrenRootDataResponse);
 
             const store = mockStore();
@@ -147,7 +147,7 @@ describe('Action: treeDirectories', () => {
             }];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(500, treeDirectoriesData.fetchDirectoryChildrenErrorResponse);
 
             const store = mockStore();
