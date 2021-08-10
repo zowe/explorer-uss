@@ -192,15 +192,11 @@ function encodeContentString(content) {
     return newContent;
 }
 
-function getSaveRequestBody(content) {
-    return `{"content": "${encodeContentString(content)}"}`;
-}
-
 export function saveUSSResource(resourceName, content, checksum) {
     return dispatch => {
         dispatch(requestSave(resourceName));
         const contentURL = constructSaveUSSURL(resourceName);
-        return atlasPut(contentURL, getSaveRequestBody(content), checksum)
+        return atlasPut(contentURL, content, checksum)
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
             })
@@ -228,7 +224,7 @@ export function saveAsUSSResource(oldResource, newResource, content) {
                 return dispatch(invalidateSaveAs());
             }
             const contentURL = constructSaveUSSURL(newResource);
-            return atlasPut(contentURL, getSaveRequestBody(content))
+            return atlasPut(contentURL, content)
                 .then(response => {
                     return dispatch(checkForValidationFailure(response));
                 })

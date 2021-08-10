@@ -44,13 +44,13 @@ export function atlasPost(endpoint, body) {
     return atlasAction(endpoint, {
         method: 'POST',
         body,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         credentials: 'include',
     });
 }
 
 export function atlasPut(endpoint, body, checksum) {
-    const headers = { 'Content-Type': 'application/json' };
+    const headers = { 'Content-Type': 'text/plain' };
     if (checksum) {
         headers['If-Match'] = checksum;
     }
