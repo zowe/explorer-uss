@@ -110,5 +110,12 @@ export const receivedNoUSSChildrenAction = {
 export const fetchUSSChildrenErrorResponse = {
     status: 'INTERNAL_SERVER_ERROR',
     message: 'Error',
-}
-;
+};
+
+export const deleteUSSErrorResponse = {
+    category: 8,
+    rc: -1,
+    reason: 96141420,
+    message: 'lstat() error',
+    details: ['EDC5129I No such file or directory. (errno2=0x053B006C)'],
+};

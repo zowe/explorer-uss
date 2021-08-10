@@ -135,6 +135,38 @@ describe('Action: treeUSS', () => {
                 });
         });
 
+        it('Should create a delete request and receive action which invalid delete resource', () => {
+            const path = '/u/jcain/xyz';
+            const rewiredFailureMessage = rewiredTree.__get__('USS_DELETE_FAIL_MESSAGE');
+            const expectedActions = [
+                {
+                    type: tree.REQUEST_DELETE_RESOURCE,
+                    path,
+                },
+                {
+                    type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
+                    message: new Map({
+                        message: `${rewiredFailureMessage} ${path} : ${treeData.deleteUSSErrorResponse.details}`,
+                    }),
+                },
+                {
+                    type: tree.INVALIDATE_DELETE_RESOURCE,
+                    path,
+                },
+            ];
+
+            nock(BASE_URL)
+                .delete(`/restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`)
+                .reply(404, treeData.deleteUSSErrorResponse);
+
+            const store = mockStore();
+
+            return store.dispatch(tree.deleteUSSResource(path))
+                .then(() => {
+                    expect(store.getActions()).toEqual(expectedActions);
+                });
+        });
+
         it('Should create a request but not receive and therefore an invalidate action too', () => {
             const path = '/u/jcain';
             const rewiredFailureMessage = rewiredTree.__get__('USS_FETCH_CHILDREN_FAIL_MESSAGE');
