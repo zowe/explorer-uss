@@ -174,22 +174,8 @@ export function getNewUSSResourceChecksum(resourceName) {
     };
 }
 
-function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(find, 'g'), replace);
-}
-
 function constructSaveUSSURL(resourceName) {
     return `restfiles/fs/${resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName}`;
-}
-
-function encodeContentString(content) {
-    let newContent = replaceAll(content, /\\/, '\\\\'); // Escape backslashes
-    newContent = replaceAll(newContent, /"/, '\\"'); // Escape double quotes
-    // The new server interface is unable to accept setings with hex values
-    newContent = replaceAll(newContent, '\x0a', '\\n'); // Escape line feed
-    newContent = replaceAll(newContent, '\x0d', '\\r'); // Escape return
-    newContent = replaceAll(newContent, '\x09', '\\t'); // Escape tab
-    return newContent;
 }
 
 export function saveUSSResource(resourceName, content, checksum) {
