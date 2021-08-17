@@ -48,9 +48,6 @@ fi
 BASE_DIR=$(cd $(dirname $0);pwd)
 REPO_ROOT_DIR=$(cd $(dirname $0)/../;pwd)
 WORK_DIR=tmp
-JFROG_REPO_SNAPSHOT=libs-snapshot-local
-JFROG_REPO_RELEASE=libs-release-local
-JFROG_URL=https://zowe.jfrog.io/zowe/
 
 ###############################
 echo ">>>>> prepare basic files"
