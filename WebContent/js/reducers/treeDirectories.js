@@ -25,9 +25,20 @@ function getChildrenFromJson(path, json) {
     let newDir = Map({});
     json.forEach(child => {
         let dirProps = Map({});
-        dirProps = dirProps.set('type', child.type);
-        dirProps = dirProps.set('isToggled', false);
-        newDir = newDir.set(`${path}/${child.name}`, dirProps);
+        /*
+         * Do not include the . and ..
+         */
+        if (!['.', '..'].includes(child.name)) {
+            if (child.mode) {
+                if (child.mode.charAt(0) === 'd') {
+                    dirProps = dirProps.set('type', 'DIRECTORY');
+                } else {
+                    dirProps = dirProps.set('type', 'FILE');
+                }
+            }
+            dirProps = dirProps.set('isToggled', false);
+            newDir = newDir.set(`${path}/${child.name}`, dirProps);
+        }
     });
     return newDir;
 }

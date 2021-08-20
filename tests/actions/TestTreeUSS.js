@@ -80,7 +80,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(200, treeData.USSFetchResponse);
 
             const store = mockStore();
@@ -102,7 +102,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(200, treeData.largeDataResponse);
 
             const store = mockStore();
@@ -124,12 +124,44 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(200, treeData.noDataResponse);
 
             const store = mockStore();
 
             return store.dispatch(tree.fetchUSSTreeChildren(path))
+                .then(() => {
+                    expect(store.getActions()).toEqual(expectedActions);
+                });
+        });
+
+        it('Should create a delete request and receive action which invalid delete resource', () => {
+            const path = '/u/jcain/xyz';
+            const rewiredFailureMessage = rewiredTree.__get__('USS_DELETE_FAIL_MESSAGE');
+            const expectedActions = [
+                {
+                    type: tree.REQUEST_DELETE_RESOURCE,
+                    path,
+                },
+                {
+                    type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
+                    message: new Map({
+                        message: `${rewiredFailureMessage} ${path} : ${treeData.deleteUSSErrorResponse.details}`,
+                    }),
+                },
+                {
+                    type: tree.INVALIDATE_DELETE_RESOURCE,
+                    path,
+                },
+            ];
+
+            nock(BASE_URL)
+                .delete(`/restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`)
+                .reply(404, treeData.deleteUSSErrorResponse);
+
+            const store = mockStore();
+
+            return store.dispatch(tree.deleteUSSResource(path))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });
@@ -156,7 +188,7 @@ describe('Action: treeUSS', () => {
             ];
 
             nock(BASE_URL)
-                .get(`/unixfiles?path=${path}`)
+                .get(`/restfiles/fs?path=${path}`)
                 .reply(500, treeData.fetchUSSChildrenErrorResponse);
 
             const store = mockStore();

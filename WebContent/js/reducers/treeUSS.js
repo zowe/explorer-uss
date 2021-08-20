@@ -31,8 +31,16 @@ export const INITIAL_TREE_STATE = Map({
 
 function getUSSChildrenFromJSON(childData) {
     let children = Map({});
+    let type;
     childData.forEach(child => {
-        children = children.set(child.name, child.type);
+        if (child.mode.charAt(0) === 'd') {
+            type = 'DIRECTORY';
+        } else {
+            type = 'FILE';
+        }
+        if (!['.', '..'].includes(child.name)) {
+            children = children.set(child.name, type);
+        }
     });
     return children;
 }

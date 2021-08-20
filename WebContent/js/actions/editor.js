@@ -62,7 +62,7 @@ export function invalidateContent() {
 export function fetchUSSFile(USSPath) {
     return dispatch => {
         dispatch(requestContent(USSPath));
-        const endpoint = `unixfiles/${USSPath && USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`;
+        const endpoint = `restfiles/fs/${USSPath && USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`;
         let checksum = '';
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
@@ -71,12 +71,12 @@ export function fetchUSSFile(USSPath) {
             .then(response => {
                 if (response.ok) {
                     checksum = response.headers.get('ETag');
-                    return response.json();
+                    return response.text();
                 }
-                return response.json().then(e => { throw Error(e.message); });
+                return response.text().then(e => { throw Error(JSON.parse(e).message); });
             })
-            .then(json => {
-                dispatch(receiveContent(USSPath, json.content, checksum));
+            .then(text => {
+                dispatch(receiveContent(USSPath, text, checksum));
             })
             .catch(e => {
                 dispatch(constructAndPushMessage(`${GET_CONTENT_FAIL_MESSAGE} ${USSPath} : ${e.message}`));
@@ -156,7 +156,7 @@ function invalidateChecksumChange() {
 export function getNewUSSResourceChecksum(resourceName) {
     return dispatch => {
         dispatch(requestChecksum(resourceName));
-        const contentURL = `unixfiles/${(resourceName && resourceName.length > 0 && resourceName.indexOf('/') === 0) ? resourceName.substring(1) : resourceName}`;
+        const contentURL = `restfiles/fs/${(resourceName && resourceName.length > 0 && resourceName.indexOf('/') === 0) ? resourceName.substring(1) : resourceName}`;
         let checksum = '';
         return atlasGet(contentURL, { credentials: 'include' })
             .then(response => {
@@ -174,33 +174,15 @@ export function getNewUSSResourceChecksum(resourceName) {
     };
 }
 
-function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(find, 'g'), replace);
-}
-
 function constructSaveUSSURL(resourceName) {
-    return `unixfiles/${resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName}`;
-}
-
-function encodeContentString(content) {
-    let newContent = replaceAll(content, /\\/, '\\\\'); // Escape backslashes
-    newContent = replaceAll(newContent, /"/, '\\"'); // Escape double quotes
-    // The new server interface is unable to accept setings with hex values
-    newContent = replaceAll(newContent, '\x0a', '\\n'); // Escape line feed
-    newContent = replaceAll(newContent, '\x0d', '\\r'); // Escape return
-    newContent = replaceAll(newContent, '\x09', '\\t'); // Escape tab
-    return newContent;
-}
-
-function getSaveRequestBody(content) {
-    return `{"content": "${encodeContentString(content)}"}`;
+    return `restfiles/fs/${resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName}`;
 }
 
 export function saveUSSResource(resourceName, content, checksum) {
     return dispatch => {
         dispatch(requestSave(resourceName));
         const contentURL = constructSaveUSSURL(resourceName);
-        return atlasPut(contentURL, getSaveRequestBody(content), checksum)
+        return atlasPut(contentURL, content, checksum)
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
             })
@@ -228,7 +210,7 @@ export function saveAsUSSResource(oldResource, newResource, content) {
                 return dispatch(invalidateSaveAs());
             }
             const contentURL = constructSaveUSSURL(newResource);
-            return atlasPut(contentURL, getSaveRequestBody(content))
+            return atlasPut(contentURL, content)
                 .then(response => {
                     return dispatch(checkForValidationFailure(response));
                 })

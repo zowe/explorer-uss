@@ -21,7 +21,7 @@ export function whichServer() {
 }
 
 function atlasAction(endpoint, content, fetchParams) {
-    return fetch(`https://${whichServer()}/api/v2/${endpoint}`, { ...fetchParams, ...content });
+    return fetch(`https://${whichServer()}/ibmzosmf/api/v1/zosmf/${endpoint}`, { ...fetchParams, ...content });
 }
 
 export function atlasGet(endpoint, content) {
@@ -44,13 +44,13 @@ export function atlasPost(endpoint, body) {
     return atlasAction(endpoint, {
         method: 'POST',
         body,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         credentials: 'include',
     });
 }
 
 export function atlasPut(endpoint, body, checksum) {
-    const headers = { 'Content-Type': 'application/json' };
+    const headers = { 'Content-Type': 'text/plain' };
     if (checksum) {
         headers['If-Match'] = checksum;
     }

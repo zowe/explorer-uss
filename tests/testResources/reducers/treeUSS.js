@@ -50,19 +50,19 @@ export const restUSSChildren = Map({
 export const USSChildData = [
     {
         name: 'hello',
-        type: 'directory',
+        mode: 'drw-------"',
     },
     {
         name: 'test.txt',
-        type: 'file',
+        mode: '-rw-------"',
     },
 ];
 
 export const receivedUSSChildrenTree = Map({
     id: ROOT_TREE_ID,
     USSChildren: Map({
-        hello: 'directory',
-        'test.txt': 'file',
+        hello: 'DIRECTORY',
+        'test.txt': 'FILE',
     }),
     isFetching: false,
     USSPath: '/u/atlas',

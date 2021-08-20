@@ -24,9 +24,9 @@ export const REQUEST_NEW_RESOURCE = 'REQUEST_NEW_RESOURCE';
 export const RECEIVE_NEW_DIRECTORY = 'RECEIVE_NEW_DIRECTORY';
 export const RECEIVE_NEW_FILE = 'RECEIVE_NEW_FILE';
 export const INVALIDATE_NEW_RESOURCE = 'INVALIDATE_NEW_RESOURCE';
-const REQUEST_DELETE_RESOURCE = 'REQUEST_DELETE_RESOURCE';
+export const REQUEST_DELETE_RESOURCE = 'REQUEST_DELETE_RESOURCE';
 export const RECEIVE_DELETE_RESOURCE = 'RECEIVE_DELETE_RESOURCE';
-const INVALIDATE_DELETE_RESOURCE = 'INVALIDATE_DELETE_RESOURCE';
+export const INVALIDATE_DELETE_RESOURCE = 'INVALIDATE_DELETE_RESOURCE';
 
 const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Fetch children failed for';
 const USS_CREATE_SUCCESS_MESSAGE = 'Create successful for';
@@ -128,7 +128,7 @@ function invalidateDelete(path) {
 export function fetchUSSTreeChildren(path) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
-        let endpoint = `unixfiles?path=${path}`;
+        let endpoint = `restfiles/fs?path=${path}`;
         if (path.substr(path.length - 1) === '/' && path !== '/') {
             endpoint = endpoint.substr(0, endpoint.length - 1);
         }
@@ -142,7 +142,7 @@ export function fetchUSSTreeChildren(path) {
                 }
                 return response.json().then(e => { throw Error(e.message); });
             }).then(json => {
-                return dispatch(receiveUSSChildren(path, json.children));
+                return dispatch(receiveUSSChildren(path, json.items));
             })
             .catch(e => {
                 dispatch(constructAndPushMessage(`${USS_FETCH_CHILDREN_FAIL_MESSAGE} ${path} : ${e.message}`));
@@ -154,7 +154,7 @@ export function fetchUSSTreeChildren(path) {
 export function createUSSResource(path, type) {
     return dispatch => {
         dispatch(requestNewResource(path));
-        const endpoint = `unixfiles/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
         const body = `{"type": "${type}", "permissions": "RWXRWXR--"}`;
         return atlasPost(endpoint, body)
             .then(response => {
@@ -176,11 +176,11 @@ export function createUSSResource(path, type) {
 export function deleteUSSResource(path) {
     return dispatch => {
         dispatch(requestDelete(path));
-        const endpoint = `unixfiles/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
         return atlasDelete(endpoint, {
             credentials: 'include',
             method: 'DELETE',
-            headers: { recursive: true },
+            headers: { 'X-IBM-Option': 'recursive' },
         })
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
@@ -191,7 +191,7 @@ export function deleteUSSResource(path) {
                     dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
                     return dispatch(invalidateContentIfOpen(path));
                 }
-                return response.json().then(e => { throw Error(e.message); });
+                return response.json().then(e => { throw Error(e.details); });
             }).catch(e => {
                 dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path} : ${e.message}`));
                 return dispatch(invalidateDelete(path));

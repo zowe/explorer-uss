@@ -27,17 +27,17 @@ export const treeDirectoriesChildData = [
     {
         name: 'helloworld.txt',
         size: 20,
-        type: 'file',
+        mode: '-rw-r--r--',
     },
     {
         name: 'test2',
         size: 8192,
-        type: 'directory',
+        mode: 'drw-r--r--',
     },
     {
         name: 'helloworld1',
         size: 1,
-        type: 'file',
+        mode: '-rw-r--r--',
     },
 ];
 
@@ -45,27 +45,27 @@ export const treeDirectoriesChildData2 = [
     {
         name: 'helloworld2',
         size: 20,
-        type: 'file',
+        mode: '-rw-r--r--',
     },
     {
         name: 'anotherFolder',
         size: 8192,
-        type: 'directory',
+        mode: 'drw-r--r--',
     },
 ];
 
 export const receivedTreeDirectories = Map({
     children: Map({
         '/u/jcain/test/helloworld.txt': Map({
-            type: 'file',
+            type: 'FILE',
             isToggled: false,
         }),
         '/u/jcain/test/test2': Map({
-            type: 'directory',
+            type: 'DIRECTORY',
             isToggled: false,
         }),
         '/u/jcain/test/helloworld1': Map({
-            type: 'file',
+            type: 'FILE',
             isToggled: false,
         }),
     }),
@@ -86,23 +86,23 @@ export const receivedTreeDirectories = Map({
 export const receivedTreeDirectoriesWithExistingChildren = Map({
     children: Map({
         '/u/jcain/test/helloworld.txt': Map({
-            type: 'file',
+            type: 'FILE',
             isToggled: false,
         }),
         '/u/jcain/test/test2': Map({
-            type: 'directory',
+            type: 'DIRECTORY',
             isToggled: false,
         }),
         '/u/jcain/test/helloworld1': Map({
-            type: 'file',
+            type: 'FILE',
             isToggled: false,
         }),
         '/u/jcain/test/test2/helloworld2': Map({
-            type: 'file',
+            type: 'FILE',
             isToggled: false,
         }),
         '/u/jcain/test/test2/anotherFolder': Map({
-            type: 'directory',
+            type: 'DIRECTORY',
             isToggled: false,
         }),
     }),
@@ -112,15 +112,15 @@ export const receivedTreeDirectoriesWithExistingChildren = Map({
 export const toggledReceivedTreeDirectories = Map({
     children: Map({
         '/u/jcain/test/helloworld.txt': Map({
-            type: 'file',
+            type: 'FILE',
             isToggled: false,
         }),
         '/u/jcain/test/test2': Map({
-            type: 'directory',
+            type: 'DIRECTORY',
             isToggled: true,
         }),
         '/u/jcain/test/helloworld1': Map({
-            type: 'file',
+            type: 'FILE',
             isToggled: false,
         }),
     }),
