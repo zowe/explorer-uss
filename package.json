@@ -45,7 +45,7 @@
     "compression-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^6.0.2",
     "cross-env": "^5.0.0",
-    "css-loader": "^0.28.4",
+    "css-loader": "^1.0.0",
     "enzyme": "^2.8.2",
     "es6-promise": "^4.1.0",
     "eslint": "^4.9.0",
