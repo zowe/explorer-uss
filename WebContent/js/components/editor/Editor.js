@@ -121,6 +121,7 @@ class Editor extends React.Component {
                             handleSaveAs={this.handleSaveAs}
                         />
                         <OrionEditor
+                            file={file}
                             content={content}
                             syntax={this.state.syntax}
                             passContentToParent={this.getContent}
