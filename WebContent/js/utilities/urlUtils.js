@@ -52,7 +52,7 @@ export function atlasPost(endpoint, body) {
 }
 
 export function atlasPut(endpoint, body, checksum) {
-    const headers = { 'Content-Type': 'text/plain',  'X-CSRF-ZOSMF-HEADER': '*' };
+    const headers = { 'Content-Type': 'text/plain', 'X-CSRF-ZOSMF-HEADER': '*' };
     if (checksum) {
         headers['If-Match'] = checksum;
     }
