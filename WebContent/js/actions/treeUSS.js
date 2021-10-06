@@ -180,7 +180,6 @@ export function deleteUSSResource(path) {
         return atlasDelete(endpoint, {
             credentials: 'include',
             method: 'DELETE',
-            headers: { 'X-IBM-Option': 'recursive' },
         })
             .then(response => {
                 return dispatch(checkForValidationFailure(response));

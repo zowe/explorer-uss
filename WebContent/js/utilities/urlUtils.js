@@ -28,6 +28,7 @@ export function atlasGet(endpoint, content) {
     const fetchParams = {
         method: 'GET',
         credentials: 'include',
+        headers: { 'X-CSRF-ZOSMF-HEADER': '*' },
     };
     return atlasAction(endpoint, content, fetchParams);
 }
@@ -36,6 +37,7 @@ export function atlasDelete(endpoint, content) {
     const fetchParams = {
         method: 'DELETE',
         credentials: 'include',
+        headers: { 'X-IBM-Option': 'recursive', 'X-CSRF-ZOSMF-HEADER': '*' },
     };
     return atlasAction(endpoint, content, fetchParams);
 }
@@ -44,13 +46,13 @@ export function atlasPost(endpoint, body) {
     return atlasAction(endpoint, {
         method: 'POST',
         body,
-        headers: { 'Content-Type': 'text/plain' },
+        headers: { 'Content-Type': 'text/plain', 'X-CSRF-ZOSMF-HEADER': '*' },
         credentials: 'include',
     });
 }
 
 export function atlasPut(endpoint, body, checksum) {
-    const headers = { 'Content-Type': 'text/plain' };
+    const headers = { 'Content-Type': 'text/plain',  'X-CSRF-ZOSMF-HEADER': '*' };
     if (checksum) {
         headers['If-Match'] = checksum;
     }
