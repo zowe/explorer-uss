@@ -5,7 +5,7 @@
   "pluginType": "application",
   "webContent": {
     "framework": "iframe",
-    "destination": "/ui/v1/explorer-uss",
+    "destination": "https://${ZOWE_EXTERNAL_HOST}:${ZWE_EXTERNAL_PORT}/ui/v1/explorer-uss",
     "launchDefinition": {
       "pluginShortNameKey": "USS Explorer",
       "pluginShortNameDefault": "USS Explorer", 
