@@ -1,6 +1,6 @@
 {
   "name": "explorer-uss",
-  "version": "1.0.19",
+  "version": "2.0.0",
   "directories": {
     "test": "tests"
   },
@@ -120,8 +120,7 @@
   "license": "EPL-2.0",
   "config": {
     "pluginId": "org.zowe.explorer-uss",
-    "pluginName": "USS Explorer",
-    "baseuri": "/ui/v1/explorer-uss"
+    "pluginName": "USS Explorer"
   },
   "proxy": {
     "target": "https://tvt5003.svl.ibm.com:47554"
