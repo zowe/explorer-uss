@@ -1,6 +1,7 @@
 {
   "name": "explorer-uss",
   "version": "2.0.0",
+  "types": "module",
   "directories": {
     "test": "tests"
   },
@@ -11,7 +12,6 @@
     "immutable": "^3.8.1",
     "interweave": "^8.0.1",
     "lowlight": "^1.8.0",
-    "npm-install-peers": "^1.2.1",
     "orion-editor-component": "0.0.14",
     "prop-types": "^15.5.10",
     "query-string": "^6.8.2",
@@ -35,7 +35,7 @@
     "@types/mocha": "^7.0.1",
     "@types/node": "^13.7.1",
     "@types/selenium-webdriver": "^4.0.8",
-    "babel-eslint": "^10.1.0",
+    "@babel/eslint-parser": "^7.5.4",
     "babel-loader": "^8.0.0",
     "babel-plugin-react-html-attrs": "^2.0.0",
     "babel-plugin-transform-class-properties": "^6.3.13",
@@ -52,9 +52,9 @@
     "css-loader": "^1.0.1",
     "dotenv": "^6.2.0",
     "es6-promise": "^4.1.0",
-    "eslint": "^4.19.1",
+    "eslint": "^7.5.0",
     "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-node": "^5.1.1",

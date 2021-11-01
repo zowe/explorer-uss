@@ -16,7 +16,7 @@ export const fetchDirectoryChildrenDataPost = [
     { name: 'test2', mode: 'drwxrwxrwx', type: 'DIRECTORY', size: 8192, link: 'https://tester.test.com:7443/ibmzosmf/api/v1/zosmf/restfiles/fs/u/jcain/test2' },
 ];
 
-    // How it appears from zosmf
+// How it appears from zosmf
 export const fetchDirectoryChildrenDataResponse = {
     items: fetchDirectoryChildrenDataPost,
 };
