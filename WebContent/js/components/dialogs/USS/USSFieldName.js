@@ -12,7 +12,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-
 export default class USSFieldName extends React.Component {
     constructor(props) {
         super(props);
@@ -45,7 +44,8 @@ export default class USSFieldName extends React.Component {
                 placeholder={fieldName}
                 value={this.state.field}
                 onChange={this.handleFieldChange}
-            />);
+            />
+        );
     }
 }
 

@@ -28,14 +28,16 @@ export default class RefreshIcon extends React.Component {
                 <CircularProgressMui
                     size={iconSize}
                     style={iconStyle}
-                />);
+                />
+            );
         }
         return (
             <RefreshIconMui
                 size={iconSize}
                 style={iconStyle}
                 onClick={this.handleSubmit}
-            />);
+            />
+        );
     }
 }
 

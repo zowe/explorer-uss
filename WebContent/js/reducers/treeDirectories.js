@@ -14,7 +14,8 @@ import {
     RECEIVE_DIRECTORY_CHILDREN,
     INVALIDATE_DIRECTORY_CHILDREN,
     TOGGLE_DIRECTORY,
-    RESET_DIRECTORY_CHILDREN } from '../actions/treeDirectories';
+    RESET_DIRECTORY_CHILDREN,
+} from '../actions/treeDirectories';
 
 const INITIAL_DIRECTORY_STATE = Map({
     children: Map({}),
@@ -79,4 +80,3 @@ export default function TreeDirectory(state = INITIAL_DIRECTORY_STATE, action) {
             return state;
     }
 }
-

@@ -72,7 +72,6 @@ export const receivedTreeDirectories = Map({
     isFetching: false,
 });
 
-
 /*
         "/u/jcain/test": Map({
             type: "directory",
@@ -126,4 +125,3 @@ export const toggledReceivedTreeDirectories = Map({
     }),
     isFetching: false,
 });
-
