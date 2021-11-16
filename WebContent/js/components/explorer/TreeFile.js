@@ -7,13 +7,14 @@
  *
  * Copyright IBM Corporation 2016, 2019
  */
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
 
 import PropTypes from 'prop-types';
 import React from 'react';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import ContentIcon from '@material-ui/icons/Description';
 import { fetchUSSFile } from '../../actions/editor';
-import USSFileMenu from '../../components/contextMenus/USSFileMenu';
+import USSFileMenu from '../contextMenus/USSFileMenu';
 import { getPathToResource } from '../../utilities/USSUtilities';
 
 /**
@@ -41,12 +42,15 @@ export default class TreeFile extends React.Component {
         return (
             <div style={{ whiteSpace: 'nowrap' }}>
                 <ContentIcon className="node-icon" />
-                <span className="node-label" onClick={this.handleToggle()} >{childId}</span>
-            </div>);
+                <span className="node-label" onClick={this.handleToggle()}>{childId}</span>
+            </div>
+        );
     }
 
     renderContentMenu() {
-        const { path, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, inDialog } = this.props;
+        const {
+            path, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, inDialog,
+        } = this.props;
         if (!inDialog) {
             return (
                 <USSFileMenu

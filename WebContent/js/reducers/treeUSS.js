@@ -18,7 +18,8 @@ import {
     RECEIVE_NEW_DIRECTORY,
     RECEIVE_NEW_FILE,
     RECEIVE_DELETE_RESOURCE,
-    INVALIDATE_USS_TREE_CHILDREN } from '../actions/treeUSS';
+    INVALIDATE_USS_TREE_CHILDREN,
+} from '../actions/treeUSS';
 import { getResourceFromPath } from '../utilities/USSUtilities';
 
 export const ROOT_TREE_ID = 'treeUSS';

@@ -27,7 +27,8 @@ export default class DeleteUSSResourceDialog extends React.Component {
                 submitAction={() => { return this.submitAction(); }}
                 dialogReturn={dialogReturn}
                 dispatch={dispatch}
-            />);
+            />
+        );
     }
 }
 

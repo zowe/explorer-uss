@@ -13,7 +13,9 @@ import React from 'react';
 import { ContextMenu, MenuItem } from 'react-contextmenu';
 
 const USSFileMenu = props => {
-    const { childId, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit } = props;
+    const {
+        childId, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit,
+    } = props;
     return (
         <ContextMenu id={childId}>
             <MenuItem onClick={path => { handleCreateDirectory(path); }}>

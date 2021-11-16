@@ -8,8 +8,6 @@
  * Copyright IBM Corporation 2016, 2019
  */
 
-/* global document */
-
 import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -42,5 +40,6 @@ ReactDOM.render(
             <Route exact={true} path="/" component={HomeView} />
             <Route path="/editor" component={FullScreenEditor} />
         </HashRouter>
-    </Provider>
-    , document.getElementById('app'));
+    </Provider>,
+    document.getElementById('app'),
+);

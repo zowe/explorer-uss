@@ -48,11 +48,12 @@ class USSSaveAsDataset extends React.Component {
             <div>
                 <ConnectedUSSTree inDialog={true} />
                 <USSFieldName fieldName={NEW_FILE_FIELD} updateField={this.updateName} startValue={USSSaveAsDataset.getFileName(file)} />
-            </div>);
+            </div>
+        );
 
         return (
             <AtlasDialog
-                title={'Save File As'}
+                title="Save File As"
                 submitAction={() => { return this.submitAction(); }}
                 dialogReturn={dialogReturn}
                 dispatch={dispatch}
@@ -81,4 +82,3 @@ function mapStateToProps(state) {
 
 const ConnectedUSSSaveAsDataset = connect(mapStateToProps)(USSSaveAsDataset);
 export default ConnectedUSSSaveAsDataset;
-
