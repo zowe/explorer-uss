@@ -38,7 +38,12 @@ function getChildrenFromJson(path, json) {
                 }
             }
             dirProps = dirProps.set('isToggled', false);
-            newDir = newDir.set(`${path}/${child.name}`, dirProps);
+            // if USSPath ends with slash '/' then remove '/'
+            if (path.lastIndexOf('/') === path.length -1){
+                newDir = newDir.set(`${path.substring(0, path.length - 1)}/${child.name}`, dirProps);
+            } else {
+                newDir = newDir.set(`${path}/${child.name}`, dirProps);
+            }
         }
     });
     return newDir;

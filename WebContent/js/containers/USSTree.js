@@ -155,12 +155,18 @@ export class USSTree extends React.Component {
         const {
             USSPath, USSChildren, dispatch, inDialog,
         } = this.props;
+        let newUSSPath = USSPath;
+        // if USSPath ends with slash '/' then remove '/'
+        if(USSPath.lastIndexOf('/') === USSPath.length - 1)
+        {
+            newUSSPath = USSPath.substring(0, USSPath.length - 1)
+        }
         if (USSChildren.get(child) === 'DIRECTORY') {
             return (
                 <ConnectedTreeDirectory
                     childId={child}
                     key={child}
-                    path={`${USSPath}/${child}`}
+                    path={`${newUSSPath}/${child}`}
                     handleCreateDirectory={this.handleCreateDirectory}
                     handleCreateFile={this.handleCreateFile}
                     handleDelete={this.handleDelete}
@@ -173,7 +179,7 @@ export class USSTree extends React.Component {
             <TreeFile
                 childId={child}
                 key={child}
-                path={`${USSPath}/${child}`}
+                path={`${newUSSPath}/${child}`}
                 dispatch={dispatch}
                 handleCreateDirectory={this.handleCreateDirectory}
                 handleCreateFile={this.handleCreateFile}
