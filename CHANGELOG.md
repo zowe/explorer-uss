@@ -1,9 +1,12 @@
 # Change Log
 All notable changes to the USS-Explorer will be documented in this file.
 
+## <1.0.19>
+- Fixed the bug where opening a file fails when USS path has '/' at the end
+
 ## <1.0.14>
 - Replaced the File APIs with zOSMF APIs
-- 
+
 ## <1.0.13>
 - updated material ui from 0.18 to 4.x, react from v15 to v16
 - updated webpack config for local build config

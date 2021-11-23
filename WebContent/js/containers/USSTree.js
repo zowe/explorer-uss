@@ -73,7 +73,8 @@ export class USSTree extends React.Component {
                 append = `/${username.toLowerCase()}`;
             }
             dispatch(setUSSPath(`/u${append}`));
-        } else if (USSPath !== nextProps.USSPath) {
+        } else if ((USSPath !== nextProps.USSPath)) {
+            this.handlePathUpdate(nextProps.USSPath);
             this.handlePathUpdate(nextProps.USSPath);
         }
         if (USSChildren !== nextProps.USSChildren) {
@@ -112,15 +113,11 @@ export class USSTree extends React.Component {
         this.setState({ dialog: NO_DIALOG });
     }
 
-    handleCreateDirectory = path => {
-        const { dispatch } = this.props;
-        dispatch(setUSSPath(path));
+    handleCreateDirectory = () => {
         this.setState({ dialog: CREATE_DIRECTORY });
     }
 
-    handleCreateFile = path => {
-        const { dispatch } = this.props;
-        dispatch(setUSSPath(path));
+    handleCreateFile = () => {
         this.setState({ dialog: CREATE_FILE });
     }
 
@@ -160,7 +157,7 @@ export class USSTree extends React.Component {
                 <ConnectedTreeDirectory
                     childId={child}
                     key={child}
-                    path={`${USSPath}/${child}`}
+                    path={`${USSPath}/${child}`.replace('//', '/')}
                     handleCreateDirectory={this.handleCreateDirectory}
                     handleCreateFile={this.handleCreateFile}
                     handleDelete={this.handleDelete}
@@ -173,7 +170,7 @@ export class USSTree extends React.Component {
             <TreeFile
                 childId={child}
                 key={child}
-                path={`${USSPath}/${child}`}
+                path={`${USSPath}/${child}`.replace('//', '/')}
                 dispatch={dispatch}
                 handleCreateDirectory={this.handleCreateDirectory}
                 handleCreateFile={this.handleCreateFile}
