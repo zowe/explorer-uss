@@ -75,7 +75,6 @@ export class USSTree extends React.Component {
             dispatch(setUSSPath(`/u${append}`));
         } else if ((USSPath !== nextProps.USSPath)) {
             this.handlePathUpdate(nextProps.USSPath);
-            this.handlePathUpdate(nextProps.USSPath);
         }
         if (USSChildren !== nextProps.USSChildren) {
             nextProps.USSChildren.keySeq().toArray().map(child => {
