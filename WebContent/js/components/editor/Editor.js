@@ -43,7 +43,7 @@ class Editor extends React.Component {
         this.dialogReturn = this.dialogReturn.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const {
             checksum, location, content, file,
         } = this.props;
