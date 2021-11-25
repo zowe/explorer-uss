@@ -1,11 +1,11 @@
 {
   "identifier": "org.zowe.explorer-uss",
   "apiVersion": "1.0.0",
-  "pluginVersion": "1.0.0",
+  "pluginVersion": "2.0.0",
   "pluginType": "application",
   "webContent": {
     "framework": "iframe",
-    "destination": "https://localhost:8080",
+    "startingPage": "index.html",
     "launchDefinition": {
       "pluginShortNameKey": "USS Explorer",
       "pluginShortNameDefault": "USS Explorer", 
