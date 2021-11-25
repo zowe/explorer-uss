@@ -24,7 +24,8 @@ module.exports = {
         "jsx-a11y/no-static-element-interactions":0,
         "lines-between-class-members": ["error", "always"],
         "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
-        "import/no-cycle": "off"
+        "import/no-cycle": "off",
+        "react/no-deprecated": "off"
     },
     "env": {
         "browser": true,
