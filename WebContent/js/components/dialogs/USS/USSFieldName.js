@@ -22,7 +22,7 @@ export default class USSFieldName extends React.Component {
         };
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const { startValue } = this.props;
         if (startValue) {
             this.setState({ field: startValue });

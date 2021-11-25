@@ -62,7 +62,7 @@ export class USSTree extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const {
             dispatch, validated, username, USSPath, USSChildren,
         } = this.props;
