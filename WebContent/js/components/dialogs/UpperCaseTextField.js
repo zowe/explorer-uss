@@ -44,11 +44,13 @@ export default class UpperCaseTextField extends React.Component {
 
     render() {
         const { fieldChangedCallback, ...props } = this.props;
-        return (<TextField
-            {...props}
-            value={this.state.field}
-            onChange={this.handleFieldChange}
-        />);
+        return (
+            <TextField
+                {...props}
+                value={this.state.field}
+                onChange={this.handleFieldChange}
+            />
+        );
     }
 }
 
@@ -56,4 +58,3 @@ UpperCaseTextField.propTypes = {
     fieldChangedCallback: PropTypes.func,
     value: PropTypes.string,
 };
-

@@ -43,9 +43,10 @@ class Editor extends React.Component {
         this.dialogReturn = this.dialogReturn.bind(this);
     }
 
-
     componentWillReceiveProps(nextProps) {
-        const { checksum, location, content, file } = this.props;
+        const {
+            checksum, location, content, file,
+        } = this.props;
         if (checksum !== nextProps.checksum) {
             this.setState({ currentChecksum: nextProps.checksum });
         }
@@ -59,10 +60,6 @@ class Editor extends React.Component {
         }
     }
 
-    getContent = content => {
-        this.setState({ currentContent: content });
-    }
-
     handleChangeSyntax(syntax) {
         this.setState({ syntax });
     }
@@ -74,6 +71,10 @@ class Editor extends React.Component {
 
     handleSaveAs() {
         this.setState({ dialog: SAVE_AS_USS });
+    }
+
+    getContent = content => {
+        this.setState({ currentContent: content });
     }
 
     dialogReturn = () => {
@@ -92,13 +93,15 @@ class Editor extends React.Component {
         const { dispatch, file, checksum } = this.props;
         switch (this.state.dialog) {
             case SAVE_AS_USS:
-                return (<USSSaveAsDialog
-                    file={file}
-                    content={this.state.currentContent}
-                    checksum={checksum}
-                    dispatch={dispatch}
-                    dialogReturn={this.dialogReturn}
-                />);
+                return (
+                    <USSSaveAsDialog
+                        file={file}
+                        content={this.state.currentContent}
+                        checksum={checksum}
+                        dispatch={dispatch}
+                        dialogReturn={this.dialogReturn}
+                    />
+                );
             default:
                 return null;
         }
@@ -125,8 +128,8 @@ class Editor extends React.Component {
                             content={content}
                             syntax={this.state.syntax}
                             passContentToParent={this.getContent}
-                            languageFilesHost={location.host}
-                            fullscreen={!!location}
+                            languageFilesHost={window.location.host}
+                            fullscreen={!!window.location}
                             editorTopOffset={56}
                             editorReady={this.editorReady}
                         />

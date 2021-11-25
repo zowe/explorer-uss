@@ -89,7 +89,9 @@ class HomeView extends React.Component {
 
     render() {
         if (this.props.validated) {
-            const { collapsed, windowWidth, treeWidthPercent, moveMode } = this.state;
+            const {
+                collapsed, windowWidth, treeWidthPercent, moveMode,
+            } = this.state;
             return (
                 <div className="row group">
                     <div

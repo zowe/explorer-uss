@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2016, 2020
  */
 
-import { createUSSResource, fetchUSSTreeChildren, INVALIDATE_NEW_RESOURCE } from '../actions/treeUSS';
+import { createUSSResource, fetchUSSTreeChildren, INVALIDATE_NEW_RESOURCE } from './treeUSS';
 import { getPathToResource } from '../utilities/USSUtilities';
 import { atlasGet, atlasPut } from '../utilities/urlUtils';
 import { checkForValidationFailure } from './validation';

@@ -63,7 +63,9 @@ export class USSTree extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { dispatch, validated, username, USSPath, USSChildren } = this.props;
+        const {
+            dispatch, validated, username, USSPath, USSChildren,
+        } = this.props;
         // Once we receive validation update the path, once we have set the path, fetch the children
         if (!validated) {
             let append = '';
@@ -90,12 +92,6 @@ export class USSTree extends React.Component {
         } else {
             this.resetAndFetchChildren(path);
         }
-    }
-
-    resetAndFetchChildren(path) {
-        const { dispatch } = this.props;
-        dispatch(resetUSSChildren());
-        dispatch(fetchUSSTreeChildren(path));
     }
 
     handlePathChange(event) {
@@ -149,8 +145,16 @@ export class USSTree extends React.Component {
         }
     }
 
+    resetAndFetchChildren(path) {
+        const { dispatch } = this.props;
+        dispatch(resetUSSChildren());
+        dispatch(fetchUSSTreeChildren(path));
+    }
+
     renderUSSChild(child) {
-        const { USSPath, USSChildren, dispatch, inDialog } = this.props;
+        const {
+            USSPath, USSChildren, dispatch, inDialog,
+        } = this.props;
         if (USSChildren.get(child) === 'DIRECTORY') {
             return (
                 <ConnectedTreeDirectory
@@ -162,7 +166,8 @@ export class USSTree extends React.Component {
                     handleDelete={this.handleDelete}
                     handleOrionEdit={this.handleOrionEdit}
                     inDialog={inDialog}
-                />);
+                />
+            );
         }
         return (
             <TreeFile
@@ -175,7 +180,8 @@ export class USSTree extends React.Component {
                 handleDelete={this.handleDelete}
                 handleOrionEdit={this.handleOrionEdit}
                 inDialog={inDialog}
-            />);
+            />
+        );
     }
 
     renderDialog() {
@@ -185,14 +191,14 @@ export class USSTree extends React.Component {
                 return (
                     <ConnectedCreateUSSResourceDialog
                         dialogReturn={this.dialogReturn}
-                        type={'DIRECTORY'}
+                        type="DIRECTORY"
                     />
                 );
             case CREATE_FILE:
                 return (
                     <ConnectedCreateUSSResourceDialog
                         dialogReturn={this.dialogReturn}
-                        type={'FILE'}
+                        type="FILE"
                     />
                 );
             case DELETE:
@@ -216,13 +222,16 @@ export class USSTree extends React.Component {
                 <ArrowUpwardIcon
                     style={iconStyle}
                     onClick={this.handleUpOneDirectory}
-                />);
+                />
+            );
         }
         return null;
     }
 
     render() {
-        const { USSChildren, USSPath, isFetching, dispatch, inDialog } = this.props;
+        const {
+            USSChildren, USSPath, isFetching, dispatch, inDialog,
+        } = this.props;
         return (
             <Card class="tree-card" style={{ paddingBottom: 0 }}>
                 <CardContent>

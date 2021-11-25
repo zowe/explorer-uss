@@ -22,4 +22,3 @@ export const ibmBlack = '#000000'; // Pure black
 export const ibmNWhite30 = '#f4f4f4'; // IBM neutral-white 30 trying to get close to f5f5f5 for gray100
 export const ibmGray30 = '#aeaeae'; // IBM Gray 30 trying to get close to bdbdbd for gray100
 export const ibmCGray40 = '#959f9f'; // IBM Cool Gray 40 trying to get close to '#9e9e9e' for grey500;
-

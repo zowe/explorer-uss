@@ -26,7 +26,6 @@ describe('Action: validation', () => {
     const middlewares = [thunk];
     const mockStore = configureMockStore(middlewares);
 
-
     describe('validateUser', () => {
         it('Should create an action to request and then receive validation along with grabbing username', () => {
             const expectedActions = [

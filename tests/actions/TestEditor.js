@@ -182,7 +182,8 @@ describe('Action: editor', () => {
 
             const store = mockStore();
             return store.dispatch(
-                editorActions.getNewUSSResourceChecksum(editorResources.USSFile))
+                editorActions.getNewUSSResourceChecksum(editorResources.USSFile),
+            )
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });

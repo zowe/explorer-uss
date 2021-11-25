@@ -66,7 +66,6 @@
 //         expect(content(contentResources.baseContent, action)).toEqual(contentResources.invalidatedContent);
 //     });
 
-
 //     it('Should handle INVALIDATE_CONTENT with ReceivedContent', () => {
 //         const action = { type: contentActions.INVALIDATE_CONTENT };
 //         expect(content(contentResources.receivedContent, action)).toEqual(contentResources.invalidatedContent);

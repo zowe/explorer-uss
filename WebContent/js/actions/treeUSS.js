@@ -10,7 +10,6 @@
 
 import { atlasGet, atlasDelete, atlasPost } from '../utilities/urlUtils';
 import { checkForValidationFailure } from './validation';
-import { invalidateContentIfOpen } from './editor';
 import { constructAndPushMessage } from './snackbarNotifications';
 
 export const REQUEST_USS_TREE_CHILDREN = 'REQUEST_USS_TREE_CHILDREN';
@@ -188,7 +187,7 @@ export function deleteUSSResource(path) {
                 if (response.ok) {
                     dispatch(receiveDelete(path));
                     dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
-                    return dispatch(invalidateContentIfOpen(path));
+                    return dispatch(invalidateDelete(path));
                 }
                 return response.json().then(e => { throw Error(e.details); });
             }).catch(e => {

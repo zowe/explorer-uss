@@ -20,5 +20,6 @@ const REDUCERS = {
     treeUSS,
     treeDirectories,
     editor,
-    snackbarNotifications };
+    snackbarNotifications,
+};
 export default combineReducers(REDUCERS);

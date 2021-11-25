@@ -7,6 +7,7 @@
  *
  * Copyright IBM Corporation 2016, 2020
  */
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
 
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -18,7 +19,7 @@ import ClosedFolderIcon from '@material-ui/icons/Folder';
 import { fetchDirectoryChildren, toggleDirectory } from '../../actions/treeDirectories';
 import { setUSSPath, resetUSSChildren } from '../../actions/treeUSS';
 import TreeFile from './TreeFile';
-import USSDirectoryMenu from '../../components/contextMenus/USSDirectoryMenu';
+import USSDirectoryMenu from '../contextMenus/USSDirectoryMenu';
 import { getPathToResource, sortChildren } from '../../utilities/USSUtilities';
 
 export class TreeDirectory extends React.Component {
@@ -29,14 +30,6 @@ export class TreeDirectory extends React.Component {
         this.renderChildren = this.renderChildren.bind(this);
         this.isDirectoryToggled = this.isDirectoryToggled.bind(this);
         this.pathMatchesStartOfElement = this.pathMatchesStartOfElement.bind(this);
-    }
-
-    getToggleIcon() {
-        const isToggled = this.isDirectoryToggled();
-        if (isToggled) {
-            return (<OpenFolderIcon className="node-icon" />);
-        }
-        return (<ClosedFolderIcon className="node-icon" />);
     }
 
     handleToggle() {
@@ -53,6 +46,14 @@ export class TreeDirectory extends React.Component {
         const { path, dispatch } = this.props;
         dispatch(resetUSSChildren());
         dispatch(setUSSPath(path));
+    }
+
+    getToggleIcon() {
+        const isToggled = this.isDirectoryToggled();
+        if (isToggled) {
+            return (<OpenFolderIcon className="node-icon" />);
+        }
+        return (<ClosedFolderIcon className="node-icon" />);
     }
 
     isDirectoryToggled() {
@@ -83,7 +84,9 @@ export class TreeDirectory extends React.Component {
      * create the directories first then the files, return the components in an array
      */
     renderChildren() {
-        const { path, children, dispatch, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, inDialog } = this.props;
+        const {
+            path, children, dispatch, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, inDialog,
+        } = this.props;
         const childComponents = [];
 
         sortChildren(children.keySeq().toArray().filter(this.pathMatchesStartOfElement))
@@ -118,7 +121,9 @@ export class TreeDirectory extends React.Component {
     }
 
     renderContentMenu() {
-        const { path, handleCreateDirectory, handleCreateFile, handleDelete, inDialog } = this.props;
+        const {
+            path, handleCreateDirectory, handleCreateFile, handleDelete, inDialog,
+        } = this.props;
         if (!inDialog) {
             return (
                 <USSDirectoryMenu

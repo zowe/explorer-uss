@@ -48,7 +48,7 @@ export default class ModalAlertDialog extends React.Component {
                     <DialogContent>
                         {dialogContent}
                     </DialogContent>
-                    <DialogActions >
+                    <DialogActions>
                         {modalActions}
                     </DialogActions>
                 </Dialog>
