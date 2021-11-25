@@ -40,7 +40,7 @@ class HomeView extends React.Component {
         window.addEventListener('resize', this.debHandleResize);
     }
 
-    UNSAFE_componentWillMount() {
+    componentWillUnmount() {
         window.removeEventListener('resize', this.debHandleResize);
     }
 
