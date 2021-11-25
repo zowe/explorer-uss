@@ -62,7 +62,7 @@ export class USSTree extends React.Component {
         }
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
         const {
             dispatch, validated, username, USSPath, USSChildren,
         } = this.props;
@@ -112,15 +112,11 @@ export class USSTree extends React.Component {
         this.setState({ dialog: NO_DIALOG });
     }
 
-    handleCreateDirectory = path => {
-        const { dispatch } = this.props;
-        dispatch(setUSSPath(path));
+    handleCreateDirectory = () => {
         this.setState({ dialog: CREATE_DIRECTORY });
     }
 
-    handleCreateFile = path => {
-        const { dispatch } = this.props;
-        dispatch(setUSSPath(path));
+    handleCreateFile = () => {
         this.setState({ dialog: CREATE_FILE });
     }
 
@@ -160,7 +156,7 @@ export class USSTree extends React.Component {
                 <ConnectedTreeDirectory
                     childId={child}
                     key={child}
-                    path={`${USSPath}/${child}`}
+                    path={`${USSPath}/${child}`.replace('//', '/')}
                     handleCreateDirectory={this.handleCreateDirectory}
                     handleCreateFile={this.handleCreateFile}
                     handleDelete={this.handleDelete}
@@ -173,7 +169,7 @@ export class USSTree extends React.Component {
             <TreeFile
                 childId={child}
                 key={child}
-                path={`${USSPath}/${child}`}
+                path={`${USSPath}/${child}`.replace('//', '/')}
                 dispatch={dispatch}
                 handleCreateDirectory={this.handleCreateDirectory}
                 handleCreateFile={this.handleCreateFile}

@@ -25,7 +25,7 @@ class AtlasSnackbar extends React.Component {
         this.registerMessageWithSnackbar = this.registerMessageWithSnackbar.bind(this);
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
         const { snackbarNotificationsMessages } = this.props;
         if (nextProps.snackbarNotificationsMessages.first()
             && snackbarNotificationsMessages.first() !== nextProps.snackbarNotificationsMessages.first()) {
@@ -35,7 +35,7 @@ class AtlasSnackbar extends React.Component {
         }
     }
 
-    UNSAFE_componentWillMount() {
+    componentWillUnmount() {
         this.state.timeout = clearTimeout(this.state.timeout);
     }
 
