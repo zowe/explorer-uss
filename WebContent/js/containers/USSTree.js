@@ -51,7 +51,7 @@ export class USSTree extends React.Component {
         };
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const { dispatch, username, USSChildren } = this.props;
         if (USSChildren.isEmpty()) {
             let append = '';
@@ -62,7 +62,7 @@ export class USSTree extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    compoUNSAFE_componentWillReceivePropsnentWillReceiveProps(nextProps) {
         const {
             dispatch, validated, username, USSPath, USSChildren,
         } = this.props;
