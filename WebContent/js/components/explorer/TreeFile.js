@@ -49,7 +49,7 @@ export default class TreeFile extends React.Component {
 
     renderContentMenu() {
         const {
-            path, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, inDialog,
+            path, handleCreateDirectory, handleCreateFile, handleDownload, handleDelete, handleOrionEdit, inDialog,
         } = this.props;
         if (!inDialog) {
             return (
@@ -57,6 +57,7 @@ export default class TreeFile extends React.Component {
                     childId={path}
                     handleCreateDirectory={() => { handleCreateDirectory(getPathToResource(path)); }}
                     handleCreateFile={() => { handleCreateFile(getPathToResource(path)); }}
+                    handleDownload={() => { handleDownload(path); }}
                     handleDelete={() => { handleDelete(path); }}
                     handleOrionEdit={() => { handleOrionEdit(path); }}
                 />
@@ -88,6 +89,7 @@ TreeFile.propTypes = {
     dispatch: PropTypes.func.isRequired,
     handleCreateDirectory: PropTypes.func.isRequired,
     handleCreateFile: PropTypes.func.isRequired,
+    handleDownload: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleOrionEdit: PropTypes.func.isRequired,
     inDialog: PropTypes.bool.isRequired,

@@ -23,6 +23,9 @@ export const REQUEST_NEW_RESOURCE = 'REQUEST_NEW_RESOURCE';
 export const RECEIVE_NEW_DIRECTORY = 'RECEIVE_NEW_DIRECTORY';
 export const RECEIVE_NEW_FILE = 'RECEIVE_NEW_FILE';
 export const INVALIDATE_NEW_RESOURCE = 'INVALIDATE_NEW_RESOURCE';
+export const REQUEST_DOWNLOAD_RESOURCE = 'REQUEST_DOWNLOAD_RESOURCE';
+export const RECEIVE_DOWNLOAD_RESOURCE = 'RECEIVE_DOWNLOAD_RESOURCE';
+export const INVALIDATE_DOWNLOAD_RESOURCE = 'INVALIDATE_DOWNLOAD_RESOURCE';
 export const REQUEST_DELETE_RESOURCE = 'REQUEST_DELETE_RESOURCE';
 export const RECEIVE_DELETE_RESOURCE = 'RECEIVE_DELETE_RESOURCE';
 export const INVALIDATE_DELETE_RESOURCE = 'INVALIDATE_DELETE_RESOURCE';
@@ -30,6 +33,7 @@ export const INVALIDATE_DELETE_RESOURCE = 'INVALIDATE_DELETE_RESOURCE';
 const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Fetch children failed for';
 const USS_CREATE_SUCCESS_MESSAGE = 'Create successful for';
 const USS_CREATE_FAIL_MESSAGE = 'Create failed for';
+const USS_DOWNLOAD_FAIL_MESSAGE = 'Download failed for';
 const USS_DELETE_SUCCESS_MESSAGE = 'Delete successful for';
 const USS_DELETE_FAIL_MESSAGE = 'Delete failed for';
 
@@ -103,6 +107,27 @@ function invalidateReceiveResource(path) {
     };
 }
 
+function requestDownload(path) {
+    return {
+        type: REQUEST_DOWNLOAD_RESOURCE,
+        path,
+    };
+}
+
+function receiveDownload(path) {
+    return {
+        type: RECEIVE_DOWNLOAD_RESOURCE,
+        path,
+    };
+}
+
+function invalidateDownload(path) {
+    return {
+        type: INVALIDATE_DOWNLOAD_RESOURCE,
+        path,
+    };
+}
+
 function requestDelete(path) {
     return {
         type: REQUEST_DELETE_RESOURCE,
@@ -168,6 +193,46 @@ export function createUSSResource(path, type) {
             }).catch(e => {
                 dispatch(constructAndPushMessage(`${USS_CREATE_FAIL_MESSAGE} ${path} : ${e.message}`));
                 return dispatch(invalidateReceiveResource(path));
+            });
+    };
+}
+
+export function createAndDownloadElement(blob, fileName) {
+    const elem = window.document.createElement('a');
+    elem.href = window.URL.createObjectURL(blob);
+    elem.download = fileName;
+    document.body.appendChild(elem);
+    elem.click();
+    document.body.removeChild(elem);
+}
+
+export function downloadUSSResource(path) {
+    return dispatch => {
+        dispatch(requestDownload(path));
+        const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const fileName = endpoint.substring(endpoint.lastIndexOf('/') + 1);
+        return atlasGet(endpoint, { credentials: 'include' })
+            .then(response => {
+                return dispatch(checkForValidationFailure(response));
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                }
+                return response.text().then(e => { throw Error(JSON.parse(e).message); });
+            })
+            .then(text => {
+                const blob = new Blob([text], { type: 'text/plain' });
+                if (window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveBlob(blob, fileName);
+                } else {
+                    createAndDownloadElement(blob, fileName);
+                }
+                dispatch(receiveDownload(path));
+            })
+            .catch(e => {
+                dispatch(constructAndPushMessage(`${USS_DOWNLOAD_FAIL_MESSAGE} ${path} : ${e.message}`));
+                return dispatch(invalidateDownload(path));
             });
     };
 }
