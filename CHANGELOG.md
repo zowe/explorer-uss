@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to the USS-Explorer will be documented in this file.
 
+## <1.0.20>
+- Adding the feature to download a file
+
 ## <1.0.19>
 - Fixed the bug where opening a file fails when USS path has '/' at the end
 
