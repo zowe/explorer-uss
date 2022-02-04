@@ -223,11 +223,7 @@ export function downloadUSSResource(path) {
             })
             .then(text => {
                 const blob = new Blob([text], { type: 'text/plain' });
-                if (window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveBlob(blob, fileName);
-                } else {
-                    createAndDownloadElement(blob, fileName);
-                }
+                createAndDownloadElement(blob, fileName);
                 dispatch(receiveDownload(path));
             })
             .catch(e => {
