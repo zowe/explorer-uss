@@ -14,7 +14,7 @@ import { ContextMenu, MenuItem } from 'react-contextmenu';
 
 const USSFileMenu = props => {
     const {
-        childId, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit,
+        childId, handleCreateDirectory, handleCreateFile, handleDownload, handleDelete, handleOrionEdit,
     } = props;
     return (
         <ContextMenu id={childId}>
@@ -26,6 +26,9 @@ const USSFileMenu = props => {
             </MenuItem>
             <MenuItem onClick={handleOrionEdit}>
                 Open
+            </MenuItem>
+            <MenuItem onClick={handleDownload}>
+                Download
             </MenuItem>
             <MenuItem onClick={handleDelete}>
                 Delete
@@ -40,6 +43,7 @@ USSFileMenu.propTypes = {
     childId: PropTypes.string.isRequired,
     handleCreateDirectory: PropTypes.func.isRequired,
     handleCreateFile: PropTypes.func.isRequired,
+    handleDownload: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleOrionEdit: PropTypes.func.isRequired,
 };

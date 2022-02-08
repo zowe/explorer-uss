@@ -19,7 +19,12 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import RefreshIcon from '../components/explorer/RefreshIcon';
 import TreeFile from '../components/explorer/TreeFile';
 import ConnectedTreeDirectory from '../components/explorer/TreeDirectory';
-import { setUSSPath, fetchUSSTreeChildren, resetUSSChildren } from '../actions/treeUSS';
+import {
+    setUSSPath,
+    fetchUSSTreeChildren,
+    downloadUSSResource,
+    resetUSSChildren,
+} from '../actions/treeUSS';
 import { addTreeDirectory, resetDirectoryChildren } from '../actions/treeDirectories';
 import { fetchUSSFile } from '../actions/editor';
 import ConnectedCreateUSSResourceDialog from '../components/dialogs/USS/CreateUSSResourceDialog';
@@ -127,6 +132,11 @@ export class USSTree extends React.Component {
         this.setState({ dialog: DELETE });
     }
 
+    handleDownload = path => {
+        const { dispatch } = this.props;
+        dispatch(downloadUSSResource(path));
+    }
+
     handleOrionEdit = path => {
         const { dispatch } = this.props;
         dispatch(fetchUSSFile(path));
@@ -159,6 +169,7 @@ export class USSTree extends React.Component {
                     path={`${USSPath}/${child}`.replace('//', '/')}
                     handleCreateDirectory={this.handleCreateDirectory}
                     handleCreateFile={this.handleCreateFile}
+                    handleDownload={this.handleDownload}
                     handleDelete={this.handleDelete}
                     handleOrionEdit={this.handleOrionEdit}
                     inDialog={inDialog}
@@ -173,6 +184,7 @@ export class USSTree extends React.Component {
                 dispatch={dispatch}
                 handleCreateDirectory={this.handleCreateDirectory}
                 handleCreateFile={this.handleCreateFile}
+                handleDownload={this.handleDownload}
                 handleDelete={this.handleDelete}
                 handleOrionEdit={this.handleOrionEdit}
                 inDialog={inDialog}
