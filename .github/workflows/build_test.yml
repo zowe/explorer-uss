@@ -2,16 +2,16 @@ name: Build and Test Workflow
 on:
   push:
     branches:
-      - v2.x/master
+      - master 
   pull_request:
     types: [opened, synchronize]
   workflow_dispatch:
     inputs:
       PERFORM_RELEASE:
-        description: '[Release] perform release'
+        description: 'Perform release?'
         required: false
-        type: boolean
         default: false
+        type: boolean
   
 
 jobs:
@@ -22,8 +22,6 @@ jobs:
       - name: check permission
         uses: zowe-actions/shared-actions/permission-check@main
         with:
-          user: ${{ github.actor }}
-          github-repo: ${{ github.repository }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   validate-package-json:
@@ -61,9 +59,6 @@ jobs:
           
       - name: '[Prep 4] Prepare workflow'
         uses: zowe-actions/shared-actions/prepare-workflow@main
-        with:
-          github-user: ${{ github.actor }}
-          github-email: 'dummy-email@email.com'
           
       - name: '[Prep 5] Setup Node'
         uses: actions/setup-node@v2
@@ -116,4 +111,4 @@ jobs:
         if: ${{ success() && github.event.inputs.PERFORM_RELEASE == 'true' && env.IS_RELEASE_BRANCH == 'true' && env.IS_FORMAL_RELEASE_BRANCH == 'true' && env.PRE_RELEASE_STRING == ''}}
         uses: zowe-actions/nodejs-actions/bump-version@main
         env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ZOWE_ROBOT_TOKEN }}
