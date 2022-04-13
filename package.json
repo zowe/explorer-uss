@@ -1,6 +1,6 @@
 {
   "name": "explorer-uss",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "types": "module",
   "directories": {
     "test": "tests"
