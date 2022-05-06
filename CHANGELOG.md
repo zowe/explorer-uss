@@ -4,6 +4,7 @@ All notable changes to the USS-Explorer will be documented in this file.
 ## <2.0.1>
 ### New features and enhancements
 - Adding the feature to download a file
+- Fixed the bug where opening a file fails when USS path has '/' at the end
 
 ## <2.0.0>
 ### New features and enhancements
