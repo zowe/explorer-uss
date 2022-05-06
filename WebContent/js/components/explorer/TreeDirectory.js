@@ -85,7 +85,7 @@ export class TreeDirectory extends React.Component {
      */
     renderChildren() {
         const {
-            path, children, dispatch, handleCreateDirectory, handleCreateFile, handleDelete, handleOrionEdit, inDialog,
+            path, children, dispatch, handleCreateDirectory, handleCreateFile, handleDownload, handleDelete, handleOrionEdit, inDialog,
         } = this.props;
         const childComponents = [];
 
@@ -99,6 +99,7 @@ export class TreeDirectory extends React.Component {
                         path={`${path}/${child.substring(child.lastIndexOf('/') + 1)}`}
                         handleCreateDirectory={handleCreateDirectory}
                         handleCreateFile={handleCreateFile}
+                        handleDownload={handleDownload}
                         handleDelete={handleDelete}
                         handleOrionEdit={handleOrionEdit}
                         inDialog={inDialog}
@@ -111,6 +112,7 @@ export class TreeDirectory extends React.Component {
                         dispatch={dispatch}
                         handleCreateDirectory={handleCreateDirectory}
                         handleCreateFile={handleCreateFile}
+                        handleDownload={handleDownload}
                         handleDelete={handleDelete}
                         handleOrionEdit={handleOrionEdit}
                         inDialog={inDialog}
@@ -165,6 +167,7 @@ TreeDirectory.propTypes = {
     children: PropTypes.instanceOf(Map),
     handleCreateDirectory: PropTypes.func.isRequired,
     handleCreateFile: PropTypes.func.isRequired,
+    handleDownload: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handleOrionEdit: PropTypes.func.isRequired,
     inDialog: PropTypes.bool.isRequired,

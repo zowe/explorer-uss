@@ -79,7 +79,7 @@ export default class EditorMenuBar extends React.Component {
                 >
                     Save as..
                 </RaisedButton>
-                <span aria-live="polite">{file}</span>
+                <span aria-live="polite" style={{ whiteSpace: 'nowrap' }}>{file}</span>
                 {isFetching && <CircularProgressMui size={24} style={{ verticalAlign: 'middle', marginLeft: '5px' }} />}
                 {file ? EditorMenuBar.renderFullScreenButton(file) : null}
                 <FormControl style={{ float: 'right', paddingTop: '5px', width: '100px' }}>

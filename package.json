@@ -69,7 +69,7 @@
     "style-loader": "3.3.1",
     "terser-webpack-plugin": "3.0.6",
     "webpack": "5.59.1",
-    "webpack-bundle-analyzer": "3.8.0",
+    "webpack-bundle-analyzer": "4.5.0",
     "webpack-cli": "4.9.1",
     "webpack-dev-server": "4.7.3"
   },
@@ -118,6 +118,6 @@
     "pluginName": "USS Explorer"
   },
   "proxy": {
-    "target": "https://tvt5010.svl.ibm.com:7554"
+    "target": "https://vm30042.svl.ibm.com:7554"
   }
 }

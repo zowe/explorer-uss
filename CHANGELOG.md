@@ -1,11 +1,13 @@
 # Change Log
 All notable changes to the USS-Explorer will be documented in this file.
 
-## <2.0.0>
+## <2.0.1>
+### New features and enhancements
+- Adding the feature to download a file
 
+## <2.0.0>
 ### New features and enhancements
 - USS-explorer no longer uses explorer-ui-server, but now depends on app-server. In a standard Zowe environment this will result in less processes, but does break links about getting to the explorer via APIML routes. The explorer is now available via the app-server's APIML route.
-
 
 ## <1.0.14>
 - Replaced the File APIs with zOSMF APIs
