@@ -24,7 +24,8 @@ import {
     fetchUSSTreeChildren,
     downloadUSSResource,
     resetUSSChildren,
-} from '../actions/treeUSS';import { addTreeDirectory, resetDirectoryChildren } from '../actions/treeDirectories';
+} from '../actions/treeUSS';
+import { addTreeDirectory, resetDirectoryChildren } from '../actions/treeDirectories';
 import { fetchUSSFile } from '../actions/editor';
 import ConnectedCreateUSSResourceDialog from '../components/dialogs/USS/CreateUSSResourceDialog';
 import DeleteUSSResourceDialog from '../components/dialogs/USS/DeleteUSSResourceDialog';
