@@ -9,7 +9,7 @@
  */
 
 export function getPathToResource(path) {
-    return path.substring(0, path.lastIndexOf('/'));
+    return path.lastIndexOf('/') === 0 ? '/' : path.substring(0, path.lastIndexOf('/'));
 }
 
 export function getResourceFromPath(path) {

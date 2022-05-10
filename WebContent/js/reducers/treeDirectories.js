@@ -38,7 +38,7 @@ function getChildrenFromJson(path, json) {
                 }
             }
             dirProps = dirProps.set('isToggled', false);
-            newDir = newDir.set(`${path}/${child.name}`, dirProps);
+            newDir = newDir.set(`${path}/${child.name}`.replace('//', '/'), dirProps);
         }
     });
     return newDir;
