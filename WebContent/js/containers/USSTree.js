@@ -63,7 +63,7 @@ export class USSTree extends React.Component {
             if (username.length > 0) {
                 append = `/${username.toLowerCase()}`;
             }
-            dispatch(setUSSPath(`/z${append}`));
+            dispatch(setUSSPath(`/u${append}`));
         }
     }
 
