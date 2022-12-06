@@ -16,6 +16,7 @@ import { Map } from 'immutable';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import OpenFolderIcon from '@material-ui/icons/FolderOpen';
 import ClosedFolderIcon from '@material-ui/icons/Folder';
+import { hideMenu } from 'react-contextmenu/modules/actions';
 import { fetchDirectoryChildren, toggleDirectory } from '../../actions/treeDirectories';
 import { setUSSPath, resetUSSChildren } from '../../actions/treeUSS';
 import TreeFile from './TreeFile';
@@ -30,6 +31,11 @@ export class TreeDirectory extends React.Component {
         this.renderChildren = this.renderChildren.bind(this);
         this.isDirectoryToggled = this.isDirectoryToggled.bind(this);
         this.pathMatchesStartOfElement = this.pathMatchesStartOfElement.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.state = {
+            menuShortCuts: true,
+            menuVisible: false,
+        };
     }
 
     handleToggle() {
@@ -48,12 +54,40 @@ export class TreeDirectory extends React.Component {
         dispatch(setUSSPath(path));
     }
 
+    handleKeyDown(e) {
+        const {
+            handleCreateFile, handleCreateDirectory, handleDelete, path,
+        } = this.props;
+        if (e.metaKey || e.altKey || e.ctrlKey) {
+            return;
+        }
+        if (this.state.menuShortCuts && this.state.menuVisible) {
+            if (e.key.toLowerCase() === 'd') {
+                handleCreateDirectory(getPathToResource(path));
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'n') {
+                handleCreateFile(getPathToResource(path));
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'delete') {
+                handleDelete(path);
+                this.hideContextMenu();
+            }
+        }
+    }
+
     getToggleIcon() {
         const isToggled = this.isDirectoryToggled();
         if (isToggled) {
             return (<OpenFolderIcon className="node-icon" />);
         }
         return (<ClosedFolderIcon className="node-icon" />);
+    }
+
+    hideContextMenu() {
+        hideMenu();
+        this.setState({ menuVisible: false });
     }
 
     isDirectoryToggled() {
@@ -133,6 +167,8 @@ export class TreeDirectory extends React.Component {
                     handleCreateDirectory={() => { handleCreateDirectory(getPathToResource(path)); }}
                     handleCreateFile={() => { handleCreateFile(getPathToResource(path)); }}
                     handleDelete={() => { handleDelete(path); }}
+                    onShow={() => { this.setState({ menuVisible: true }); }}
+                    onHide={() => { this.setState({ menuVisible: false }); }}
                 />
             );
         }
@@ -145,7 +181,13 @@ export class TreeDirectory extends React.Component {
             <li>
                 <div className="node">
                     <ContextMenuTrigger id={path}>
-                        <div className="node-label" onClick={() => { this.handleToggle(); }} onDoubleClick={() => { this.handleDirectorySelect(); }}>
+                        <div
+                            className="node-label"
+                            onClick={() => { this.handleToggle(); }}
+                            onDoubleClick={() => { this.handleDirectorySelect(); }}
+                            onKeyDown={this.handleKeyDown}
+                            tabIndex="0" /* eslint-disable-line */ 
+                        >
                             {this.getToggleIcon()}
                             {childId}
                         </div>

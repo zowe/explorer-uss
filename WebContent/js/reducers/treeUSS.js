@@ -20,6 +20,11 @@ import {
     RECEIVE_DELETE_RESOURCE,
     INVALIDATE_USS_TREE_CHILDREN,
 } from '../actions/treeUSS';
+import {
+    REQUEST_CONTENT,
+    RECEIVE_CONTENT,
+    INVALIDATE_CONTENT,
+} from '../actions/editor';
 import { getResourceFromPath } from '../utilities/USSUtilities';
 
 export const ROOT_TREE_ID = 'treeUSS';
@@ -86,6 +91,11 @@ export default function treeUSS(state = INITIAL_TREE_STATE, action) {
             }
             return state;
         }
+        case REQUEST_CONTENT:
+            return state.set('isFetching', true);
+        case RECEIVE_CONTENT:
+        case INVALIDATE_CONTENT:
+            return state.set('isFetching', false);
         default:
             return state;
     }

@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ContextMenuTrigger } from 'react-contextmenu';
 import ContentIcon from '@material-ui/icons/Description';
+import { hideMenu } from 'react-contextmenu/modules/actions';
 import { fetchUSSFile } from '../../actions/editor';
 import USSFileMenu from '../contextMenus/USSFileMenu';
 import { getPathToResource } from '../../utilities/USSUtilities';
@@ -25,6 +26,11 @@ export default class TreeFile extends React.Component {
     constructor(props) {
         super(props);
         this.handleToggle = this.handleToggle.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.state = {
+            menuShortCuts: true,
+            menuVisible: false,
+        };
     }
 
     /**
@@ -35,6 +41,42 @@ export default class TreeFile extends React.Component {
             const { path, dispatch } = this.props;
             dispatch(fetchUSSFile(path));
         });
+    }
+
+    handleKeyDown(e) {
+        const {
+            handleCreateFile, handleOrionEdit, handleCreateDirectory, handleDownload, handleDelete, path,
+        } = this.props;
+        if (e.metaKey || e.altKey || e.ctrlKey) {
+            return;
+        }
+        if (this.state.menuShortCuts && this.state.menuVisible) {
+            if (e.key.toLowerCase() === 'd') {
+                handleCreateDirectory(getPathToResource(path));
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'n') {
+                handleCreateFile(getPathToResource(path));
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'o') {
+                handleOrionEdit(path);
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'w') {
+                handleDownload(path);
+                this.hideContextMenu();
+            }
+            if (e.key.toLowerCase() === 'delete') {
+                handleDelete(path);
+                this.hideContextMenu();
+            }
+        }
+    }
+
+    hideContextMenu() {
+        hideMenu();
+        this.setState({ menuVisible: false });
     }
 
     renderFile() {
@@ -60,6 +102,8 @@ export default class TreeFile extends React.Component {
                     handleDownload={() => { handleDownload(path); }}
                     handleDelete={() => { handleDelete(path); }}
                     handleOrionEdit={() => { handleOrionEdit(path); }}
+                    onShow={() => { this.setState({ menuVisible: true }); }}
+                    onHide={() => { this.setState({ menuVisible: false }); }}
                 />
             );
         }
@@ -72,7 +116,11 @@ export default class TreeFile extends React.Component {
             <li>
                 <div className="node">
                     <ContextMenuTrigger id={path}>
-                        <div className="node-label">
+                        <div
+                            className="node-label"
+                            onKeyDown={this.handleKeyDown}
+                            tabIndex="0" /* eslint-disable-line */ 
+                        >
                             {this.renderFile()}
                         </div>
                     </ContextMenuTrigger>
