@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the USS-Explorer will be documented in this file.
 
+## <2.0.5>
+### New features and enhancements
+- Shortcuts for context menu
+- Progress indicator spinning when getting large file
+
 ## <2.0.1>
 ### New features and enhancements
 - Adding the feature to download a file
