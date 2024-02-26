@@ -17,12 +17,12 @@ FROM zowe-docker-release.jfrog.io/ompzowe/base-node:${ZOWE_BASE_IMAGE} AS builde
 ##################################
 # labels
 LABEL name="USS Explorer" \
-      maintainer="jack-tiefeng.jia@ibm.com" \
-      vendor="Zowe" \
-      version="0.0.0" \
-      release="0" \
-      summary="IBM z/OS Unix Files UI service" \
-      description="This Zowe UI component can display unix files on z/OS"
+    maintainer="jack-tiefeng.jia@ibm.com" \
+    vendor="Zowe" \
+    version="0.0.0" \
+    release="0" \
+    summary="IBM z/OS Unix Files UI service" \
+    description="This Zowe UI component can display unix files on z/OS"
 
 ##################################
 # switch context
@@ -37,6 +37,7 @@ COPY --chown=zowe:zowe component .
 # build component
 # pretty same as .pax/prepare-workspace.sh. any way we can merge?
 RUN npm ci --no-audit --ignore-scripts \
+    && npm install -g npm@7.24.2 \
     && npm run prod \
     && mkdir -p final/web \
     && cp README.md final \
