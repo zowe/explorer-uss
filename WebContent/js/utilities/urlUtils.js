@@ -26,9 +26,9 @@ const ZOSMF_PREFIX_LENGTH = 6;
 
 function atlasAction(endpoint, content, fetchParams) {
     // In v3, /ibmzosmf/api/v1 endpoint removes /zosmf part of a /zosmf URL, so string must be trimmed.
-    endpoint = endpoint.substring(ZOSMF_PREFIX_LENGTH);
+    let trimmedEndpoint = endpoint.substring(ZOSMF_PREFIX_LENGTH);
 
-    return fetch(`https://${whichServer()}/ibmzosmf/api/v1/zosmf/${endpoint}`, { ...fetchParams, ...content });
+    return fetch(`https://${whichServer()}/ibmzosmf/api/v1/zosmf/${trimmedEndpoint}`, { ...fetchParams, ...content });
 }
 
 export function atlasGet(endpoint, content) {
