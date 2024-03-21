@@ -20,7 +20,6 @@ export function whichServer() {
     return server;
 }
 
-
 // zosmf/
 const ZOSMF_PREFIX_LENGTH = 6;
 
