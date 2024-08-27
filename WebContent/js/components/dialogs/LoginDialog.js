@@ -70,71 +70,68 @@ class LoginDialog extends React.Component {
         return null;
     }
 
-     handleLogin = () => {
-         const { dispatch } = this.props;
-         this.setState({ firstLoginAttempted: true });
-         return dispatch(loginUser(this.state.username, this.state.password));
-     }
+    handleLogin = () => {
+        const { dispatch } = this.props;
+        this.setState({ firstLoginAttempted: true });
+        return dispatch(loginUser(this.state.username, this.state.password));
+    };
 
-     render() {
-         const { isValidating } = this.props;
-         const dialogContent = isValidating ? <CircularProgress />
-             : (
-                 <form onSubmit={this.handleLogin} style={{ width: '500px' }}>
-                     <TextField
-                         id="username"
-                         label="Username*"
-                         value={this.state.username}
-                         onChange={this.handleUsernameChange}
-                         style={{ display: 'block' }}
-                         fullWidth={true}
-                         autoFocus={true}
-                     />
-                     <TextField
-                         id="password"
-                         label="Password*"
-                         type="password"
-                         value={this.state.password}
-                         onChange={this.handlePasswordChange}
-                         fullWidth={true}
-                     />
-                     <input type="submit" style={{ display: 'none' }} />
-                     {this.getDialogErrorMessage()}
-                 </form>
-             );
-
-         const dialogAction = !isValidating ? (<Button onClick={this.handleLogin}>Login</Button>) : null;
-
-         const dialogTitle = !isValidating
-             ? (
-                 <DialogTitle style={{ textAlign: 'center' }}>
-                     <img
-                         style={{
-                             width: '100px', display: 'block', marginLeft: 'auto', marginRight: 'auto',
-                         }}
-                         src={ZoweIcon}
-                         alt="logo"
-                     />
-                     Zowe Login
-                 </DialogTitle>
-             )
-             : null;
-
-         return (
-             <Dialog
-                 open={true}
-                 type="primary"
-             >
-                 {dialogTitle}
-                 <DialogContent>
-                     {dialogContent}
-                 </DialogContent>
-                 <DialogActions>
-                     {dialogAction}
-                 </DialogActions>
-             </Dialog>
-         );
-     }
+    render() {
+        const { isValidating } = this.props;
+        const dialogContent = isValidating ? <CircularProgress />
+            : (
+                <form onSubmit={this.handleLogin} style={{ width: '500px' }}>
+                    <TextField
+                        id="username"
+                        label="Username*"
+                        value={this.state.username}
+                        onChange={this.handleUsernameChange}
+                        style={{ display: 'block' }}
+                        fullWidth={true}
+                        autoFocus={true}
+                    />
+                    <TextField
+                        id="password"
+                        label="Password*"
+                        type="password"
+                        value={this.state.password}
+                        onChange={this.handlePasswordChange}
+                        fullWidth={true}
+                    />
+                    <input type="submit" style={{ display: 'none' }} />
+                    {this.getDialogErrorMessage()}
+                </form>
+            );
+        const dialogAction = !isValidating ? (<Button onClick={this.handleLogin}>Login</Button>) : null;
+        const dialogTitle = !isValidating
+            ? (
+                <DialogTitle style={{ textAlign: 'center' }}>
+                    <img
+                        style={{
+                            width: '100px', display: 'block', marginLeft: 'auto', marginRight: 'auto',
+                        }}
+                        src={ZoweIcon}
+                        alt="logo"
+                    />
+                    Zowe Login
+                </DialogTitle>
+            )
+            : null;
+        return (
+            <Dialog
+                open={true}
+                type="primary"
+            >
+                {dialogTitle}
+                <DialogContent>
+                    {dialogContent}
+                </DialogContent>
+                <DialogActions>
+                    {dialogAction}
+                </DialogActions>
+            </Dialog>
+        );
+    }
 }
 
 LoginDialog.propTypes = {

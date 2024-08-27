@@ -115,32 +115,32 @@ export class USSTree extends React.Component {
 
     dialogReturn = () => {
         this.setState({ dialog: NO_DIALOG });
-    }
+    };
 
     handleCreateDirectory = () => {
         this.setState({ dialog: CREATE_DIRECTORY });
-    }
+    };
 
     handleCreateFile = () => {
         this.setState({ dialog: CREATE_FILE });
-    }
+    };
 
     handleDelete = path => {
         const { dispatch } = this.props;
         dispatch(setUSSPath(getPathToResource(path)));
         this.setState({ selectedResource: path });
         this.setState({ dialog: DELETE });
-    }
+    };
 
     handleDownload = path => {
         const { dispatch } = this.props;
         dispatch(downloadUSSResource(path));
-    }
+    };
 
     handleOrionEdit = path => {
         const { dispatch } = this.props;
         dispatch(fetchUSSFile(path));
-    }
+    };
 
     handleUpOneDirectory = () => {
         const { dispatch, USSPath } = this.props;
@@ -149,7 +149,7 @@ export class USSTree extends React.Component {
         } else if (USSPath.length >= 1) {
             dispatch(setUSSPath('/'));
         }
-    }
+    };
 
     resetAndFetchChildren(path) {
         const { dispatch } = this.props;

@@ -20,7 +20,7 @@ import AtlasDialog from '../AtlasDialog';
 class USSSaveAsDataset extends React.Component {
     static getFileName = path => {
         return path.substring(path.lastIndexOf('/') + 1);
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -33,7 +33,7 @@ class USSSaveAsDataset extends React.Component {
     submitAction = () => {
         const { file, USSPath, content } = this.props;
         return saveAsUSSResource(file, `${USSPath}/${this.state.newFileName}`, content);
-    }
+    };
 
     updateName(newValue) {
         this.setState({
