@@ -47,12 +47,12 @@ class CreateUSSResourceDialog extends React.Component {
             return path;
         }
         return `${path}/`;
-    }
+    };
 
     submitAction = () => {
         const { USSPath, type } = this.props;
         return createUSSResource(`${this.addSlashToPathIfMissing(USSPath)}${this.state.field}`, type);
-    }
+    };
 
     updateName(newValue) {
         this.setState({

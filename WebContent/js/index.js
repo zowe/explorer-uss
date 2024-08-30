@@ -8,7 +8,6 @@
  * Copyright IBM Corporation 2016, 2019
  */
 
-import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
