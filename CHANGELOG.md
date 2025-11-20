@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the USS-Explorer will be documented in this file.
 
+## <3.4.0>
+### New features and enhancements
+- Upgraded react-contextmenu and react-redux. [(#213)](https://github.com/zowe/explorer-uss/pull/213)
+
 ## <2.0.1>
 ### New features and enhancements
 - Adding the feature to download a file
