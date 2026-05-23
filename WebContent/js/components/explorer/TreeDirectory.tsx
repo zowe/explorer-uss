@@ -93,7 +93,7 @@ export class TreeDirectory extends React.Component {
             .forEach(child => {
                 const type = children.get(child).get('type');
                 if (type === 'DIRECTORY') {
-                    childComponents.push(<ConnectedTreeDirectory
+                    childComponents.push(<ConnectedTreeDirectory // eslint-disable-line no-use-before-define
                         childId={child.substring(child.lastIndexOf('/') + 1)}
                         key={child}
                         path={`${path}/${child.substring(child.lastIndexOf('/') + 1)}`}
