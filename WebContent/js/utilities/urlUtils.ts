@@ -9,7 +9,7 @@
  * Copyright IBM Corporation 2018, 2020
  */
 
-export function encodeURLComponent(URL) {
+export function encodeURLComponent(URL: string) {
     return encodeURIComponent(URL);
 }
 
@@ -21,11 +21,11 @@ export function whichServer() {
     return server;
 }
 
-function atlasAction(endpoint, content, fetchParams) {
+function atlasAction(endpoint: string, content, fetchParams) {
     return fetch(`https://${whichServer()}/ibmzosmf/api/v1/zosmf/${endpoint}`, { ...fetchParams, ...content });
 }
 
-export function atlasGet(endpoint, content) {
+export function atlasGet(endpoint: string, content) {
     const fetchParams = {
         method: 'GET',
         credentials: 'include',
@@ -34,7 +34,7 @@ export function atlasGet(endpoint, content) {
     return atlasAction(endpoint, content, fetchParams);
 }
 
-export function atlasDelete(endpoint, content) {
+export function atlasDelete(endpoint: string, content) {
     const fetchParams = {
         method: 'DELETE',
         credentials: 'include',
@@ -43,7 +43,7 @@ export function atlasDelete(endpoint, content) {
     return atlasAction(endpoint, content, fetchParams);
 }
 
-export function atlasPost(endpoint, body) {
+export function atlasPost(endpoint: string, body) {
     return atlasAction(endpoint, {
         method: 'POST',
         body,
@@ -52,7 +52,7 @@ export function atlasPost(endpoint, body) {
     });
 }
 
-export function atlasPut(endpoint, body, checksum) {
+export function atlasPut(endpoint: string, body: string, checksum) {
     const headers = { 'Content-Type': 'text/plain', 'X-CSRF-ZOSMF-HEADER': '*' };
     if (checksum) {
         headers['If-Match'] = checksum;

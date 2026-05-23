@@ -45,7 +45,7 @@ function getChildrenFromJson(path, json) {
     return newDir;
 }
 
-function updateDirectoryToggle(state, path, isToggled) {
+function updateDirectoryToggle(state, path: string, isToggled: boolean) {
     let child = Map({});
     child = child.set(path, state.get('children').get(path).set('isToggled', isToggled));
     return child;

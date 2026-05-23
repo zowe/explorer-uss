@@ -20,14 +20,14 @@ export const RESET_DIRECTORY_CHILDREN = 'RESET_DIRECTORY_CHILDREN';
 
 const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Fetch children failed for';
 
-function requestDirectoryChildren(directory) {
+function requestDirectoryChildren(directory: string) {
     return {
         type: REQUEST_DIRECTORY_CHILDREN,
         directory,
     };
 }
 
-function receiveDirectoryChildren(path, children) {
+function receiveDirectoryChildren(path: string, children) {
     return {
         type: RECEIVE_DIRECTORY_CHILDREN,
         path,
@@ -41,7 +41,7 @@ function invalidateChildren() {
     };
 }
 
-export function toggleDirectory(path, toggled) {
+export function toggleDirectory(path: string, toggled: boolean) {
     return {
         type: TOGGLE_DIRECTORY,
         path,
@@ -49,7 +49,7 @@ export function toggleDirectory(path, toggled) {
     };
 }
 
-export function resetDirectoryChildren(path) {
+export function resetDirectoryChildren(path: string) {
     return {
         type: RESET_DIRECTORY_CHILDREN,
         path,
@@ -60,14 +60,14 @@ export function resetDirectoryChildren(path) {
  * When Tree component renders the first level of directories it fetches the data in the Tree actions and
  * stores via the Tree reducer, we need also need to be able to add them in here to track them
  */
-export function addTreeDirectory(path, child) {
+export function addTreeDirectory(path: string, child) {
     const dir = [{ name: child, type: 'directory' }];
     return dispatch => {
         dispatch(receiveDirectoryChildren(path, dir));
     };
 }
 
-export function fetchDirectoryChildren(path) {
+export function fetchDirectoryChildren(path: string) {
     const endpoint = `restfiles/fs?path=${path}`;
     return dispatch => {
         dispatch(requestDirectoryChildren(path));

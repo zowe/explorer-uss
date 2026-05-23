@@ -37,14 +37,14 @@ const USS_DOWNLOAD_FAIL_MESSAGE = 'Download failed for';
 const USS_DELETE_SUCCESS_MESSAGE = 'Delete successful for';
 const USS_DELETE_FAIL_MESSAGE = 'Delete failed for';
 
-function requestUSSChildren(path) {
+function requestUSSChildren(path: string) {
     return {
         type: REQUEST_USS_TREE_CHILDREN,
         USSPath: path,
     };
 }
 
-function receiveUSSChildren(path, childData) {
+function receiveUSSChildren(path: string, childData) {
     return {
         type: RECEIVE_USS_TREE_CHILDREN,
         USSPath: path,
@@ -52,7 +52,7 @@ function receiveUSSChildren(path, childData) {
     };
 }
 
-function invalidateUSSChildren(path) {
+function invalidateUSSChildren(path: string) {
     return {
         type: INVALIDATE_USS_TREE_CHILDREN,
         USSPath: path,
@@ -65,91 +65,91 @@ export function resetUSSChildren() {
     };
 }
 
-export function setUSSPath(path) {
+export function setUSSPath(path: string) {
     return {
         type: SET_USS_TREE_PATH,
         USSPath: path,
     };
 }
 
-function requestNewResource(path) {
+function requestNewResource(path: string) {
     return {
         type: REQUEST_NEW_RESOURCE,
         USSPath: path,
     };
 }
 
-function receiveNewDirectory(path) {
+function receiveNewDirectory(path: string) {
     return {
         type: RECEIVE_NEW_DIRECTORY,
         USSPath: path,
     };
 }
 
-function receiveNewFile(path) {
+function receiveNewFile(path: string) {
     return {
         type: RECEIVE_NEW_FILE,
         USSPath: path,
     };
 }
 
-function receiveNewResource(path, type) {
+function receiveNewResource(path: string, type: string) {
     if (type === 'DIRECTORY') {
         return receiveNewDirectory(path);
     }
     return receiveNewFile(path);
 }
 
-function invalidateReceiveResource(path) {
+function invalidateReceiveResource(path: string) {
     return {
         type: INVALIDATE_NEW_RESOURCE,
         path,
     };
 }
 
-function requestDownload(path) {
+function requestDownload(path: string) {
     return {
         type: REQUEST_DOWNLOAD_RESOURCE,
         path,
     };
 }
 
-function receiveDownload(path) {
+function receiveDownload(path: string) {
     return {
         type: RECEIVE_DOWNLOAD_RESOURCE,
         path,
     };
 }
 
-function invalidateDownload(path) {
+function invalidateDownload(path: string) {
     return {
         type: INVALIDATE_DOWNLOAD_RESOURCE,
         path,
     };
 }
 
-function requestDelete(path) {
+function requestDelete(path: string) {
     return {
         type: REQUEST_DELETE_RESOURCE,
         path,
     };
 }
 
-function receiveDelete(path) {
+function receiveDelete(path: string) {
     return {
         type: RECEIVE_DELETE_RESOURCE,
         path,
     };
 }
 
-function invalidateDelete(path) {
+function invalidateDelete(path: string) {
     return {
         type: INVALIDATE_DELETE_RESOURCE,
         path,
     };
 }
 
-export function fetchUSSTreeChildren(path) {
+export function fetchUSSTreeChildren(path: string) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
         let endpoint = `restfiles/fs?path=${path}`;
@@ -175,7 +175,7 @@ export function fetchUSSTreeChildren(path) {
     };
 }
 
-export function createUSSResource(path, type) {
+export function createUSSResource(path: string, type: string) {
     return dispatch => {
         dispatch(requestNewResource(path));
         const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
@@ -197,7 +197,7 @@ export function createUSSResource(path, type) {
     };
 }
 
-export function createAndDownloadElement(blob, fileName) {
+export function createAndDownloadElement(blob, fileName: string) {
     const elem = window.document.createElement('a');
     elem.href = window.URL.createObjectURL(blob);
     elem.download = fileName;
@@ -206,7 +206,7 @@ export function createAndDownloadElement(blob, fileName) {
     document.body.removeChild(elem);
 }
 
-export function downloadUSSResource(path) {
+export function downloadUSSResource(path: string) {
     return dispatch => {
         dispatch(requestDownload(path));
         const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
@@ -233,7 +233,7 @@ export function downloadUSSResource(path) {
     };
 }
 
-export function deleteUSSResource(path) {
+export function deleteUSSResource(path: string) {
     return dispatch => {
         dispatch(requestDelete(path));
         const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;

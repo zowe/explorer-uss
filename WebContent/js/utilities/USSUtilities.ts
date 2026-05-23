@@ -8,11 +8,11 @@
  * Copyright IBM Corporation 2018, 2019
  */
 
-export function getPathToResource(path) {
+export function getPathToResource(path: string) {
     return path.lastIndexOf('/') === 0 ? '/' : path.substring(0, path.lastIndexOf('/'));
 }
 
-export function getResourceFromPath(path) {
+export function getResourceFromPath(path: string) {
     return path.substring(path.lastIndexOf('/') + 1);
 }
 
