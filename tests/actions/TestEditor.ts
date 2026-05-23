@@ -45,7 +45,7 @@ describe('Action: editor', () => {
     const rewiredEditor = rewire('../../WebContent/js/actions/editor');
     const rewiredTree = rewire('../../WebContent/js/actions/treeUSS');
     const rewiredSaveSuccessMessage = rewiredEditor.__get__('SAVE_SUCCESS_MESSAGE');
-    const rewiredSaveFailMessage = rewiredEditor.__get__('SAVE_FAILURE_MESSAGE');
+    const rewiredSaveFailMessage = editorActions.SAVE_FAILURE_MESSAGE;
     const rewiredCreateSuccessMessage = rewiredTree.__get__('USS_CREATE_SUCCESS_MESSAGE');
     const rewiredCreateFailMessage = rewiredTree.__get__('USS_CREATE_FAIL_MESSAGE');
 
@@ -108,9 +108,9 @@ describe('Action: editor', () => {
         it('Should create an action to update the editor content', () => {
             const expectedAction = {
                 type: editorActions.UPDATE_EDITOR_CONTENT,
-                content: editorResources.content,
+                content: editorResources.text,
             };
-            expect(editorActions.updateEditorContent(editorResources.content)).toEqual(expectedAction);
+            expect(editorActions.updateEditorContent(editorResources.text)).toEqual(expectedAction);
         });
     });
 
@@ -130,9 +130,9 @@ describe('Action: editor', () => {
 
             const expectedAction = {
                 type: editorActions.REQUEST_SAVE,
-                resource: editorResources.dataset,
+                resource: editorResources.USSFile,
             };
-            expect(rewiredRequestSave(editorResources.dataset)).toEqual(expectedAction);
+            expect(rewiredRequestSave(editorResources.USSFile)).toEqual(expectedAction);
         });
     });
 
@@ -153,9 +153,9 @@ describe('Action: editor', () => {
 
             const expectedAction = {
                 type: editorActions.REQUEST_CHECKSUM,
-                resource: editorResources.dataset,
+                resource: editorResources.USSFile,
             };
-            expect(rewiredRequestChecksum(editorResources.dataset)).toEqual(expectedAction);
+            expect(rewiredRequestChecksum(editorResources.USSFile)).toEqual(expectedAction);
         });
     });
 
@@ -178,7 +178,7 @@ describe('Action: editor', () => {
 
             nock(BASE_URL)
                 .get(`/restfiles/fs/${editorResources.USSFile.indexOf('/') === 0 ? editorResources.USSFile.substring(1) : editorResources.USSFile}`)
-                .reply(200, editorResources.content, { ETag: `${editorResources.checksum}` });
+                .reply(200, editorResources.text, { ETag: `${editorResources.checksum}` });
 
             const store = mockStore();
             return store.dispatch(
@@ -193,7 +193,7 @@ describe('Action: editor', () => {
             const expectedActions = [
                 {
                     type: editorActions.REQUEST_CHECKSUM,
-                    resource: editorResources.ussFile,
+                    resource: editorResources.USSFile,
                 },
                 {
                     type: editorActions.INVALIDATE_CHECKSUM,
@@ -205,7 +205,7 @@ describe('Action: editor', () => {
                 .reply(500);
 
             const store = mockStore();
-            return store.dispatch(editorActions.getNewUSSResourceChecksum(editorResources.ussFile))
+            return store.dispatch(editorActions.getNewUSSResourceChecksum(editorResources.USSFile))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });
@@ -343,7 +343,7 @@ describe('Action: editor', () => {
             return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
-                    expect(treeUSSActions.fetchUSSTreeChildren.calledOnce).toEqual(true, 'fetchUSSTreeChildren called once');
+                    expect((treeUSSActions.fetchUSSTreeChildren as any).calledOnce).toEqual(true);
                 });
         });
         it('Should create actions to requestSaveAs and invalidateSaveAs due to not able to create new file', () => {
@@ -378,7 +378,7 @@ describe('Action: editor', () => {
 
             const store = mockStore();
 
-            return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent.content))
+            return store.dispatch(editorActions.saveAsUSSResource(editorResources.USSFile, editorResources.newUSSFile, editorResources.newContent))
                 .then(() => {
                     expect(store.getActions()).toEqual(expectedActions);
                 });

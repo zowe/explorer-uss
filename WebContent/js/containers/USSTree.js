@@ -241,7 +241,7 @@ export class USSTree extends React.Component {
             USSChildren, USSPath, isFetching, dispatch, inDialog,
         } = this.props;
         return (
-            <Card class="tree-card" style={{ paddingBottom: 0 }}>
+            <Card className="tree-card" style={{ paddingBottom: 0 }}>
                 <CardContent>
                     <div className="component-header">
                         <TextField

@@ -15,6 +15,8 @@ import { checkForValidationFailure } from './validation';
 import { constructAndPushMessage } from './snackbarNotifications';
 
 export const REQUEST_CONTENT = 'REQUEST_CONTENT';
+export const EDITOR_MESSAGE_TYPE = 'EDITOR';
+export const SAVE_FAILURE_MESSAGE = 'Save failed for';
 export const RECEIVE_CONTENT = 'RECEIVE_CONTENT';
 export const INVALIDATE_CONTENT = 'INVALIDATE_CONTENT';
 
@@ -34,7 +36,6 @@ export const RECEIVE_CHTAG = 'RECEIVE_CHTAG';
 export const UPDATE_CHTAG = 'UPDATE_CHTAG';
 
 const GET_CONTENT_FAIL_MESSAGE = 'Get content failed';
-const SAVE_FAILURE_MESSAGE = 'Save failed for';
 const SAVE_SUCCESS_MESSAGE = 'Save success for';
 
 function requestContent(resource) {

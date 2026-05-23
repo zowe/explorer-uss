@@ -74,7 +74,7 @@ describe('Reducer: editor', () => {
     it('Should handle INVALIDATE_SAVE', () => {
         const action = {
             type: editorActions.INVALIDATE_SAVE,
-            message: new Map({
+            message: Map({
                 messageType: editorActions.EDITOR_MESSAGE_TYPE,
                 message: `${editorActions.SAVE_FAILURE_MESSAGE}: Precondition failed`,
             }),

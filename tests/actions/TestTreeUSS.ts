@@ -145,7 +145,7 @@ describe('Action: treeUSS', () => {
                 },
                 {
                     type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
-                    message: new Map({
+                    message: Map({
                         message: `${rewiredFailureMessage} ${path} : ${treeData.deleteUSSErrorResponse.details}`,
                     }),
                 },
@@ -177,7 +177,7 @@ describe('Action: treeUSS', () => {
                 },
                 {
                     type: snackbarActions.PUSH_NOTIFICATION_MESSAGE,
-                    message: new Map({
+                    message: Map({
                         message: `${rewiredFailureMessage} ${path} : ${treeData.fetchUSSChildrenErrorResponse.message}`,
                     }),
                 },

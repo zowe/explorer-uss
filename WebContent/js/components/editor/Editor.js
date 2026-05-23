@@ -11,7 +11,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import queryString from 'query-string';
 import OrionEditor from 'orion-editor-component';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -84,7 +83,7 @@ class Editor extends React.Component {
     editorReady = () => {
         const { location, dispatch } = this.props;
         if (location && location.search) {
-            const urlQueryParams = queryString.parse(location.search);
+            const urlQueryParams = Object.fromEntries(new URLSearchParams(location.search));
             dispatch(fetchUSSFile(urlQueryParams.file));
         }
     };
@@ -111,9 +110,9 @@ class Editor extends React.Component {
         const { content, file } = this.props;
         return (
             <div>
-                <Card class="component-no-vertical-pad">
+                <Card className="component-no-vertical-pad">
                     <CardContent
-                        class="component-no-vertical-pad"
+                        className="component-no-vertical-pad"
                         style={{ paddingTop: '2px' }}
                     >
                         <EditorMenuBar

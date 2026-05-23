@@ -10,7 +10,6 @@
 
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { createLogger } from 'redux-logger';
 import { Map } from 'immutable';
 import rootReducer from '../reducers';
 
@@ -19,12 +18,7 @@ export default () => {
     let store;
 
     function configureStore() {
-        let appMiddleware;
-        if (window.localStorage.getItem('enableReduxLogger') === 'true') {
-            appMiddleware = applyMiddleware(thunk, createLogger());
-        } else {
-            appMiddleware = applyMiddleware(thunk);
-        }
+        const appMiddleware = applyMiddleware(thunk);
 
         const emptyState = Map({});
         return appMiddleware(createStore)(rootReducer, emptyState);
