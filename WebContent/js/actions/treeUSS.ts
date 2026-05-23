@@ -30,12 +30,12 @@ export const REQUEST_DELETE_RESOURCE = 'REQUEST_DELETE_RESOURCE';
 export const RECEIVE_DELETE_RESOURCE = 'RECEIVE_DELETE_RESOURCE';
 export const INVALIDATE_DELETE_RESOURCE = 'INVALIDATE_DELETE_RESOURCE';
 
-const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Fetch children failed for';
-const USS_CREATE_SUCCESS_MESSAGE = 'Create successful for';
-const USS_CREATE_FAIL_MESSAGE = 'Create failed for';
-const USS_DOWNLOAD_FAIL_MESSAGE = 'Download failed for';
-const USS_DELETE_SUCCESS_MESSAGE = 'Delete successful for';
-const USS_DELETE_FAIL_MESSAGE = 'Delete failed for';
+export const USS_FETCH_CHILDREN_FAIL_MESSAGE = 'Fetch children failed for';
+export const USS_CREATE_SUCCESS_MESSAGE = 'Create successful for';
+export const USS_CREATE_FAIL_MESSAGE = 'Create failed for';
+export const USS_DOWNLOAD_FAIL_MESSAGE = 'Download failed for';
+export const USS_DELETE_SUCCESS_MESSAGE = 'Delete successful for';
+export const USS_DELETE_FAIL_MESSAGE = 'Delete failed for';
 
 function requestUSSChildren(path: string) {
     return {

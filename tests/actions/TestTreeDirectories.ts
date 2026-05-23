@@ -12,7 +12,6 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import nock from 'nock';
 import expect from 'expect';
-import rewire from 'rewire';
 import { Map } from 'immutable';
 import * as treeDirectories from '../../WebContent/js/actions/treeDirectories';
 import * as treeDirectoriesData from '../testResources/actions/treeDirectories';
@@ -129,8 +128,7 @@ describe('Action: treeDirectories', () => {
         });
 
         it('Should create an action to request but not receive and therefore an invalidate action too', () => {
-            const rewiredTreeDirectories = rewire('../../WebContent/js/actions/treeDirectories');
-            const rewiredFailureMessage = rewiredTreeDirectories.__get__('USS_FETCH_CHILDREN_FAIL_MESSAGE');
+            const rewiredFailureMessage = treeDirectories.USS_FETCH_CHILDREN_FAIL_MESSAGE;
             const path = '/u/jcain/';
             const expectedActions = [{
                 type: treeDirectories.REQUEST_DIRECTORY_CHILDREN,

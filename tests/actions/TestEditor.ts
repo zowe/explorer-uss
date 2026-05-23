@@ -12,9 +12,7 @@ import configureMockStore from 'redux-mock-store';
 import nock from 'nock';
 import thunk from 'redux-thunk';
 import expect from 'expect';
-import rewire from 'rewire';
 import { Map } from 'immutable';
-import sinon from 'sinon';
 import { LOCAL_HOST_ENDPOINT as BASE_URL } from '../testResources/hostConstants';
 import * as editorActions from '../../WebContent/js/actions/editor';
 import * as editorResources from '../testResources/actions/editor';
@@ -22,32 +20,30 @@ import * as treeUSSActions from '../../WebContent/js/actions/treeUSS';
 import * as snackbarActions from '../../WebContent/js/actions/snackbarNotifications';
 
 describe('Action: editor', () => {
-    let sandbox;
+    const stubs: Array<{ obj: Record<string, unknown>; method: string; original: unknown }> = [];
 
     afterEach(() => {
+        stubs.forEach(({ obj, method, original }) => { obj[method] = original; });
+        stubs.length = 0;
         nock.cleanAll();
-        sandbox.restore();
     });
 
-    beforeEach(() => {
-        sandbox = sinon.sandbox.create();
-    });
-
-    function mockVoidFunction(object, method) {
-        sandbox.stub(object, method).callsFake(() => {
-            return (() => { });
-        });
+    function mockVoidFunction(object: Record<string, unknown>, method: string) {
+        stubs.push({ obj: object, method, original: object[method] });
+        let callCount = 0;
+        const stub = () => { callCount++; return () => {}; };
+        (stub as any).calledOnce = false;
+        Object.defineProperty(stub, 'calledOnce', { get: () => callCount === 1 });
+        object[method] = stub;
     }
 
     const middlewares = [thunk];
     const mockStore = configureMockStore(middlewares);
 
-    const rewiredEditor = rewire('../../WebContent/js/actions/editor');
-    const rewiredTree = rewire('../../WebContent/js/actions/treeUSS');
-    const rewiredSaveSuccessMessage = rewiredEditor.__get__('SAVE_SUCCESS_MESSAGE');
+    const rewiredSaveSuccessMessage = editorActions.SAVE_SUCCESS_MESSAGE;
     const rewiredSaveFailMessage = editorActions.SAVE_FAILURE_MESSAGE;
-    const rewiredCreateSuccessMessage = rewiredTree.__get__('USS_CREATE_SUCCESS_MESSAGE');
-    const rewiredCreateFailMessage = rewiredTree.__get__('USS_CREATE_FAIL_MESSAGE');
+    const rewiredCreateSuccessMessage = treeUSSActions.USS_CREATE_SUCCESS_MESSAGE;
+    const rewiredCreateFailMessage = treeUSSActions.USS_CREATE_FAIL_MESSAGE;
 
     describe('fetchUSSFile', () => {
         it('Should handle requesting and receiving a USS File', () => {
@@ -76,7 +72,7 @@ describe('Action: editor', () => {
         });
 
         it('Should handle requesting and invalidation', () => {
-            const rewiredFetchFail = rewiredEditor.__get__('GET_CONTENT_FAIL_MESSAGE');
+            const rewiredFetchFail = editorActions.GET_CONTENT_FAIL_MESSAGE;
             const USSPath = '/u/jcain/hello/test.txt';
             const expectedActions = [{
                 type: editorActions.REQUEST_CONTENT,
@@ -126,7 +122,7 @@ describe('Action: editor', () => {
 
     describe('requestSave', () => {
         it('Should create an action to request a save', () => {
-            const rewiredRequestSave = rewiredEditor.__get__('requestSave');
+            const rewiredRequestSave = editorActions.requestSave;
 
             const expectedAction = {
                 type: editorActions.REQUEST_SAVE,
@@ -138,18 +134,18 @@ describe('Action: editor', () => {
 
     describe('invalidateSave', () => {
         it('Should create an action to invalidate a save request', () => {
-            const rewiredInvalidateSave = rewiredEditor.__get__('invalidateSave');
+            const rewiredInvalidateSave = editorActions.invalidateSave;
 
             const expectedAction = {
                 type: editorActions.INVALIDATE_SAVE,
             };
-            expect(rewiredInvalidateSave(editorResources.invalidateSaveResponse)).toEqual(expectedAction);
+            expect(rewiredInvalidateSave()).toEqual(expectedAction);
         });
     });
 
     describe('requestChecksum', () => {
         it('Should create an action to request a Checksum', () => {
-            const rewiredRequestChecksum = rewiredEditor.__get__('requestChecksum');
+            const rewiredRequestChecksum = editorActions.requestChecksum;
 
             const expectedAction = {
                 type: editorActions.REQUEST_CHECKSUM,

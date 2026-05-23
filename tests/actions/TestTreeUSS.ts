@@ -12,7 +12,6 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import nock from 'nock';
 import expect from 'expect';
-import rewire from 'rewire';
 import { Map } from 'immutable';
 import * as tree from '../../WebContent/js/actions/treeUSS';
 import * as treeData from '../testResources/actions/treeUSS';
@@ -26,7 +25,6 @@ describe('Action: treeUSS', () => {
 
     const middlewares = [thunk];
     const mockStore = configureMockStore(middlewares);
-    const rewiredTree = rewire('../../WebContent/js/actions/treeUSS');
 
     describe('setPath', () => {
         it('Should create an action to set the path to an expected starting USS path', () => {
@@ -137,7 +135,7 @@ describe('Action: treeUSS', () => {
 
         it('Should create a delete request and receive action which invalid delete resource', () => {
             const path = '/u/jcain/xyz';
-            const rewiredFailureMessage = rewiredTree.__get__('USS_DELETE_FAIL_MESSAGE');
+            const rewiredFailureMessage = tree.USS_DELETE_FAIL_MESSAGE;
             const expectedActions = [
                 {
                     type: tree.REQUEST_DELETE_RESOURCE,
@@ -169,7 +167,7 @@ describe('Action: treeUSS', () => {
 
         it('Should create a request but not receive and therefore an invalidate action too', () => {
             const path = '/u/jcain';
-            const rewiredFailureMessage = rewiredTree.__get__('USS_FETCH_CHILDREN_FAIL_MESSAGE');
+            const rewiredFailureMessage = tree.USS_FETCH_CHILDREN_FAIL_MESSAGE;
             const expectedActions = [
                 {
                     type: tree.REQUEST_USS_TREE_CHILDREN,

@@ -36,8 +36,8 @@ export const REQUEST_CHTAG = 'REQUEST_CHTAG';
 export const RECEIVE_CHTAG = 'RECEIVE_CHTAG';
 export const UPDATE_CHTAG = 'UPDATE_CHTAG';
 
-const GET_CONTENT_FAIL_MESSAGE = 'Get content failed';
-const SAVE_SUCCESS_MESSAGE = 'Save success for';
+export const GET_CONTENT_FAIL_MESSAGE = 'Get content failed';
+export const SAVE_SUCCESS_MESSAGE = 'Save success for';
 
 function requestContent(resource) {
     return {
@@ -87,7 +87,7 @@ export function fetchUSSFile(USSPath) {
     };
 }
 
-function requestSave(resource) {
+export function requestSave(resource) {
     return {
         type: REQUEST_SAVE,
         resource,
@@ -109,7 +109,7 @@ function receiveSave(resource) {
     };
 }
 
-function requestChecksum(resource) {
+export function requestChecksum(resource) {
     return {
         type: REQUEST_CHECKSUM,
         resource,
@@ -137,7 +137,7 @@ export function updateEditorChecksum(checksum) {
     };
 }
 
-function invalidateSave() {
+export function invalidateSave() {
     return {
         type: INVALIDATE_SAVE,
     };
