@@ -108,7 +108,7 @@ class HomeView extends React.Component {
                         </div>
                         <div
                             id="resize-bar"
-                            className={`component col col-0-1 collapse-col ${collapsed ? '' : 'draggable'} `}
+                            className={`component col col-0-1 collapse-col ${!collapsed ? 'draggable' : ''} `}
                             onMouseDown={this.onDraggingStart}
                         >
                             <IconButton

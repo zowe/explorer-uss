@@ -14,10 +14,6 @@ import PropTypes from 'prop-types';
 import ModalAlertDialog from './ModalAlertDialog';
 
 export default class UnsavedWarningDialog extends React.Component {
-    handleClose = () => {
-        this.setState({ open: false });
-    };
-
     render() {
         const { editorLabel, yesAction, noAction } = this.props;
         const dialogContent = <div>{`${editorLabel} has modifed content. Do you wish to save changes?`}</div>;

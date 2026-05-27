@@ -80,12 +80,12 @@ jobs:
       - name: '[Build] Nodejs project build'
         run: npm run prod
 
-#      - name: '[Test] Nodejs project unit test'
-#        run: npm run test
+      - name: '[Test] Nodejs project unit test'
+        run: npm run test
 
-#      - name: '[Scan 1] Fix code coverage paths'
-#        working-directory: ./coverage
-#        run: sed -i 's#'$GITHUB_WORKSPACE'#/github/workspace/#g' lcov.info
+      - name: '[Scan 1] Fix code coverage paths'
+        working-directory: ./coverage
+        run: sed -i 's#'$GITHUB_WORKSPACE'#/github/workspace/#g' lcov.info
 
       - name: '[Scan 2] SonarCloud Scan'
         uses: sonarsource/sonarcloud-github-action@master

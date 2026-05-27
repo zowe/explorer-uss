@@ -153,8 +153,8 @@ export function fetchUSSTreeChildren(path: string) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
         let endpoint = `restfiles/fs?path=${path}`;
-        if (path.substr(path.length - 1) === '/' && path !== '/') {
-            endpoint = endpoint.substr(0, endpoint.length - 1);
+        if (path.at(-1) === '/' && path !== '/') {
+            endpoint = endpoint.slice(0, -1);
         }
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
@@ -164,7 +164,7 @@ export function fetchUSSTreeChildren(path: string) {
                 if (response.ok) {
                     return response.json();
                 }
-                return response.json().then(e => { throw Error(e.message); });
+                return response.json().then(e => { throw new Error(e.message); });
             }).then(json => {
                 return dispatch(receiveUSSChildren(path, json.items));
             })
@@ -198,8 +198,8 @@ export function createUSSResource(path: string, type: string) {
 }
 
 export function createAndDownloadElement(blob, fileName: string) {
-    const elem = window.document.createElement('a');
-    elem.href = window.URL.createObjectURL(blob);
+    const elem = document.createElement('a');
+    elem.href = URL.createObjectURL(blob);
     elem.download = fileName;
     document.body.appendChild(elem);
     elem.click();
@@ -219,7 +219,7 @@ export function downloadUSSResource(path: string) {
                 if (response.ok) {
                     return response.text();
                 }
-                return response.text().then(e => { throw Error(JSON.parse(e).message); });
+                return response.text().then(e => { throw new Error(JSON.parse(e).message); });
             })
             .then(text => {
                 const blob = new Blob([text], { type: 'text/plain' });
@@ -250,7 +250,7 @@ export function deleteUSSResource(path: string) {
                     dispatch(constructAndPushMessage(`${USS_DELETE_SUCCESS_MESSAGE} ${path}`));
                     return dispatch(invalidateDelete(path));
                 }
-                return response.json().then(e => { throw Error(e.details); });
+                return response.json().then(e => { throw new Error(e.details); });
             }).catch(e => {
                 dispatch(constructAndPushMessage(`${USS_DELETE_FAIL_MESSAGE} ${path} : ${e.message}`));
                 return dispatch(invalidateDelete(path));

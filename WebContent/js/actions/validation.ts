@@ -55,7 +55,7 @@ function checkResponse(response) {
     }
     return response.json()
         .then(error => {
-            throw Error(constructValidationErrorMessage(error.messages[0]));
+            throw new Error(constructValidationErrorMessage(error.messages[0]));
         });
 }
 

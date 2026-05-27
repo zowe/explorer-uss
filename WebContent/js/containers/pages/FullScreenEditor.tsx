@@ -17,7 +17,7 @@ import { validateUser } from '../../actions/validation';
 import LoginDialog from '../../components/dialogs/LoginDialog';
 
 class FullScreenEditor extends React.Component {
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const { dispatch, validated } = this.props;
         if (!validated) {
             dispatch(validateUser());

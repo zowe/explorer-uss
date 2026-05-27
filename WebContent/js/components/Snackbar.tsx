@@ -25,12 +25,12 @@ class AtlasSnackbar extends React.Component {
         this.registerMessageWithSnackbar = this.registerMessageWithSnackbar.bind(this);
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const { snackbarNotificationsMessages } = this.props;
         if (nextProps.snackbarNotificationsMessages.first()
             && snackbarNotificationsMessages.first() !== nextProps.snackbarNotificationsMessages.first()) {
             const messageValue = nextProps.snackbarNotificationsMessages.first();
-            window.sendUssNotificationsToZlux(messageValue.get('message'));
+            (globalThis as any).sendUssNotificationsToZlux(messageValue.get('message'));
             this.registerMessageWithSnackbar();
         }
     }

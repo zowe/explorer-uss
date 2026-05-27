@@ -56,7 +56,7 @@ export class USSTree extends React.Component {
         };
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const { dispatch, username, USSChildren } = this.props;
         if (USSChildren.isEmpty()) {
             let append = '';
@@ -67,7 +67,7 @@ export class USSTree extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const {
             dispatch, validated, username, USSPath, USSChildren,
         } = this.props;
@@ -89,7 +89,7 @@ export class USSTree extends React.Component {
     }
 
     handlePathUpdate(path) {
-        if (document.activeElement && document.activeElement.tagName && document.activeElement.tagName.toLowerCase() === 'input') {
+        if (document.activeElement?.tagName?.toLowerCase() === 'input') {
             clearTimeout(this.state.timeout);
             this.state.timeout = setTimeout(() => {
                 this.resetAndFetchChildren(path);

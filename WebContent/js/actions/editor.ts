@@ -75,7 +75,7 @@ export function fetchUSSFile(USSPath) {
                     checksum = response.headers.get('ETag');
                     return response.text();
                 }
-                return response.text().then(e => { throw Error(JSON.parse(e).message); });
+                return response.text().then(e => { throw new Error(JSON.parse(e).message); });
             })
             .then(text => {
                 dispatch(receiveContent(USSPath, text, checksum));
@@ -193,7 +193,7 @@ export function saveUSSResource(resourceName, content, checksum) {
                     dispatch(constructAndPushMessage(`${SAVE_SUCCESS_MESSAGE} ${resourceName}`));
                     return dispatch(receiveSave(resourceName));
                 }
-                return response.json().then(e => { throw Error(e.message); });
+                return response.json().then(e => { throw new Error(e.message); });
             }).then(() => {
                 dispatch(getNewUSSResourceChecksum(resourceName));
             })
@@ -221,7 +221,7 @@ export function saveAsUSSResource(oldResource, newResource, content) {
                         dispatch(constructAndPushMessage(`${SAVE_SUCCESS_MESSAGE} ${newResource}`));
                         return dispatch(receiveSave(newResource));
                     }
-                    return response.json().then(e => { throw Error(e.message); });
+                    return response.json().then(e => { throw new Error(e.message); });
                 }).then(() => {
                     dispatch(fetchUSSTreeChildren(getPathToResource(newResource)));
                     return dispatch(fetchUSSFile(newResource));

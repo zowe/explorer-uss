@@ -12,25 +12,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Route, HashRouter } from 'react-router-dom';
-// import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'; // v1.x
 import store from './store/Store';
 import HomeView from './containers/pages/Home';
-// import * as ibmcolors from './themes/ibmcolors';
 import FullScreenEditor from './containers/pages/FullScreenEditor';
-
-// const lightTheme = createMuiTheme({
-//     palette: {
-//         primary1Color: ibmcolors.ibmBlueDark,
-//         primary2Color: ibmcolors.ibmBlue,
-//         primary3Color: ibmcolors.ibmGray30,
-//         accent1Color: ibmcolors.ibmBluePale,
-//         accent2Color: ibmcolors.ibmNWhite30,
-//         accent3Color: ibmcolors.ibmCGray40,
-//         textColor: ibmcolors.ibmDarkText,
-//         alternateTextColor: ibmcolors.ibmWhite,
-//         canvasColor: ibmcolors.ibmCyanPale,
-//     },
-// });
 
 ReactDOM.render(
 
