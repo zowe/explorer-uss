@@ -20,6 +20,11 @@ npm install
 
 Modify the host variable in WebContent/js/utilities/urlUtils.js to a host and port that has the Zowe Jobs API server available
 
+Copy `.env.example` to `.env` and set `DEV_PROXY_TARGET` to the API ML gateway you want `webpack-dev-server` to proxy requests to, e.g.:
+```
+DEV_PROXY_TARGET=https://your-apiml-host:port
+```
+
 ```
 npm run dev 
 ```
