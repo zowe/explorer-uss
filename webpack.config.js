@@ -8,10 +8,12 @@
 * Copyright IBM Corporation 2018, 2020
  */
 
+require('dotenv').config();
+
 const PACKAGE = require('./package.json');
 
 const DEVSERVER_HOST = PACKAGE.devServerHost || 'localhost';
-const proxy = PACKAGE.proxy;
+const proxyTarget = process.env.DEV_PROXY_TARGET || '';
 const APP_VERSION = PACKAGE.version;
 
 
@@ -130,7 +132,7 @@ const devServer = {
     https: true,
     proxy: {
         '*': {
-            target: proxy.target,
+            target: proxyTarget,
             secure: false,
         },
     },
