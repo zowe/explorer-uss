@@ -41,6 +41,7 @@
     "copy-webpack-plugin": "12.0.2",
     "cross-env": "7.0.3",
     "css-loader": "7.1.2",
+    "dotenv": "16.4.5",
     "eslint": "8.56.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-plugin-import": "2.29.1",
@@ -114,8 +115,5 @@
   "config": {
     "pluginId": "org.zowe.explorer-uss",
     "pluginName": "USS Explorer"
-  },
-  "proxy": {
-    "target": "https://tvt5010.svl.ibm.com:7554"
   }
 }
