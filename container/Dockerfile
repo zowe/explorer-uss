@@ -44,7 +44,7 @@ RUN npm ci --no-audit --ignore-scripts \
     && cp package-lock.json final/web \
     && cp -r dist/. final/web \
     && cp manifest.yaml final \
-    && cp pluginDefinition.prod.json final/pluginDefinition.json
+    && cp pluginDefinition.json final/pluginDefinition.json
 
 ##################################
 # second stage
