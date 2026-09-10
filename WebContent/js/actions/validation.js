@@ -86,6 +86,7 @@ export function loginUser(username, password) {
                 method: 'POST',
                 credentials: 'include',
                 'Access-Control-Allow-Credentials': 'true',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
             })
             .then(response => {
