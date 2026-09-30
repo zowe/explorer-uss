@@ -179,7 +179,7 @@ export function createUSSResource(path: string, type: string) {
     return dispatch => {
         dispatch(requestNewResource(path));
         const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
-        const body = `{"type": "${type}", "permissions": "RWXRWXR--"}`;
+        const body = JSON.stringify({ type });
         return atlasPost(endpoint, body)
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
