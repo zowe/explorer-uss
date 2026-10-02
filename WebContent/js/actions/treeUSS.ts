@@ -8,7 +8,9 @@
  * Copyright IBM Corporation 2016, 2020
  */
 
-import { atlasGet, atlasDelete, atlasPost } from '../utilities/urlUtils';
+import {
+    atlasGet, atlasDelete, atlasPost, encodeURLComponent, encodeURLPath,
+} from '../utilities/urlUtils';
 import { checkForValidationFailure } from './validation';
 import { constructAndPushMessage } from './snackbarNotifications';
 
@@ -152,10 +154,8 @@ function invalidateDelete(path: string) {
 export function fetchUSSTreeChildren(path: string) {
     return dispatch => {
         dispatch(requestUSSChildren(path));
-        let endpoint = `restfiles/fs?path=${path}`;
-        if (path.at(-1) === '/' && path !== '/') {
-            endpoint = endpoint.slice(0, -1);
-        }
+        const requestPath = path.at(-1) === '/' && path !== '/' ? path.slice(0, -1) : path;
+        const endpoint = `restfiles/fs?path=${encodeURLComponent(requestPath)}`;
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
@@ -178,7 +178,7 @@ export function fetchUSSTreeChildren(path: string) {
 export function createUSSResource(path: string, type: string) {
     return dispatch => {
         dispatch(requestNewResource(path));
-        const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const endpoint = `restfiles/fs/${encodeURLPath(path && path.indexOf('/') === 0 ? path.substring(1) : path)}`;
         const body = `{"type": "${type}", "permissions": "RWXRWXR--"}`;
         return atlasPost(endpoint, body)
             .then(response => {
@@ -209,8 +209,8 @@ export function createAndDownloadElement(blob, fileName: string) {
 export function downloadUSSResource(path: string) {
     return dispatch => {
         dispatch(requestDownload(path));
-        const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
-        const fileName = endpoint.substring(endpoint.lastIndexOf('/') + 1);
+        const endpoint = `restfiles/fs/${encodeURLPath(path && path.indexOf('/') === 0 ? path.substring(1) : path)}`;
+        const fileName = path.substring(path.lastIndexOf('/') + 1);
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
                 return dispatch(checkForValidationFailure(response));
@@ -236,7 +236,7 @@ export function downloadUSSResource(path: string) {
 export function deleteUSSResource(path: string) {
     return dispatch => {
         dispatch(requestDelete(path));
-        const endpoint = `restfiles/fs/${path && path.indexOf('/') === 0 ? path.substring(1) : path}`;
+        const endpoint = `restfiles/fs/${encodeURLPath(path && path.indexOf('/') === 0 ? path.substring(1) : path)}`;
         return atlasDelete(endpoint, {
             credentials: 'include',
             method: 'DELETE',
