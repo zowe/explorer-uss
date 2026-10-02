@@ -13,6 +13,10 @@ export function encodeURLComponent(URL: string) {
     return encodeURIComponent(URL);
 }
 
+export function encodeURLPath(path: string) {
+    return path.split('/').map(encodeURIComponent).join('/');
+}
+
 export function whichServer() {
     let server = global.location.host;
     if (global.location.hostname === 'tester.test.com') {
