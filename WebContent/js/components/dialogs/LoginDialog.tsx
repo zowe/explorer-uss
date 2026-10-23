@@ -80,7 +80,7 @@ class LoginDialog extends React.Component {
         const { isValidating } = this.props;
         const dialogContent = isValidating ? <CircularProgress />
             : (
-                <form onSubmit={this.handleLogin} style={{ width: '500px' }}>
+                <form onSubmit={this.handleLogin} style={{ width: '500px' }} autoComplete="off">
                     <TextField
                         id="username"
                         label="Username*"
@@ -89,6 +89,7 @@ class LoginDialog extends React.Component {
                         style={{ display: 'block' }}
                         fullWidth={true}
                         autoFocus={true}
+                        inputProps={{ autoComplete: 'off' }}
                     />
                     <TextField
                         id="password"
@@ -97,6 +98,7 @@ class LoginDialog extends React.Component {
                         value={this.state.password}
                         onChange={this.handlePasswordChange}
                         fullWidth={true}
+                        inputProps={{ autoComplete: 'new-password' }}
                     />
                     <input type="submit" style={{ display: 'none' }} />
                     {this.getDialogErrorMessage()}
