@@ -11,7 +11,7 @@
 
 import { createUSSResource, fetchUSSTreeChildren, INVALIDATE_NEW_RESOURCE } from './treeUSS';
 import { getPathToResource } from '../utilities/USSUtilities';
-import { atlasGet, atlasPut } from '../utilities/urlUtils';
+import { atlasGet, atlasPut, encodeURLPath } from '../utilities/urlUtils';
 import { checkForValidationFailure } from './validation';
 import { constructAndPushMessage } from './snackbarNotifications';
 
@@ -64,7 +64,7 @@ export function invalidateContent() {
 export function fetchUSSFile(USSPath) {
     return dispatch => {
         dispatch(requestContent(USSPath));
-        const endpoint = `restfiles/fs/${USSPath && USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath}`;
+        const endpoint = `restfiles/fs/${encodeURLPath(USSPath && USSPath.indexOf('/') === 0 ? USSPath.substring(1) : USSPath)}`;
         let checksum = '';
         return atlasGet(endpoint, { credentials: 'include' })
             .then(response => {
@@ -158,7 +158,7 @@ function invalidateChecksumChange() {
 export function getNewUSSResourceChecksum(resourceName) {
     return dispatch => {
         dispatch(requestChecksum(resourceName));
-        const contentURL = `restfiles/fs/${(resourceName && resourceName.length > 0 && resourceName.indexOf('/') === 0) ? resourceName.substring(1) : resourceName}`;
+        const contentURL = `restfiles/fs/${encodeURLPath((resourceName && resourceName.length > 0 && resourceName.indexOf('/') === 0) ? resourceName.substring(1) : resourceName)}`;
         let checksum = '';
         return atlasGet(contentURL, { credentials: 'include' })
             .then(response => {
@@ -177,7 +177,7 @@ export function getNewUSSResourceChecksum(resourceName) {
 }
 
 function constructSaveUSSURL(resourceName) {
-    return `restfiles/fs/${resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName}`;
+    return `restfiles/fs/${encodeURLPath(resourceName && resourceName.indexOf('/') === 0 ? resourceName.substring(1) : resourceName)}`;
 }
 
 export function saveUSSResource(resourceName, content, checksum) {

@@ -8,7 +8,7 @@
  * Copyright IBM Corporation 2016, 2020
  */
 
-import { atlasGet } from '../utilities/urlUtils';
+import { atlasGet, encodeURLComponent } from '../utilities/urlUtils';
 import { checkForValidationFailure } from './validation';
 import { constructAndPushMessage } from './snackbarNotifications';
 
@@ -68,7 +68,7 @@ export function addTreeDirectory(path: string, child) {
 }
 
 export function fetchDirectoryChildren(path: string) {
-    const endpoint = `restfiles/fs?path=${path}`;
+    const endpoint = `restfiles/fs?path=${encodeURLComponent(path)}`;
     return dispatch => {
         dispatch(requestDirectoryChildren(path));
         return atlasGet(endpoint, { credentials: 'include' })
