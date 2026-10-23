@@ -14,6 +14,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self';">
     <title>USS Explorer</title>
     <link rel="stylesheet" href="css/responsive-grid.css" />
     <link rel="stylesheet" href="css/styles.css" />
@@ -22,12 +23,7 @@
 <body>
     <div id="app"></div>
 </body>
-<script>
-  if(exports){
-    var ZoweZLUX_tempExports = exports;
-  }
-  var exports = {"__esModule": true};
-</script>
+<script type="text/javascript" src="zlux-hooks/exports-shim.js"></script>
 <script type="text/javascript" src="/zlux/ui/v1/lib/org.zowe.zlux.logger/0.9.0/logger.js"></script>
 <script type="text/javascript" src="/zlux/ui/v1/ZLUX/plugins/org.zowe.zlux.bootstrap/web/iframe-adapter.js"></script>
 <script type="text/javascript" src="zlux-hooks/register-handler.js"></script>
