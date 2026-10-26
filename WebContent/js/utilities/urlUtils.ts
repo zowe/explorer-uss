@@ -13,16 +13,8 @@ export function encodeURLComponent(URL: string) {
     return encodeURIComponent(URL);
 }
 
-export function whichServer() {
-    let server = global.location.host;
-    if (global.location.hostname === 'tester.test.com') {
-        server = 'tester.test.com:7443';
-    }
-    return server;
-}
-
 function atlasAction(endpoint: string, content, fetchParams) {
-    return fetch(`https://${whichServer()}/ibmzosmf/api/v1/zosmf/${endpoint}`, { ...fetchParams, ...content });
+    return fetch(`https://${global.location.host}/ibmzosmf/api/v1/zosmf/${endpoint}`, { ...fetchParams, ...content });
 }
 
 export function atlasGet(endpoint: string, content) {
